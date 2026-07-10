@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIBOU|無料30分AI相談 — AIをどう使えばいいか、30分で道筋が見えます</title>
+<meta name="description" content="個人事業主・中小企業向けのAI活用相談「AIBOU」。あなたの業務を聞いて、AIで楽にできる箇所と手順をその場でお見せします。無料・30分・オンライン。">
+<meta property="og:title" content="AIBOU|無料30分AI相談">
+<meta property="og:description" content="AIをどう使えばいいか、30分で道筋が見えます。無料・オンライン・営業なし。">
+<meta property="og:type" content="website">
+<style>
+  :root{
+    --navy:#1b2a4a;
+    --navy-light:#2c4270;
+    --accent:#f5a623;
+    --accent-dark:#e08900;
+    --bg:#fdfcf8;
+    --text:#2a2a2a;
+    --muted:#6b7280;
+    --line:#e5e1d8;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","BIZ UDPGothic",Meiryo,sans-serif;color:var(--text);background:var(--bg);line-height:1.9;font-size:16px;}
+  .wrap{max-width:640px;margin:0 auto;padding:0 20px;}
+  section{padding:56px 0;}
+  h2{font-size:1.45rem;color:var(--navy);margin-bottom:28px;text-align:center;line-height:1.5;}
+  h2 .en{display:block;font-size:.72rem;letter-spacing:.18em;color:var(--accent-dark);margin-bottom:6px;}
+
+  /* CTA button */
+  .cta{display:block;background:var(--accent);color:#fff;text-align:center;text-decoration:none;font-weight:700;font-size:1.05rem;padding:18px 24px;border-radius:999px;box-shadow:0 4px 14px rgba(224,137,0,.35);transition:transform .15s, box-shadow .15s;}
+  .cta:active{transform:scale(.98);}
+  .cta small{display:block;font-weight:400;font-size:.78rem;opacity:.95;margin-top:2px;}
+  .cta-note{text-align:center;font-size:.8rem;color:var(--muted);margin-top:10px;}
+
+  /* Hero */
+  .hero{background:linear-gradient(160deg,var(--navy) 0%,var(--navy-light) 100%);color:#fff;padding:64px 0 56px;}
+  .hero .brand{font-size:.95rem;font-weight:700;letter-spacing:.08em;color:var(--accent);margin-bottom:24px;}
+  .hero h1{font-size:1.75rem;line-height:1.6;font-weight:800;margin-bottom:18px;}
+  .hero h1 .marker{background:linear-gradient(transparent 62%,rgba(245,166,35,.55) 62%);padding:0 2px;}
+  .hero .sub{font-size:.98rem;opacity:.92;margin-bottom:30px;}
+  .badges{display:flex;gap:10px;justify-content:flex-start;margin-bottom:30px;flex-wrap:wrap;}
+  .badges span{border:1px solid rgba(255,255,255,.45);border-radius:999px;padding:4px 14px;font-size:.82rem;}
+  .hero .cta-note{color:rgba(255,255,255,.75);}
+
+  /* Pains */
+  .pains ul{list-style:none;}
+  .pains li{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 18px 16px 46px;margin-bottom:12px;position:relative;font-size:.95rem;}
+  .pains li::before{content:"✓";position:absolute;left:16px;top:14px;color:var(--accent-dark);font-weight:700;font-size:1.1rem;}
+  .pains .lead-after{text-align:center;margin-top:24px;font-weight:700;color:var(--navy);}
+
+  /* Offer */
+  .offer{background:#fff;}
+  .offer .card{border:2px solid var(--navy);border-radius:16px;padding:24px 20px;margin-bottom:16px;}
+  .offer .card h3{color:var(--navy);font-size:1.05rem;margin-bottom:10px;}
+  .offer .card p{font-size:.93rem;}
+  .offer .lead{text-align:center;margin-bottom:26px;font-size:.98rem;}
+
+  /* Steps */
+  .steps ol{list-style:none;counter-reset:step;}
+  .steps li{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px 18px 18px 64px;margin-bottom:14px;position:relative;font-size:.95rem;}
+  .steps li::before{counter-increment:step;content:counter(step);position:absolute;left:16px;top:50%;transform:translateY(-50%);width:34px;height:34px;background:var(--navy);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;}
+  .steps li b{color:var(--navy);}
+
+  /* Profile */
+  .profile{background:#fff;}
+  .profile .box{background:var(--bg);border:1px solid var(--line);border-radius:16px;padding:26px 22px;}
+  .profile .service-name{font-weight:800;color:var(--navy);font-size:1.1rem;margin-bottom:4px;}
+  .profile .copy{font-size:.85rem;color:var(--accent-dark);font-weight:700;margin-bottom:16px;}
+  .profile p{font-size:.93rem;margin-bottom:12px;}
+
+  /* FAQ */
+  .faq details{background:#fff;border:1px solid var(--line);border-radius:12px;margin-bottom:12px;overflow:hidden;}
+  .faq summary{padding:16px 18px;font-weight:700;font-size:.95rem;color:var(--navy);cursor:pointer;list-style:none;position:relative;padding-right:40px;}
+  .faq summary::after{content:"+";position:absolute;right:18px;top:50%;transform:translateY(-50%);color:var(--accent-dark);font-size:1.3rem;font-weight:400;}
+  .faq details[open] summary::after{content:"−";}
+  .faq .a{padding:0 18px 16px;font-size:.92rem;color:var(--text);}
+
+  /* Closing */
+  .closing{background:linear-gradient(160deg,var(--navy) 0%,var(--navy-light) 100%);color:#fff;text-align:center;}
+  .closing h2{color:#fff;}
+  .closing p.note{font-size:.9rem;opacity:.9;margin-bottom:26px;}
+  .closing .cta-note{color:rgba(255,255,255,.75);}
+
+  footer{padding:28px 0;text-align:center;font-size:.78rem;color:var(--muted);}
+</style>
+</head>
+<body>
+
+<!-- ① ファーストビュー -->
+<header class="hero">
+  <div class="wrap">
+    <p class="brand">AIBOU ― 経営者の隣に、AIの相棒を。</p>
+    <h1>AIをどう使えばいいか、<br><span class="marker">30分で道筋が見えます</span></h1>
+    <p class="sub">あなたの業務の中から「AIで楽にできる仕事」を見つけて、その場で手順までお見せする無料相談です。</p>
+    <div class="badges"><span>無料</span><span>30分</span><span>オンライン(Google Meet)</span></div>
+    <a class="cta js-booking" href="https://calendar.app.google/zMxqLt596RLktY3Y7" target="_blank" rel="noopener">無料相談を予約する<small>空いている日時を選ぶだけ・約1分</small></a>
+    <p class="cta-note">しつこい営業は一切しません</p>
+  </div>
+</header>
+
+<!-- ② 悩み共感 -->
+<section class="pains">
+  <div class="wrap">
+    <h2><span class="en">CHECK</span>こんなこと、ありませんか?</h2>
+    <ul>
+      <li>ChatGPTを触ってみたけれど、<b>仕事でどう使えばいいか分からない</b></li>
+      <li>AIが流行っているのは知っているが、<b>何から始めればいいか分からない</b></li>
+      <li>人を雇う余裕はないのに、<b>仕事は増える一方</b></li>
+      <li>見積書・請求書・問い合わせ返信など、<b>毎日の細かい作業に時間を取られている</b></li>
+    </ul>
+    <p class="lead-after">ひとつでも当てはまったら、30分だけ話しませんか。</p>
+  </div>
+</section>
+
+<!-- ③ 相談でできること -->
+<section class="offer">
+  <div class="wrap">
+    <h2><span class="en">SERVICE</span>無料相談でできること</h2>
+    <p class="lead">むずかしい専門用語は使いません。<br>あなたの仕事の話を聞くところから始めます。</p>
+    <div class="card">
+      <h3>1. 業務の棚卸し</h3>
+      <p>いまの仕事の流れをお聞きして、「AIで楽にできる箇所」を一緒に見つけます。</p>
+    </div>
+    <div class="card">
+      <h3>2. その場でお手本</h3>
+      <p>見つけた箇所について、実際のAIの使い方を画面共有で<b>その場でお見せ</b>します。持ち帰ってすぐ試せます。</p>
+    </div>
+    <div class="card">
+      <h3>3. 次の一歩の道筋</h3>
+      <p>「まず何から始めるか」の順番を整理してお渡しします。相談だけで終わってもまったく問題ありません。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ④ 相談の流れ -->
+<section class="steps">
+  <div class="wrap">
+    <h2><span class="en">FLOW</span>ご相談の流れ</h2>
+    <ol>
+      <li><b>下のボタンから日時を選ぶ</b><br>空いている枠をタップするだけ。約1分で予約完了です。</li>
+      <li><b>当日、Google Meetで30分</b><br>予約と同時にオンライン会議のURLが自動で届きます。顔出しは任意です。</li>
+      <li><b>無理な営業は一切しません</b><br>相談の最後に、もし続けたい場合の選択肢だけ簡単にご紹介します。</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ⑤ プロフィール -->
+<section class="profile">
+  <div class="wrap">
+    <h2><span class="en">ABOUT</span>「AIBOU」について</h2>
+    <div class="box">
+      <p class="service-name">AIBOU</p>
+      <p class="copy">経営者の隣に、AIの相棒を。</p>
+      <p>大手コンサルのような大がかりなDXではなく、<b>小さな事業の隣で一緒に手を動かすスタイル</b>のAI活用支援です。</p>
+      <p>「AIBOU(アイボウ)」という名前には、いつでも隣で気軽に頼れる"相棒"でありたい、という思いを込めています。</p>
+      <p>個人事業主や中小企業の現場で、毎日の業務が少しずつ軽くなっていく——その最初の一歩を、無料相談でお手伝いします。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ⑥ FAQ -->
+<section class="faq">
+  <div class="wrap">
+    <h2><span class="en">FAQ</span>よくあるご質問</h2>
+    <details>
+      <summary>パソコンやITが苦手でも大丈夫ですか?</summary>
+      <div class="a">大丈夫です。専門用語を使わずにお話しします。スマホからのご参加も可能です。</div>
+    </details>
+    <details>
+      <summary>本当に無料ですか?あとから請求されませんか?</summary>
+      <div class="a">はい、30分の相談は完全に無料です。相談後に費用が発生することは一切ありません。</div>
+    </details>
+    <details>
+      <summary>しつこい営業をされませんか?</summary>
+      <div class="a">しません。相談の最後に「もし続けたい場合」の選択肢を1分ほどご紹介するだけです。その後こちらから何度も連絡することはありません。</div>
+    </details>
+    <details>
+      <summary>顔出しは必要ですか?</summary>
+      <div class="a">任意です。カメラオフ・音声のみでのご相談もまったく問題ありません。</div>
+    </details>
+    <details>
+      <summary>何を準備すればいいですか?</summary>
+      <div class="a">特に準備は不要です。「いま困っていること」を頭に浮かべてお越しいただくだけで大丈夫です。</div>
+    </details>
+  </div>
+</section>
+
+<!-- ⑦ クロージングCTA -->
+<section class="closing">
+  <div class="wrap">
+    <h2>まずは30分、<br>話すだけ話してみませんか。</h2>
+    <p class="note">相談枠は平日夜(18:00〜22:00)と土日のみ・先着順です。</p>
+    <a class="cta js-booking" href="https://calendar.app.google/zMxqLt596RLktY3Y7" target="_blank" rel="noopener">無料相談を予約する<small>空いている日時を選ぶだけ・約1分</small></a>
+    <p class="cta-note">予約が確定すると、確認メールとGoogle MeetのURLが自動で届きます</p>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 AIBOU</p>
+</footer>
+
+<script>
+  // 予約ページURL(GoogleカレンダーのURL確定後にここを書き換えて再デプロイする)
+  var BOOKING_URL = "https://calendar.app.google/zMxqLt596RLktY3Y7";
+  document.querySelectorAll(".js-booking").forEach(function(btn){
+    if (BOOKING_URL) {
+      btn.href = BOOKING_URL;
+      btn.target = "_blank";
+      btn.rel = "noopener";
+    } else {
+      btn.addEventListener("click", function(e){
+        e.preventDefault();
+        alert("予約ページは現在準備中です。公開まで今しばらくお待ちください。");
+      });
+    }
+  });
+</script>
+</body>
+</html>
