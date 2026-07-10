@@ -97,6 +97,15 @@
     margin-top:24px;text-align:center;
   }
 
+  /* デモ動画 */
+  .demo .videobox{
+    border:2px solid var(--ink);
+    border-radius:18px 6px 22px 6px/6px 22px 6px 18px;
+    overflow:hidden;background:#fff;box-shadow:4px 4px 0 rgba(43,43,43,.15);
+  }
+  .demo video{display:block;width:100%;height:auto;}
+  .demo .vnote{font-family:"Klee One",cursive;font-size:.85rem;color:var(--ink-soft);text-align:center;margin-top:12px;}
+
   /* ③ 流れ */
   .steps .step{display:flex;gap:14px;align-items:flex-start;margin-bottom:6px;}
   .steps .step .no{
@@ -163,6 +172,19 @@
       <p>実際のAIの使い方を画面共有でお見せします。持ち帰って、その日から真似できます。</p>
     </div>
     <p class="memo">相談だけで終わってもOK。<span class="mk">手ぶらでどうぞ。</span></p>
+  </div>
+</section>
+
+<!-- デモ動画 -->
+<section class="demo">
+  <div class="wrap">
+    <h2>実際の様子を<span class="mk">60秒</span>でどうぞ</h2>
+    <div class="videobox">
+      <video controls playsinline preload="metadata" poster="demo-poster.jpg">
+        <source src="demo.mp4" type="video/mp4">
+      </video>
+    </div>
+    <p class="vnote">※音は出ません。画面はAI活用の流れを再現したイメージです。</p>
   </div>
 </section>
 
