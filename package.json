@@ -1,0 +1,15 @@
+{
+  "name": "aibou-lp",
+  "private": true,
+  "type": "module",
+  "description": "AIBOU LP と、業種別デモ動画の生成ツール",
+  "scripts": {
+    "video": "node video/generate.mjs",
+    "video:beauty": "node video/generate.mjs beauty",
+    "video:koumuten": "node video/generate.mjs koumuten",
+    "video:shigyou": "node video/generate.mjs shigyou"
+  },
+  "devDependencies": {
+    "playwright": "^1.40.0"
+  }
+}
