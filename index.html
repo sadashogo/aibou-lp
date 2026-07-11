@@ -11,6 +11,14 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&display=swap" rel="stylesheet">
+<!-- Google Analytics (GA4) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DV61552QWH"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-DV61552QWH');
+</script>
 <style>
   :root{
     --ink:#2b2b2b;          /* 黒ペン */
@@ -249,7 +257,17 @@
 
 <footer>
   <p>© 2026 AIBOU</p>
+  <p style="font-size:.72rem;margin-top:4px;">本サイトはアクセス状況の把握のためGoogleアナリティクスを利用しています。</p>
 </footer>
+
+<script>
+  // 予約ボタンのクリック計測(訪問→予約クリック率の実測用)
+  document.querySelectorAll('.cta').forEach(function(btn, i){
+    btn.addEventListener('click', function(){
+      if (typeof gtag === 'function') gtag('event', 'booking_click', { position: i === 0 ? 'hero' : 'closing' });
+    });
+  });
+</script>
 
 </body>
 </html>
