@@ -131,6 +131,8 @@
   const params = new URLSearchParams(location.search);
   const format = params.get("format") || "landscape";
   document.body.className = format === "vertical" ? "v" : "l";
+  // 文字サイズの基準(rem基準=html)。デフォルト16pxに対し約2倍で全要素を拡大。
+  document.documentElement.style.fontSize = format === "vertical" ? "32px" : "32px";
   const scene = JSON.parse(decodeURIComponent(params.get("scene") || "{}"));
 
   const esc = (s) => (s || "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
