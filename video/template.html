@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>AIBOU scene</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#2b2b2b; --ink-soft:#555;
+    --marker:#ffc46b; --marker-strong:#f5a623;
+    --grid:rgba(70,90,130,.07);
+    --line:#e7e0d2;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{width:100%;height:100%;}
+  body{
+    font-family:"Klee One","IPAGothic","Hiragino Kaku Gothic ProN",sans-serif;
+    color:var(--ink);
+    background-color:#fffdf9;
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size:32px 32px;
+    overflow:hidden;
+  }
+  .hand{font-family:"Klee One","IPAGothic",sans-serif;font-weight:600;}
+  .mk{background:linear-gradient(transparent 60%, var(--marker) 60%);padding:0 .1em;}
+
+  /* ステージ: 字幕を上部に固定、本文は残り領域の中央に置く */
+  .stage{
+    width:100%;height:100%;
+    display:flex;flex-direction:column;align-items:center;
+    padding:6% 8%;text-align:center;
+  }
+  body.v .stage{padding:11% 9%;}
+  .cap-slot{flex:0 0 auto;}
+  .main{
+    flex:1;width:100%;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;gap:5%;
+  }
+  body.l .main{gap:4%;}
+
+  /* 上部キャプション(字幕) */
+  .caption{
+    font-family:"Klee One","IPAGothic",sans-serif;font-weight:600;
+    color:var(--ink);
+    border:2.5px solid var(--ink);background:#fff;
+    border-radius:140px 16px 140px 16px / 16px 140px 16px 140px;
+    padding:.5em 1.1em;line-height:1.5;
+  }
+
+  /* 手描き風カード */
+  .card{
+    background:#fff;border:2.5px solid var(--ink);
+    border-radius:24px 8px 26px 8px / 8px 26px 8px 24px;
+    box-shadow:6px 6px 0 rgba(43,43,43,.14);
+    padding:1.1em 1.2em;line-height:1.7;text-align:left;
+    max-width:100%;white-space:pre-line;
+  }
+  .tag{
+    display:inline-block;font-family:"Klee One","IPAGothic",sans-serif;font-weight:600;
+    border:2px solid var(--ink);border-radius:100px 12px 100px 12px/12px 100px 12px 100px;
+    padding:.15em .9em;background:#fff;margin-bottom:.5em;
+  }
+  .tag.ai{background:var(--marker);}
+
+  /* チップ(業種バッジ) */
+  .badge{
+    font-family:"Klee One","IPAGothic",sans-serif;font-weight:600;
+    border:2.5px solid var(--ink);background:#fff;
+    border-radius:120px 14px 120px 14px / 14px 120px 14px 120px;
+    padding:.25em 1.2em;
+  }
+
+  /* タイトル */
+  .title{font-family:"Klee One","IPAGothic",sans-serif;font-weight:600;line-height:1.55;white-space:pre-line;}
+  .note{font-family:"Klee One","IPAGothic",sans-serif;color:var(--ink-soft);}
+
+  /* GOボタン */
+  .go{
+    font-family:"Klee One","IPAGothic",sans-serif;font-weight:600;color:#fff;
+    background:var(--marker-strong);
+    border:3px solid var(--ink);
+    border-radius:225px 20px 245px 20px / 20px 245px 20px 225px;
+    box-shadow:6px 6px 0 rgba(43,43,43,.85);
+    padding:.4em 1.6em;letter-spacing:.05em;
+    position:relative;
+  }
+  .finger{position:absolute;right:-.15em;bottom:-.35em;filter:drop-shadow(0 2px 1px rgba(0,0,0,.2));}
+
+  /* 完了チェック */
+  .done-badge{
+    display:inline-flex;align-items:center;justify-content:center;
+    border:3px solid #2e9e6b;color:#2e9e6b;border-radius:50%;
+    background:#eafaf1;font-weight:700;
+  }
+
+  /* LINE通知風 */
+  .line-card{border-color:#06c755;}
+  .line-head{display:flex;align-items:center;gap:.5em;color:#06c755;font-weight:600;
+    font-family:"Klee One","IPAGothic",sans-serif;margin-bottom:.5em;}
+  .line-dot{width:1.1em;height:1.1em;border-radius:50%;background:#06c755;display:inline-block;
+    color:#fff;text-align:center;line-height:1.1em;font-size:.8em;}
+
+  /* ---- フォーマット別サイズ(横) ---- */
+  body.l{font-size:26px;}
+  body.l .caption{font-size:1.15rem;}
+  body.l .card{font-size:1.25rem;max-width:78%;}
+  body.l .badge{font-size:1.3rem;}
+  body.l .title{font-size:2.5rem;}
+  body.l .note{font-size:1.15rem;}
+  body.l .go{font-size:2.6rem;}
+  body.l .done-badge{width:1.8em;height:1.8em;font-size:2rem;margin-bottom:.2em;}
+
+  /* ---- フォーマット別サイズ(縦) ---- */
+  body.v{font-size:44px;}
+  body.v .caption{font-size:1.05rem;}
+  body.v .card{font-size:1.15rem;max-width:100%;}
+  body.v .badge{font-size:1.25rem;}
+  body.v .title{font-size:2.2rem;}
+  body.v .note{font-size:1.05rem;}
+  body.v .go{font-size:2.8rem;}
+  body.v .done-badge{width:2em;height:2em;font-size:2.4rem;margin-bottom:.2em;}
+</style>
+</head>
+<body>
+<div class="stage" id="stage"></div>
+<script>
+  const params = new URLSearchParams(location.search);
+  const format = params.get("format") || "landscape";
+  document.body.className = format === "vertical" ? "v" : "l";
+  // 文字サイズの基準(rem基準=html)。デフォルト16pxに対し約2倍で全要素を拡大。
+  document.documentElement.style.fontSize = format === "vertical" ? "32px" : "32px";
+  const scene = JSON.parse(decodeURIComponent(params.get("scene") || "{}"));
+
+  const esc = (s) => (s || "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+  const el = (html) => { const d=document.createElement("div"); d.innerHTML=html; return d.firstElementChild; };
+  const stage = document.getElementById("stage");
+
+  // 字幕は上部スロットに固定、それ以外は中央の .main に積む
+  const capSlot = el(`<div class="cap-slot"></div>`);
+  const main = el(`<div class="main"></div>`);
+  stage.appendChild(capSlot);
+  stage.appendChild(main);
+  const add = (html) => main.appendChild(el(html));
+
+  if (scene.caption) capSlot.appendChild(el(`<div class="caption">${esc(scene.caption)}</div>`));
+
+  switch (scene.kind) {
+    case "title":
+      add(`<div class="badge">${esc(scene.badge)}</div>`);
+      add(`<div class="title"><span class="mk">${esc(scene.title)}</span></div>`);
+      add(`<div class="note">${esc(scene.note)}</div>`);
+      break;
+    case "chat":
+      add(`<div class="card"><span class="tag">${esc(scene.who)}</span>${esc(scene.text)}</div>`);
+      break;
+    case "draft":
+      add(`<div class="card"><span class="tag ai">🤖 AIの下書き</span>${esc(scene.text)}</div>`);
+      break;
+    case "notify":
+      add(`<div class="card line-card"><div class="line-head"><span class="line-dot">L</span>LINE通知</div>${esc(scene.text)}</div>`);
+      break;
+    case "approve":
+      add(`<div class="go">${esc(scene.text)}<span class="finger">👆</span></div>`);
+      break;
+    case "done":
+      add(`<div class="done-badge">✓</div>`);
+      add(`<div class="title" style="font-size:1.5em">${esc(scene.text)}</div>`);
+      break;
+    case "cta":
+      add(`<div class="title"><span class="mk">${esc(scene.title)}</span></div>`);
+      add(`<div class="note">${esc(scene.note)}</div>`);
+      add(`<div class="badge">${esc(scene.url)}</div>`);
+      break;
+  }
+
+  // フォント読み込み完了をスクリプト側から検知できるようフラグを立てる
+  window.__ready = false;
+  (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => { window.__ready = true; });
+  setTimeout(() => { window.__ready = true; }, 1500); // フォント取得が失敗しても進む
+</script>
+</body>
+</html>
