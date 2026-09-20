@@ -1,0 +1,99 @@
+---
+import Base from '../layouts/Base.astro';
+import ScrollRail from '../components/ScrollRail.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import Section from '../components/Section.astro';
+import VideoFrame from '../components/VideoFrame.astro';
+import RoadmapTable from '../components/RoadmapTable.astro';
+import PitfallList from '../components/PitfallList.astro';
+import TrackRecord from '../components/TrackRecord.astro';
+import BookingCTA from '../components/BookingCTA.astro';
+---
+
+<Base>
+  <ScrollRail />
+  <SiteHeader />
+
+  <main class="mx-auto max-w-[880px] px-6 pt-[120px] pb-24 sm:pt-[180px] sm:pb-[120px]">
+    <Section variant="hero">
+      <div class="mono mb-7 text-[11px] uppercase" style="color: var(--color-ink-faint); letter-spacing: 0.25em;">
+        The Executive Mandate
+      </div>
+      <h1
+        class="mb-9 font-normal"
+        style="font-size: clamp(32px, 6vw, 64px); letter-spacing: -0.02em; line-height: 1.6; color: var(--color-ink-lead);"
+      >
+        流行のツールを追うのではなく、<br />
+        自社専任の<span style="color: var(--color-ink-bright);">「右腕」</span>を築く。
+      </h1>
+      <p
+        class="mb-12 max-w-[700px] text-[16px] font-light"
+        style="color: var(--color-ink-lead); line-height: 2.1;"
+      >
+        市販のAIを配るだけでは、企業の利益率は1ミリも向上しません。<br />
+        経営者が本当に必要としているのは、現場の暗黙知を安全に集約し、冷徹かつ正確に意思決定を支え続ける「自社専用の知性＝右腕」です。
+      </p>
+      <div class="mono text-[11px]" style="color: var(--color-ink-faint);">
+        AUDIT / PROPRIETARY ARCHITECTURE / EXECUTIVE GOVERNANCE
+      </div>
+    </Section>
+
+    <Section>
+      <div class="mono mb-7 text-[11px] uppercase" style="color: var(--color-ink-faint); letter-spacing: 0.25em;">
+        01 / Diagnosis
+      </div>
+      <h2 class="mb-8 font-normal" style="font-size: clamp(24px, 3.4vw, 36px); line-height: 1.6; color: #fff;">
+        なぜ、9割の企業でAI投資がコスト倒れになるのか
+      </h2>
+      <p class="max-w-[640px] text-[14px]" style="color: var(--color-ink-muted);">
+        ツールの営業トークや過大な開発提案に乗せられた結果、多くの企業が以下の3つの罠に陥っています。
+      </p>
+      <PitfallList />
+    </Section>
+
+    <Section>
+      <div class="mono mb-7 text-[11px] uppercase" style="color: var(--color-ink-faint); letter-spacing: 0.25em;">
+        02 / Deliverables &amp; Sequence
+      </div>
+      <h2 class="mb-8 font-normal" style="font-size: clamp(24px, 3.4vw, 36px); line-height: 1.6; color: #fff;">
+        社内データを利益に変える4段階の工程
+      </h2>
+      <p class="max-w-[640px] text-[14px]" style="color: var(--color-ink-muted);">
+        私たちはツールの売り込みを行いません。経営陣の右腕として、客観的な診断から具体的なドキュメント・実証環境の納品までを一貫して担当します。
+      </p>
+      <VideoFrame />
+      <RoadmapTable />
+    </Section>
+
+    <Section>
+      <div class="mono mb-7 text-[11px] uppercase" style="color: var(--color-ink-faint); letter-spacing: 0.25em;">
+        03 / Track Record
+      </div>
+      <h2 class="mb-8 font-normal" style="font-size: clamp(24px, 3.4vw, 36px); line-height: 1.6; color: #fff;">
+        これまでに、実際に作ってきたもの
+      </h2>
+      <TrackRecord />
+    </Section>
+
+    <Section id="inquiry" variant="closing" last>
+      <div class="mono mb-7 text-[11px] uppercase" style="color: var(--color-ink-faint); letter-spacing: 0.25em;">
+        04 / Consultation
+      </div>
+      <h2 class="mb-8 font-normal" style="font-size: clamp(24px, 3.4vw, 36px); line-height: 1.6; color: #fff;">
+        対話の要請
+      </h2>
+      <p class="max-w-[580px] text-[14px]" style="color: var(--color-ink-muted); line-height: 2;">
+        品質保持のため、常時お受けする顧問契約は年間5社に限定しております。現在検討中のベンダー見積書の妥当性チェックなど、構想段階のメモの共有からお気軽にご相談ください。
+      </p>
+      <BookingCTA />
+    </Section>
+  </main>
+
+  <footer class="mono py-16 text-center text-[11px]" style="color: var(--color-ink-dim); letter-spacing: 0.15em;">
+    © 2026 THE RIGHT HAND. INDEPENDENT STRATEGIC AI ADVISORY.
+  </footer>
+
+  <script>
+    import '../scripts/reveal.ts';
+  </script>
+</Base>

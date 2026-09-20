@@ -1,0 +1,123 @@
+---
+import { roadmap } from '../data/roadmap';
+---
+
+<!-- Desktop / tablet: table -->
+<table
+  class="mono hidden w-full border-collapse text-[13.5px] sm:table"
+  style="margin-top: 12px;"
+>
+  <thead>
+    <tr>
+      <th
+        class="border-b px-4 py-4 text-left text-[11px] font-normal"
+        style="color: var(--color-ink-faint); border-color: var(--color-hairline-frame);"
+        >PHASE</th
+      >
+      <th
+        class="border-b px-4 py-4 text-left text-[11px] font-normal"
+        style="color: var(--color-ink-faint); border-color: var(--color-hairline-frame); width: 44%;"
+        >FOCUS &amp; ACTION</th
+      >
+      <th
+        class="border-b px-4 py-4 text-left text-[11px] font-normal"
+        style="color: var(--color-ink-faint); border-color: var(--color-hairline-frame); width: 34%;"
+        >DELIVERABLE (提供成果物)</th
+      >
+    </tr>
+  </thead>
+  <tbody>
+    {
+      roadmap.map((row) => (
+        <tr class="roadmap-row">
+          <td
+            class="align-top border-b px-4 py-[22px]"
+            style="width: 22%; color: #fff; border-color: var(--color-hairline-faint);"
+          >
+            <span class="not-mono block">{row.phase}</span>
+            <span
+              class="mono block text-[11px]"
+              style="color: var(--color-ink-faint);"
+            >
+              {row.period}
+            </span>
+          </td>
+          <td
+            class="align-top border-b px-4 py-[22px] not-mono"
+            style="color: var(--color-ink-lead); border-color: var(--color-hairline-faint);"
+          >
+            <strong style="color: #fff; font-weight: 500;">
+              {row.focusTitle}
+            </strong>
+            <br />
+            <span class="text-[12px]" style="color: var(--color-ink-muted);">
+              {row.focusDescription}
+            </span>
+          </td>
+          <td
+            class="mono align-top border-b px-4 py-[22px] text-[12px]"
+            style="color: var(--color-ink-cell); border-color: var(--color-hairline-faint);"
+          >
+            {row.deliverables.map((d, i) => (
+              <>
+                {d}
+                {i < row.deliverables.length - 1 && <br />}
+              </>
+            ))}
+          </td>
+        </tr>
+      ))
+    }
+  </tbody>
+</table>
+
+<!-- Mobile: stacked cards -->
+<div class="flex flex-col gap-6 sm:hidden" style="margin-top: 12px;">
+  {
+    roadmap.map((row) => (
+      <div class="border-t pt-6" style="border-color: var(--color-hairline-faint);">
+        <div class="mb-3">
+          <span class="text-[15px]" style="color: #fff;">
+            {row.phase}
+          </span>
+          <span class="mono ml-2 text-[11px]" style="color: var(--color-ink-faint);">
+            {row.period}
+          </span>
+        </div>
+        <div class="mb-4">
+          <div class="mono mb-1 text-[10px]" style="color: var(--color-ink-faint);">
+            FOCUS &amp; ACTION
+          </div>
+          <strong style="color: #fff; font-weight: 500; font-size: 13px;">
+            {row.focusTitle}
+          </strong>
+          <p class="mt-1 text-[12px]" style="color: var(--color-ink-muted);">
+            {row.focusDescription}
+          </p>
+        </div>
+        <div>
+          <div class="mono mb-1 text-[10px]" style="color: var(--color-ink-faint);">
+            DELIVERABLE
+          </div>
+          <div class="mono text-[12px]" style="color: var(--color-ink-cell);">
+            {row.deliverables.map((d, i) => (
+              <>
+                {d}
+                {i < row.deliverables.length - 1 && <br />}
+              </>
+            ))}
+          </div>
+        </div>
+      </div>
+    ))
+  }
+</div>
+
+<style>
+  .roadmap-row:hover td {
+    background: var(--color-hover-wash);
+  }
+  .not-mono {
+    font-family: var(--font-sans);
+  }
+</style>

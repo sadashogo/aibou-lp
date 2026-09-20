@@ -1,0 +1,52 @@
+---
+import { site } from '../data/site';
+---
+
+<div class="mt-9 flex flex-wrap items-center gap-4">
+  <a
+    href={site.bookingUrl}
+    target="_blank"
+    rel="noopener"
+    class="mono border px-6 py-3.5 text-[14px] transition-colors duration-200"
+    style="color: var(--color-ink-bright); border-color: var(--color-hairline-btn); background: var(--color-hover-wash);"
+    id="bookingCtaLink"
+  >
+    ［相談の日程を選ぶ］
+  </a>
+  <button
+    id="copyBtn"
+    type="button"
+    class="mono cursor-pointer border bg-transparent px-6 py-3 text-[12px] transition-colors duration-200"
+    style="color: #fff; border-color: var(--color-hairline-copy);"
+  >
+    ［リンクをコピー］
+  </button>
+  <span
+    id="copyNote"
+    role="status"
+    aria-live="polite"
+    class="mono text-[11px] transition-opacity duration-300"
+    style="color: var(--color-ink-muted); opacity: 0;"></span>
+</div>
+
+<div
+  id="bookingUrlField"
+  class="mono mt-4 block max-w-full border px-5 py-3 text-[13.5px]"
+  style="color: #fff; background: var(--color-hover-wash); border-color: var(--color-hairline-frame); user-select: all; overflow-wrap: anywhere;"
+>
+  {site.bookingUrl}
+</div>
+
+<style>
+  #bookingCtaLink:hover {
+    background: #fff;
+    color: #000;
+  }
+  #copyBtn:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
+</style>
+
+<script>
+  import '../scripts/copy.ts';
+</script>
