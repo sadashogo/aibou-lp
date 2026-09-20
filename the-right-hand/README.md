@@ -31,7 +31,8 @@ npm run check      # astro check（型・構文チェック）
    ```bash
    ffmpeg -i roadmap-sequence.mp4 -an -c:v copy out.mp4
    ```
-   この環境には ffmpeg が無いため未実施。
+   作業環境にあった ffmpeg は Playwright 内蔵ビルドで、入力が webm/matroska のみ・
+   H.264 デコーダ非搭載のため MP4 を読めず、未実施。通常版の ffmpeg で実行すること。
 4. **ポスター画像が未設定。**
    動画の先頭フレームから作成して `public/` に配置し、`VideoFrame.astro` の `<video>` に `poster` 属性を渡すと初期表示が改善する。
 5. **アクセス解析は未導入。**
