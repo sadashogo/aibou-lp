@@ -1,0 +1,27 @@
+---
+interface Props {
+  id?: string;
+  variant?: 'hero' | 'standard' | 'closing';
+  last?: boolean;
+}
+
+const { id, variant = 'standard', last = false } = Astro.props;
+
+const paddingByVariant: Record<string, string> = {
+  hero: 'py-20 sm:py-28',
+  standard: 'py-16 sm:py-24',
+  closing: 'py-20 sm:py-32',
+};
+---
+
+<section
+  id={id}
+  class:list={[
+    'reveal',
+    paddingByVariant[variant],
+    { 'border-b': !last },
+  ]}
+  style={last ? undefined : 'border-color: var(--color-hairline);'}
+>
+  <slot />
+</section>

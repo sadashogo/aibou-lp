@@ -1,0 +1,55 @@
+---
+import { trackRecord } from '../data/track-record';
+---
+
+<p class="mb-8 max-w-[640px] text-[14px]" style="color: var(--color-ink-muted);">
+  {trackRecord.framing}
+</p>
+
+<div class="flex flex-col gap-8">
+  {
+    trackRecord.metrics.map((m) => (
+      <div class="border-t pt-6" style="border-color: var(--color-hairline-faint);">
+        <div class="mono text-[22px] sm:text-[28px]" style="color: #fff;">
+          {m.value}
+        </div>
+        <div class="mt-2 text-[13.5px]" style="color: var(--color-ink-muted);">
+          {m.label}
+        </div>
+      </div>
+    ))
+  }
+
+  <div class="border-t pt-6" style="border-color: var(--color-hairline-faint);">
+    <ul class="flex flex-col gap-3">
+      {
+        trackRecord.facts.map((f) => (
+          <li class="text-[13.5px] leading-[1.85]" style="color: var(--color-ink-lead);">
+            {f.text}
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+
+  <div class="border-t pt-6" style="border-color: var(--color-hairline-faint);">
+    <div class="mono mb-3 text-[11px]" style="color: var(--color-ink-faint);">
+      実装したもの
+    </div>
+    <ul class="flex flex-col gap-2">
+      {
+        trackRecord.implementations.map((i) => (
+          <li class="text-[13.5px]" style="color: var(--color-ink-lead);">
+            ・{i.text}
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+
+  <div class="border-t pt-6" style="border-color: var(--color-hairline-faint);">
+    <p class="text-[13.5px]" style="color: var(--color-ink-lead);">
+      {trackRecord.ongoing}
+    </p>
+  </div>
+</div>

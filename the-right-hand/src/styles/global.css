@@ -1,0 +1,116 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------
+   Design tokens — 漆黒 + ヘアライン / gothic only
+   ------------------------------------------------------------------ */
+@theme {
+  --color-void: #060608;
+  --color-ink: #d1d1d6;
+  --color-ink-bright: #ffffff;
+  --color-ink-lead: #aeaeb2;
+  --color-ink-muted: #8e8e93;
+  --color-ink-faint: #636366;
+  --color-ink-dim: #48484a;
+  --color-ink-cell: #e5e5ea;
+
+  --color-hairline: rgba(255, 255, 255, 0.08);
+  --color-hairline-head: rgba(255, 255, 255, 0.07);
+  --color-hairline-frame: rgba(255, 255, 255, 0.15);
+  --color-hairline-faint: rgba(255, 255, 255, 0.06);
+  --color-hairline-btn: rgba(255, 255, 255, 0.25);
+  --color-hairline-copy: rgba(255, 255, 255, 0.3);
+  --color-hover-wash: rgba(255, 255, 255, 0.02);
+
+  --font-sans: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN",
+    "Yu Gothic Medium", "Yu Gothic", "Noto Sans JP", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "JetBrains Mono", Menlo, Consolas,
+    monospace;
+}
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-void);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    line-height: 1.9;
+    font-feature-settings: "palt" 1;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: rgba(255, 255, 255, 0.16);
+  }
+
+  :focus-visible {
+    outline: 1px solid rgba(255, 255, 255, 0.64);
+    outline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  .mono {
+    font-family: var(--font-mono);
+    letter-spacing: 0.05em;
+  }
+
+  /* ごく控えめなフェードイン。JS 無効時も必ず見える初期値にする。 */
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+
+  html.js .reveal {
+    opacity: 0;
+    transform: translateY(12px);
+    transition:
+      opacity 900ms cubic-bezier(0.22, 1, 0.36, 1),
+      transform 900ms cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: opacity, transform;
+  }
+
+  html.js .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html.js .reveal {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* 極細ヘアライン。border では 1px 未満を表現できないため使い分ける。 */
+  .hairline-t {
+    border-top: 1px solid var(--color-hairline);
+  }
+  .hairline-b {
+    border-bottom: 1px solid var(--color-hairline);
+  }
+  .hairline {
+    border: 1px solid var(--color-hairline);
+  }
+}

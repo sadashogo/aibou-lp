@@ -1,0 +1,30 @@
+---
+---
+
+<div
+  data-video-frame
+  class="relative my-9 overflow-hidden"
+  style="aspect-ratio: 16/9; border: 1px solid var(--color-hairline-frame); background: #000; border-radius: 4px;"
+>
+  <video
+    autoplay
+    loop
+    muted
+    playsinline
+    preload="metadata"
+    disablepictureinpicture
+    class="block h-full w-full object-cover"
+  >
+    <source src="/roadmap-sequence.mp4" type="video/mp4" />
+  </video>
+  <div
+    class="mono pointer-events-none absolute top-4 left-5 border px-2.5 py-1 text-[10px]"
+    style="color: var(--color-ink-muted); background: rgba(6,6,8,0.7); backdrop-filter: blur(8px); border-color: rgba(255,255,255,0.1); letter-spacing: 0.2em; border-radius: 2px;"
+  >
+    THE RIGHT HAND // PHASE PIPELINE
+  </div>
+</div>
+
+<script>
+  import '../scripts/video.ts';
+</script>

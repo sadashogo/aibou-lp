@@ -1,0 +1,29 @@
+---
+import { pitfalls } from '../data/pitfalls';
+---
+
+<div class="mt-8 flex flex-col gap-6">
+  {
+    pitfalls.map((p) => (
+      <div
+        class="grid gap-2 border-t pt-6 sm:grid-cols-[80px_1fr] sm:gap-0 sm:pt-6"
+        style="border-color: var(--color-hairline-faint);"
+      >
+        <div class="mono text-[12px]" style="color: var(--color-ink-muted);">
+          {p.num}
+        </div>
+        <div>
+          <h3
+            class="mb-2 text-[16px] font-medium"
+            style="color: #fff;"
+          >
+            {p.title}
+          </h3>
+          <p class="text-[13.5px] leading-[1.85]" style="color: var(--color-ink-muted);">
+            {p.description}
+          </p>
+        </div>
+      </div>
+    ))
+  }
+</div>
