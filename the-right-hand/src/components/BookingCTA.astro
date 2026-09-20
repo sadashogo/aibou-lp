@@ -2,12 +2,12 @@
 import { site } from '../data/site';
 ---
 
-<div class="mt-9 flex flex-wrap items-center gap-4">
+<div class="mt-9 flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
   <a
     href={site.bookingUrl}
     target="_blank"
     rel="noopener"
-    class="mono border px-6 py-3.5 text-[14px] transition-colors duration-200"
+    class="mono border px-6 py-3.5 text-center text-[14px] transition-colors duration-200"
     style="color: var(--color-ink-bright); border-color: var(--color-hairline-btn); background: var(--color-hover-wash);"
     id="bookingCtaLink"
   >
@@ -16,7 +16,7 @@ import { site } from '../data/site';
   <button
     id="copyBtn"
     type="button"
-    class="mono cursor-pointer border bg-transparent px-6 py-3 text-[12px] transition-colors duration-200"
+    class="mono cursor-pointer border bg-transparent px-6 py-3.5 text-center text-[12px] transition-colors duration-200"
     style="color: #fff; border-color: var(--color-hairline-copy);"
   >
     ［リンクをコピー］
@@ -25,19 +25,27 @@ import { site } from '../data/site';
     id="copyNote"
     role="status"
     aria-live="polite"
-    class="mono text-[11px] transition-opacity duration-300"
+    class="mono text-center text-[11px] transition-opacity duration-300 sm:text-left"
     style="color: var(--color-ink-muted); opacity: 0;"></span>
 </div>
 
-<div
-  id="bookingUrlField"
-  class="mono mt-4 block max-w-full border px-5 py-3 text-[13.5px]"
-  style="color: #fff; background: var(--color-hover-wash); border-color: var(--color-hairline-frame); user-select: all; overflow-wrap: anywhere;"
->
+{/*
+  コピー失敗時の execCommand フォールバックは、この要素を Range で選択して使う。
+  display:none にすると選択できずフォールバックが壊れるため、画面外へ逃がして残す。
+*/}
+<div id="bookingUrlField" class="sr-only-selectable" aria-hidden="true">
   {site.bookingUrl}
 </div>
 
 <style>
+  .sr-only-selectable {
+    position: absolute;
+    left: -9999px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
   #bookingCtaLink:hover {
     background: #fff;
     color: #000;
