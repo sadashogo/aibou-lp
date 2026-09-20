@@ -1,14 +1,14 @@
 @import "tailwindcss";
 
 /* ------------------------------------------------------------------
-   Design tokens — 漆黒 + ヘアライン / gothic only
+   Design tokens — 漆黒 + ヘアライン / 明朝体
    ------------------------------------------------------------------ */
 @theme {
   --color-void: #060608;
-  --color-ink: #d1d1d6;
+  --color-ink: #dcdce0;
   --color-ink-bright: #ffffff;
-  --color-ink-lead: #aeaeb2;
-  --color-ink-muted: #8e8e93;
+  --color-ink-lead: #c3c3c8;
+  --color-ink-muted: #9b9ba0;
   --color-ink-faint: #636366;
   --color-ink-dim: #48484a;
   --color-ink-cell: #e5e5ea;
@@ -21,8 +21,9 @@
   --color-hairline-copy: rgba(255, 255, 255, 0.3);
   --color-hover-wash: rgba(255, 255, 255, 0.02);
 
-  --font-sans: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN",
-    "Yu Gothic Medium", "Yu Gothic", "Noto Sans JP", sans-serif;
+  /* 明朝体。-apple-system を先頭に置くと Mac/iPhone でゴシックに解決されるため入れない。 */
+  --font-serif: "Hiragino Mincho ProN", "Hiragino Mincho Pro", "Yu Mincho",
+    YuMincho, "Noto Serif JP", "Times New Roman", serif;
   --font-mono: ui-monospace, SFMono-Regular, "JetBrains Mono", Menlo, Consolas,
     monospace;
 }
@@ -40,11 +41,12 @@
   body {
     background-color: var(--color-void);
     color: var(--color-ink);
-    font-family: var(--font-sans);
+    font-family: var(--font-serif);
     line-height: 1.9;
     font-feature-settings: "palt" 1;
-    -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+    /* 暗背景では antialiased が明朝の細い縦画をさらに痩せさせるため、あえて既定のままにする。 */
+    -webkit-font-smoothing: auto;
   }
 
   ::selection {
