@@ -1,16 +1,19 @@
 ---
 import MadeFigure from './MadeFigure.astro';
-import { madeForLabel, type Made } from '../data/made';
+import type { Made } from '../data/made';
 
-// compact: トップ用（図・名前・作ったものの一文だけ）
+// compact: トップ用（図・名前・作ったものの一文・タグ3つまで）
 interface Props { item: Made; compact?: boolean; headingLevel?: 'h2' | 'h3' }
 const { item, compact = false, headingLevel = 'h3' } = Astro.props;
 const H = headingLevel;
+const tags = compact ? item.tags.slice(0, 3) : item.tags;
+// 検索用の文字列（名前・説明・タグをまとめる）
+const searchText = [item.name, item.context, item.before, item.what, item.after, ...item.tags].filter(Boolean).join(' ').toLowerCase();
 ---
-<article class="made" data-for={item.for} id={compact ? undefined : item.id}>
+<article class="made" id={compact ? undefined : item.id} data-tags={item.tags.join('|')} data-search={compact ? undefined : searchText}>
   <div class="made-fig"><MadeFigure kind={item.figure} /></div>
   <div class="made-body">
-    <p class="made-meta"><span class={`made-tag made-tag--${item.for}`}>{madeForLabel[item.for]}</span>{item.context}</p>
+    <p class="made-meta">{item.for === 'client' && <span class="made-badge">お客さま事例</span>}{item.context}</p>
     <H class="made-name">{item.name}</H>
     {!compact && item.before && (
       <p class="made-row"><span class="made-label">困っていたこと</span>{item.before}</p>
@@ -19,11 +22,11 @@ const H = headingLevel;
     {!compact && item.after && (
       <p class="made-row"><span class="made-label">その後</span>{item.after}</p>
     )}
-    {!compact && (
-      <ul class="made-tools" aria-label="使った道具">
-        {item.tools.map((t) => <li>{t}</li>)}
-      </ul>
-    )}
+    <ul class="made-tags" aria-label="タグ">
+      {tags.map((t) => (
+        <li>{compact ? <a class="tag" href={`/made/?tag=${encodeURIComponent(t)}`}>#{t}</a> : <button type="button" class="tag" data-tag={t}>#{t}</button>}</li>
+      ))}
+    </ul>
     {item.url && (
       <a class="made-open" href={item.url} target="_blank" rel="noopener">サイトを開く <span aria-hidden="true">↗</span><span class="sr">（別のタブで開きます）</span></a>
     )}
@@ -40,13 +43,18 @@ const H = headingLevel;
   .made-fig :global(svg) { max-height: 120px; margin-inline: auto; }
   .made-body { padding: var(--space-lg); display: grid; gap: var(--space-xs); align-content: start; }
   .made-meta { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2xs) var(--space-xs); font-size: 0.8125rem; color: var(--color-ink-soft); }
-  .made-tag { font-weight: 700; padding: 1px 8px; border-radius: 999px; border: 1.5px solid var(--color-ink); color: var(--color-ink); white-space: nowrap; }
-  .made-tag--client { background: var(--color-marker); }
+  .made-badge { font-weight: 700; padding: 1px 8px; border-radius: 999px; border: 1.5px solid var(--color-ink); color: var(--color-ink); background: var(--color-marker); white-space: nowrap; }
   .made-name { font-size: var(--text-xl); }
   .made-row { font-size: var(--text-sm); }
   .made-label { display: block; font-size: 0.75rem; font-weight: 700; color: var(--color-ink-soft); letter-spacing: 0.04em; }
-  .made-tools { display: flex; flex-wrap: wrap; gap: var(--space-2xs) var(--space-xs); margin: var(--space-2xs) 0 0; padding: 0; list-style: none; }
-  .made-tools li { font-size: 0.75rem; line-height: 1.6; padding: 1px 8px; border-radius: 4px; background: var(--color-paper-2); }
+  .made-tags { display: flex; flex-wrap: wrap; gap: var(--space-2xs) var(--space-xs); margin: var(--space-2xs) 0 0; padding: 0; list-style: none; }
+  .tag {
+    font: inherit; font-size: 0.75rem; line-height: 1.6; padding: 1px 8px; border-radius: 4px; white-space: nowrap;
+    background: var(--color-paper-2); color: var(--color-ink-soft); border: 0;
+  }
+  a.tag { text-decoration: none; }
+  button.tag { cursor: pointer; }
+  button.tag:hover, a.tag:hover { background: var(--color-marker); color: var(--color-ink); }
   .made-open { margin-top: var(--space-xs); font-weight: 700; white-space: nowrap; justify-self: start; }
   .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 </style>
