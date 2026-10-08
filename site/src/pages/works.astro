@@ -40,9 +40,8 @@ import { works, results, voices } from '../data/site';
       </div>
       <div class="res-built">
         <h3>これまでに作った仕組み</h3>
-        <ul>
-          {results.built.map((b) => <li>{b}</li>)}
-        </ul>
+        <p>LINE Bot、Excelの自動化、Chrome拡張、在庫アプリ、業務マニュアル作成ツールなど、作ったものを1つずつ紹介しています。</p>
+        <p class="res-link"><a href="/made/">つくったものを見る</a></p>
       </div>
     </div>
   </section>
@@ -64,11 +63,12 @@ import { works, results, voices } from '../data/site';
   .res { display: grid; gap: var(--space-xl) var(--space-2xl); grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); }
   .res-metric { font-family: var(--font-hand); font-weight: 600; font-size: var(--text-display); line-height: 1.4; }
   .res-facts { margin: var(--space-lg) 0; padding-left: 1.2em; color: var(--color-ink-soft); display: grid; gap: var(--space-xs); }
-  .res-ongoing { font-family: var(--font-hand); font-weight: 600; font-size: var(--text-lg); }
+  .res-ongoing { font-weight: 700; font-size: var(--text-lg); }
   .res-built {
     background: var(--color-card); border: 2px solid var(--color-ink); border-radius: var(--radius-md); padding: var(--space-lg);
   }
   .res-built h3 { font-size: var(--text-lg); margin-bottom: var(--space-sm); }
-  .res-built ul { margin: 0; padding-left: 1.2em; display: grid; gap: var(--space-xs); font-size: var(--text-sm); }
+  .res-built p { font-size: var(--text-sm); }
+  .res-link { margin-top: var(--space-sm); font-weight: 700; }
   @media (max-width: 760px) { .res { grid-template-columns: minmax(0, 1fr); } }
 </style>

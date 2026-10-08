@@ -1,0 +1,52 @@
+---
+import MadeFigure from './MadeFigure.astro';
+import { madeForLabel, type Made } from '../data/made';
+
+// compact: トップ用（図・名前・作ったものの一文だけ）
+interface Props { item: Made; compact?: boolean; headingLevel?: 'h2' | 'h3' }
+const { item, compact = false, headingLevel = 'h3' } = Astro.props;
+const H = headingLevel;
+---
+<article class="made" data-for={item.for} id={compact ? undefined : item.id}>
+  <div class="made-fig"><MadeFigure kind={item.figure} /></div>
+  <div class="made-body">
+    <p class="made-meta"><span class={`made-tag made-tag--${item.for}`}>{madeForLabel[item.for]}</span>{item.context}</p>
+    <H class="made-name">{item.name}</H>
+    {!compact && item.before && (
+      <p class="made-row"><span class="made-label">困っていたこと</span>{item.before}</p>
+    )}
+    <p class="made-row">{!compact && <span class="made-label">つくったもの</span>}{item.what}</p>
+    {!compact && item.after && (
+      <p class="made-row"><span class="made-label">その後</span>{item.after}</p>
+    )}
+    {!compact && (
+      <ul class="made-tools" aria-label="使った道具">
+        {item.tools.map((t) => <li>{t}</li>)}
+      </ul>
+    )}
+    {item.url && (
+      <a class="made-open" href={item.url} target="_blank" rel="noopener">サイトを開く <span aria-hidden="true">↗</span><span class="sr">（別のタブで開きます）</span></a>
+    )}
+  </div>
+</article>
+
+<style>
+  .made {
+    display: grid; align-content: start; height: 100%; overflow: hidden;
+    background: var(--color-card); border: 2px solid var(--color-ink); border-radius: var(--radius-md);
+    box-shadow: 4px 4px 0 var(--color-rule);
+  }
+  .made-fig { background: var(--color-paper-2); border-bottom: 2px solid var(--color-ink); padding: var(--space-md) var(--space-xl); }
+  .made-fig :global(svg) { max-height: 120px; margin-inline: auto; }
+  .made-body { padding: var(--space-lg); display: grid; gap: var(--space-xs); align-content: start; }
+  .made-meta { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2xs) var(--space-xs); font-size: 0.8125rem; color: var(--color-ink-soft); }
+  .made-tag { font-weight: 700; padding: 1px 8px; border-radius: 999px; border: 1.5px solid var(--color-ink); color: var(--color-ink); white-space: nowrap; }
+  .made-tag--client { background: var(--color-marker); }
+  .made-name { font-size: var(--text-xl); }
+  .made-row { font-size: var(--text-sm); }
+  .made-label { display: block; font-size: 0.75rem; font-weight: 700; color: var(--color-ink-soft); letter-spacing: 0.04em; }
+  .made-tools { display: flex; flex-wrap: wrap; gap: var(--space-2xs) var(--space-xs); margin: var(--space-2xs) 0 0; padding: 0; list-style: none; }
+  .made-tools li { font-size: 0.75rem; line-height: 1.6; padding: 1px 8px; border-radius: 4px; background: var(--color-paper-2); }
+  .made-open { margin-top: var(--space-xs); font-weight: 700; white-space: nowrap; justify-self: start; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+</style>

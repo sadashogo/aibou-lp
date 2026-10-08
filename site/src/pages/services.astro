@@ -1,13 +1,9 @@
 ---
 import Base from '../layouts/Base.astro';
 import ContactButtons from '../components/ContactButtons.astro';
-import { services, site } from '../data/site';
+import { services, site, consultSteps } from '../data/site';
 
-const steps = [
-  { title: '日時を選んで予約', body: '空いている枠をタップするだけ。約1分で予約完了です。' },
-  { title: '当日、オンラインで30分', body: '予約と同時にGoogle MeetのURLが自動で届きます。顔出しは任意、スマホ参加もOKです。' },
-  { title: '道筋を持ち帰る', body: '「まず何から始めるか」を整理してお渡しします。売り込みはしません。' },
-];
+const steps = consultSteps;
 ---
 <Base title="サービス" description="無料30分AI相談、予約・申込の事務 自動化パック、業務の自動化・LINE公式アカウントの構築、Webサイト・LP制作、月額サポート（AI顧問）。AIBOUのサービス内容と料金です。">
   <section class="wrap page-head">
@@ -70,7 +66,7 @@ const steps = [
 
   .svc { display: grid; gap: var(--space-lg) var(--space-2xl); grid-template-columns: minmax(0, 20rem) minmax(0, 1fr); scroll-margin-top: 96px; }
   .svc-head h2 { font-size: var(--text-2xl); margin-bottom: var(--space-sm); }
-  .svc-price { display: inline-flex; gap: var(--space-xs); align-items: baseline; font-family: var(--font-hand); font-weight: 600; font-size: var(--text-lg); }
+  .svc-price { display: inline-flex; gap: var(--space-xs); align-items: baseline; font-weight: 700; font-size: var(--text-lg); }
   .svc-price span {
     font-family: var(--font-body); font-weight: 400; font-size: 0.75rem; line-height: 1.6; white-space: nowrap; flex: none;
     padding: 1px 8px; border: 1.5px solid var(--color-ink); border-radius: 999px;
@@ -79,7 +75,7 @@ const steps = [
   .svc-price-note { margin-top: var(--space-xs); }
   .svc-extra { margin-top: calc(-1 * var(--space-sm)); margin-bottom: var(--space-lg); }
   .svc-list { margin: 0 0 var(--space-lg); padding-left: 1.2em; display: grid; gap: var(--space-xs); color: var(--color-ink-soft); }
-  .svc-link { font-family: var(--font-hand); font-weight: 600; }
+  .svc-link { font-weight: 700; }
   .svc-cta { margin-top: var(--space-lg); }
   @media (max-width: 760px) { .svc { grid-template-columns: minmax(0, 1fr); } }
 
@@ -92,7 +88,7 @@ const steps = [
     content: counter(step); grid-row: span 2; display: grid; place-items: center; width: 2.25rem; height: 2.25rem;
     font-family: var(--font-hand); font-weight: 600; border: 2px solid var(--color-ink); border-radius: 50% 45% 55% 48%;
   }
-  .steps b { font-family: var(--font-hand); font-weight: 600; }
+  .steps b { font-weight: 700; }
   .steps span { font-size: var(--text-sm); color: var(--color-ink-soft); }
 
   .demo { margin: 0; max-width: 36rem; }

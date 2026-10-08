@@ -58,10 +58,6 @@ body {
   line-height: 1.95;
   color: var(--color-ink);
   background-color: var(--color-paper);
-  background-image:
-    linear-gradient(var(--color-grid) 1px, transparent 1px),
-    linear-gradient(90deg, var(--color-grid) 1px, transparent 1px);
-  background-size: 26px 26px;
   font-feature-settings: 'palt' 1;
 }
 img, video { display: block; max-width: 100%; height: auto; }
@@ -105,7 +101,7 @@ p { margin: 0; }
 .btn--line::before {
   content: ''; width: 10px; height: 10px; border-radius: 50%; background: var(--color-line); flex: none;
 }
-.btn--sm { min-height: 40px; padding: var(--space-2xs) var(--space-md); font-size: var(--text-base); box-shadow: 2px 2px 0 var(--color-ink); }
+.btn--sm { min-height: 40px; padding: var(--space-2xs) var(--space-md); font-family: var(--font-body); font-weight: 700; font-size: var(--text-sm); box-shadow: 2px 2px 0 var(--color-ink); }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
