@@ -10,7 +10,7 @@ export const site = {
   url: 'https://aibou.pages.dev',
   owner: '定方 翔吾',
   bookingUrl: 'https://calendar.app.google/BoqLTYmykRKZVpJb9',
-  lineUrl: 'https://lin.ee/uCJpe5v',
+  lineUrl: 'https://lin.ee/R67gFib',
   gaId: 'G-DV61552QWH',
   consultHours: '平日夜（18:00〜22:00）と土日',
 };
@@ -48,8 +48,8 @@ export const services: Service[] = [
     name: '予約・申込の事務 自動化パック',
     summary:
       '講座・セミナー、サロン・整体・教室、説明会や体験会を開く小さな会社向け。LINE公式・フォーム・スプレッドシートで、予約・申込まわりの事務をまとめて自動にします。',
-    price: '初期 165,000円 ＋ 保守 月11,000円（任意）',
-    priceNote: '先着3社はモニター価格 55,000円。月額のツール代はかからず、データはすべてお客さまのアカウントに置きます。',
+    price: '初期 165,000円（税込） ＋ 保守 月11,000円（税込・任意）',
+    priceNote: '先着3社はモニター価格 55,000円（税込）。月額のツール代はかからず、データはすべてお客さまのアカウントに置きます。',
     details: [
       '申込・予約の受付（フォームからスプレッドシートに自動で記録）',
       'LINEで受付完了・ご案内を自動送信',
@@ -112,8 +112,9 @@ export const works: Work[] = [
     name: '赤城急送',
     kind: '運送会社のWebサイト',
     url: 'https://akagi-express.pages.dev/',
-    description: 'スクロールに合わせて映像が進む、運送会社のWebサイトの制作サンプルです。',
+    description: '夜間の幹線輸送を担う運送会社を想定したWebサイトです。スクロールに合わせて映像が進み、画面の隅に走行距離と時刻を表示しています。',
     points: ['架空の会社', 'スクロール連動の映像演出'],
+    image: '/works/akagi-express.jpg',
   },
   {
     name: 'MAISON KUROGANE',
