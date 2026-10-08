@@ -2,7 +2,8 @@
 import Base from '../layouts/Base.astro';
 import ContactButtons from '../components/ContactButtons.astro';
 import WorkCard from '../components/WorkCard.astro';
-import { site, services, works, results } from '../data/site';
+import VoiceCard from '../components/VoiceCard.astro';
+import { site, services, works, voices } from '../data/site';
 
 const pack = services.find((s) => s.id === 'booking-pack')!;
 ---
@@ -70,14 +71,12 @@ const pack = services.find((s) => s.id === 'booking-pack')!;
     </div>
   </section>
 
-  <section class="section wrap result">
-    <div>
-      <h2 class="sec-title">業務改善の実績</h2>
-      <p class="result-metric"><span class="mk">{results.metric.value}</span></p>
-      <p>{results.metric.label}</p>
-      <p class="lead">{results.ongoing}</p>
+  <section class="section wrap">
+    <h2 class="sec-title">いただいた声</h2>
+    <div class="voices">
+      {voices.map((v) => <VoiceCard voice={v} />)}
     </div>
-    <p class="more"><a href="/works/">実績をもっと見る</a></p>
+    <p class="more"><a href="/works/#voices">全文を見る</a></p>
   </section>
 
   <section class="section narrow letter">
@@ -155,9 +154,8 @@ const pack = services.find((s) => s.id === 'booking-pack')!;
   .works { display: grid; gap: var(--space-xl); grid-template-columns: repeat(2, minmax(0, 1fr)); }
   @media (max-width: 760px) { .works { grid-template-columns: minmax(0, 1fr); } }
 
-  .result { display: grid; gap: var(--space-md); grid-template-columns: minmax(0, 1fr) auto; align-items: end; }
-  .result-metric { font-family: var(--font-hand); font-weight: 600; font-size: var(--text-display); line-height: 1.4; }
-  @media (max-width: 760px) { .result { grid-template-columns: minmax(0, 1fr); } }
+  .voices { display: grid; gap: var(--space-xl); grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  @media (max-width: 760px) { .voices { grid-template-columns: minmax(0, 1fr); } }
 
   .letter p + p { margin-top: var(--space-md); }
   .sign { font-family: var(--font-hand); text-align: right; }

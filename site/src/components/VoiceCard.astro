@@ -1,0 +1,41 @@
+---
+import type { Voice } from '../data/site';
+
+// full: 実績ページ用（本文まで出す）／ false: トップ用（一言と肩書きだけ）
+interface Props { voice: Voice; full?: boolean }
+const { voice, full = false } = Astro.props;
+---
+<figure class="voice">
+  <p class="voice-case"><span>{voice.case}</span>{voice.context}</p>
+  <blockquote>
+    <p class="voice-head">「{voice.headline}」</p>
+    {full && voice.body.map((b) => <p class="voice-body">{b}</p>)}
+  </blockquote>
+  <figcaption class="voice-person">{voice.person}</figcaption>
+  {full && (
+    <ul class="voice-topics" aria-label="取り組んだこと">
+      {voice.topics.map((t) => <li>{t}</li>)}
+    </ul>
+  )}
+  {voice.note && <p class="voice-note">{voice.note}</p>}
+</figure>
+
+<style>
+  .voice {
+    margin: 0; height: 100%; display: grid; align-content: start; gap: var(--space-sm);
+    background: var(--color-card); border: 2px solid var(--color-ink); border-radius: var(--radius-md);
+    box-shadow: 4px 4px 0 var(--color-rule); padding: var(--space-lg);
+  }
+  .voice-case { font-size: var(--text-sm); color: var(--color-ink-soft); }
+  .voice-case span { font-family: var(--font-hand); font-weight: 600; color: var(--color-ink); margin-right: var(--space-xs); }
+  blockquote { margin: 0; display: grid; gap: var(--space-sm); }
+  .voice-head { font-family: var(--font-hand); font-weight: 600; font-size: var(--text-xl); line-height: 1.6; }
+  .voice-body { font-size: var(--text-sm); }
+  .voice-person { font-size: var(--text-sm); color: var(--color-ink-soft); text-align: right; }
+  .voice-topics { display: flex; flex-wrap: wrap; gap: var(--space-2xs) var(--space-xs); margin: 0; padding: 0; list-style: none; }
+  .voice-topics li {
+    font-size: 0.8125rem; line-height: 1.6; padding: 2px 10px;
+    border: 1.5px solid var(--color-ink); border-radius: 999px; background: var(--color-paper);
+  }
+  .voice-note { font-size: 0.8125rem; color: var(--color-ink-faint); }
+</style>

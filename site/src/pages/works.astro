@@ -1,12 +1,13 @@
 ---
 import Base from '../layouts/Base.astro';
 import WorkCard from '../components/WorkCard.astro';
-import { works, results } from '../data/site';
+import VoiceCard from '../components/VoiceCard.astro';
+import { works, results, voices } from '../data/site';
 ---
 <Base title="実績" description="AIBOUの実績。Webサイトの制作サンプル（赤城急送・MAISON KUROGANE）と、業務の自動化・改善の実績です。">
   <section class="wrap page-head">
     <h1>実績</h1>
-    <p class="lead">Webサイトの制作サンプルと、業務の自動化・改善の実績です。</p>
+    <p class="lead">Webサイトの制作サンプル、いただいた声、業務の自動化・改善の実績です。</p>
   </section>
 
   <section class="section wrap">
@@ -16,6 +17,13 @@ import { works, results } from '../data/site';
     </p>
     <div class="works">
       {works.map((w) => <WorkCard work={w} headingLevel="h3" />)}
+    </div>
+  </section>
+
+  <section class="section wrap" id="voices">
+    <h2 class="sec-title">いただいた声</h2>
+    <div class="voices">
+      {voices.map((v) => <VoiceCard voice={v} full />)}
     </div>
   </section>
 
@@ -48,6 +56,10 @@ import { works, results } from '../data/site';
   .sec-lead strong { font-weight: 700; color: var(--color-ink); }
   .works { display: grid; gap: var(--space-xl); grid-template-columns: repeat(2, minmax(0, 1fr)); }
   @media (max-width: 760px) { .works { grid-template-columns: minmax(0, 1fr); } }
+
+  .voices { display: grid; gap: var(--space-xl); grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  @media (max-width: 760px) { .voices { grid-template-columns: minmax(0, 1fr); } }
+  #voices { scroll-margin-top: 96px; }
 
   .res { display: grid; gap: var(--space-xl) var(--space-2xl); grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); }
   .res-metric { font-family: var(--font-hand); font-weight: 600; font-size: var(--text-display); line-height: 1.4; }
