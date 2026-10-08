@@ -1,0 +1,65 @@
+---
+import Base from '../layouts/Base.astro';
+import MadeCard from '../components/MadeCard.astro';
+import { made, madeForLabel, type MadeFor } from '../data/made';
+
+const filters: ('all' | MadeFor)[] = ['all', 'client', 'employer', 'own', 'sample'];
+const count = (f: 'all' | MadeFor) => (f === 'all' ? made.length : made.filter((m) => m.for === f).length);
+---
+<Base title="つくったもの" description="AIBOUの定方がこれまでに作った仕組み。LINE Bot、Excelの自動化、Chrome拡張、在庫アプリ、業務マニュアル作成ツール、Webサイトなど。">
+  <section class="wrap page-head">
+    <h1>つくったもの</h1>
+    <p class="lead">
+      これまでに作った仕組みです。「困っていたこと」と「つくったもの」を並べています。勤務先の運送会社で作ったものは、会社名や画面の中の数字を伏せて載せています。
+    </p>
+  </section>
+
+  <section class="wrap made-wrap">
+    <div class="filters" role="group" aria-label="誰のために作ったかで絞り込む" hidden data-filters>
+      {filters.map((f, i) => (
+        <button type="button" class="filter" data-filter={f} aria-pressed={i === 0 ? 'true' : 'false'}>
+          {f === 'all' ? 'すべて' : madeForLabel[f]}<span>{count(f)}</span>
+        </button>
+      ))}
+    </div>
+    <div class="made-grid">
+      {made.map((m) => <MadeCard item={m} headingLevel="h2" />)}
+    </div>
+  </section>
+</Base>
+
+<script>
+  // JS が動くときだけ絞り込みボタンを出す（動かなくても全件見える）
+  const box = document.querySelector<HTMLElement>('[data-filters]');
+  if (box) {
+    box.hidden = false;
+    const cards = [...document.querySelectorAll<HTMLElement>('.made-grid > [data-for]')];
+    box.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-filter]');
+      if (!btn) return;
+      const f = btn.dataset.filter;
+      box.querySelectorAll('[data-filter]').forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+      cards.forEach((c) => { c.hidden = f !== 'all' && c.dataset.for !== f; });
+    });
+  }
+</script>
+
+<style>
+  .page-head { padding-block: var(--space-2xl) var(--space-lg); }
+  .page-head h1 { font-size: var(--text-display); margin-bottom: var(--space-sm); }
+  .page-head .lead { max-width: var(--measure); }
+  .made-wrap { padding-bottom: var(--space-3xl); }
+  .filters { display: flex; flex-wrap: wrap; gap: var(--space-xs); margin-bottom: var(--space-xl); }
+  .filter {
+    font: inherit; font-size: var(--text-sm); font-weight: 700; cursor: pointer; white-space: nowrap;
+    padding: 6px 14px; border-radius: 999px; border: 1.5px solid var(--color-ink);
+    background: var(--color-card); color: var(--color-ink);
+  }
+  .filter span { margin-left: 6px; font-weight: 400; color: var(--color-ink-soft); }
+  .filter[aria-pressed='true'] { background: var(--color-ink); color: var(--color-paper); }
+  .filter[aria-pressed='true'] span { color: var(--color-paper); }
+  .made-grid { display: grid; gap: var(--space-xl); grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .made-grid > :global([hidden]) { display: none; }
+  @media (max-width: 1000px) { .made-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 640px) { .made-grid { grid-template-columns: minmax(0, 1fr); } }
+</style>

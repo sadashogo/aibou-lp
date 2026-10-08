@@ -1,0 +1,90 @@
+---
+// 「つくったもの」の簡単な線画。画面写真が届いたら写真に差し替える。
+import type { FigureKind } from '../data/made';
+
+interface Props { kind: FigureKind }
+const { kind } = Astro.props;
+---
+<svg class="fig" viewBox="0 0 160 100" role="img" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+  {kind === 'chat' && (
+    <>
+      <rect x="52" y="8" width="56" height="86" rx="9" />
+      <path d="M62 26h26a5 5 0 0 1 5 5v6a5 5 0 0 1-5 5H70l-6 5v-5h-2a5 5 0 0 1-5-5v-6a5 5 0 0 1 5-5z" />
+      <rect class="acc" x="66" y="52" width="34" height="28" rx="5" />
+      <path d="M71 60h22M71 67h16M71 74h19" />
+    </>
+  )}
+  {kind === 'sheet' && (
+    <>
+      <rect x="28" y="12" width="104" height="76" rx="5" />
+      <path d="M28 30h104M28 48h104M28 66h104M62 12v76M98 12v76" />
+      <rect class="acc" x="99.5" y="49.5" width="31" height="15" />
+      <path d="M108 57l4 4 7-8" />
+    </>
+  )}
+  {kind === 'dashboard' && (
+    <>
+      <rect x="22" y="12" width="116" height="76" rx="6" />
+      <rect class="acc" x="32" y="22" width="28" height="18" rx="3" />
+      <rect x="66" y="22" width="28" height="18" rx="3" />
+      <rect x="100" y="22" width="28" height="18" rx="3" />
+      <path d="M32 54h64M32 66h96M32 78h48" />
+      <path d="M104 54h24" />
+    </>
+  )}
+  {kind === 'pallet' && (
+    <>
+      <rect x="36" y="20" width="40" height="22" rx="2" /><rect x="76" y="20" width="40" height="22" rx="2" />
+      <rect class="acc" x="36" y="42" width="40" height="22" rx="2" /><rect x="76" y="42" width="40" height="22" rx="2" />
+      <path d="M30 64h92v8H30zM36 72v8M76 72v8M116 72v8" />
+      <rect x="122" y="34" width="22" height="38" rx="4" />
+      <path d="M127 44h12M127 52h8" />
+    </>
+  )}
+  {kind === 'robot' && (
+    <>
+      <rect x="54" y="28" width="52" height="40" rx="8" />
+      <path d="M80 28V16" /><circle cx="80" cy="13" r="3" />
+      <circle class="acc" cx="68" cy="46" r="5" /><circle class="acc" cx="92" cy="46" r="5" />
+      <path d="M70 58h20M60 68l-6 18M100 68l6 18" />
+      <path d="M118 30a14 14 0 1 1 0 20M118 50l6 0M118 50l0-6" />
+    </>
+  )}
+  {kind === 'book' && (
+    <>
+      <path d="M80 22c-12-8-32-8-44-4v64c12-4 32-4 44 4 12-8 32-8 44-4V18c-12-4-32-4-44 4z" />
+      <path d="M80 22v64" />
+      <rect class="acc" x="46" y="34" width="24" height="16" rx="2" />
+      <path d="M46 58h24M46 66h18M90 36h24M90 44h24M90 52h18M90 64h24" />
+    </>
+  )}
+  {kind === 'bubble' && (
+    <>
+      <rect x="20" y="16" width="70" height="44" rx="6" />
+      <path d="M30 30h40M30 40h28M30 50h34" />
+      <path class="acc" d="M92 46h40a6 6 0 0 1 6 6v20a6 6 0 0 1-6 6h-22l-10 9v-9h-8a6 6 0 0 1-6-6V52a6 6 0 0 1 6-6z" />
+      <path d="M100 58h28M100 66h18" />
+    </>
+  )}
+  {kind === 'route' && (
+    <>
+      <circle cx="30" cy="74" r="7" /><circle cx="80" cy="34" r="7" /><circle cx="130" cy="64" r="7" />
+      <path d="M36 70c14-10 22-24 38-32M86 38c16 6 24 16 38 22" stroke-dasharray="2 7" />
+      <rect class="acc" x="96" y="14" width="44" height="22" rx="4" />
+      <path d="M104 25h28" />
+    </>
+  )}
+  {kind === 'site' && (
+    <>
+      <rect x="18" y="14" width="124" height="72" rx="6" />
+      <rect class="acc" x="28" y="24" width="60" height="34" rx="3" />
+      <path d="M28 68h60M28 76h40M100 26h32M100 36h24M100 46h28" />
+      <path d="M118 62v18M112 74l6 6 6-6" />
+    </>
+  )}
+</svg>
+
+<style>
+  .fig { display: block; width: 100%; height: auto; color: var(--color-ink); }
+  .fig .acc { fill: var(--color-marker); }
+</style>

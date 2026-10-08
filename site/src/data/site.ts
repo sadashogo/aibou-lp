@@ -11,14 +11,32 @@ export const site = {
   owner: '定方 翔吾',
   bookingUrl: 'https://calendar.app.google/BoqLTYmykRKZVpJb9',
   lineUrl: 'https://lin.ee/R67gFib',
+  noteUrl: 'https://note.com/shogo_ai',
+  noteRss: 'https://note.com/shogo_ai/rss',
   gaId: 'G-DV61552QWH',
   consultHours: '平日夜（18:00〜22:00）と土日',
 };
 
 export const nav = [
   { href: '/services/', label: 'サービス' },
+  { href: '/made/', label: 'つくったもの' },
   { href: '/works/', label: '実績' },
-  { href: '/about/', label: 'AIBOUについて' },
+  { href: '/about/', label: 'AIBOUとは' },
+];
+
+// 無料相談の流れ（トップとサービスページで共通）
+export const consultSteps = [
+  { title: '日時を選んで予約', body: '空いている枠をタップするだけ。約1分で予約完了です。' },
+  { title: '当日、オンラインで30分', body: '予約と同時にGoogle MeetのURLが自動で届きます。顔出しは任意、スマホ参加もOKです。' },
+  { title: '道筋を持ち帰る', body: '「まず何から始めるか」を整理してお渡しします。売り込みはしません。' },
+];
+
+// トップの「こんなこと、ありませんか」
+export const pains = [
+  '見積書や日報づくりに、毎日時間を取られている',
+  '問い合わせや予約の返信を、もっと早く・楽にしたい',
+  'AIが気になるけど、何から始めればいいか分からない',
+  'お店のサイトやLINEを、ちゃんと整えたい',
 ];
 
 // 自動化パックのモニター枠。決まるたびに remaining を減らす。0 にするとモニター価格の文言が消える。
@@ -140,7 +158,6 @@ export const results = {
     'デジタコ（運行記録計）のデータ分析による燃費改善',
     'テールゲートリフター補助金の申請、ホワイト物流・健康経営の認定取得',
   ],
-  built: ['業務を自動化するLINE Bot', 'Excel VBAによる月次処理の自動化', 'Chrome拡張', 'ブラウザ操作の自動化によるデータ取得', '業務マニュアル作成ツール'],
   ongoing: 'サロン業の2社を、月額で継続して支援しています',
 };
 

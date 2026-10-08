@@ -18,6 +18,10 @@ import { site, faqs } from '../data/site';
       「AIBOU（アイボウ）」という名前には、いつでも隣で気軽に頼れる“相棒”でありたい、という思いを込めています。
     </p>
     <p class="sign">— {site.name} {site.owner}</p>
+    <p class="about-links">
+      <a href="/made/">これまでにつくったもの</a>
+      <a href={site.noteUrl} target="_blank" rel="noopener">noteで書いていること <span aria-hidden="true">↗</span></a>
+    </p>
   </section>
 
   <section class="section narrow">
@@ -35,18 +39,17 @@ import { site, faqs } from '../data/site';
   .page-head { padding-block: var(--space-2xl) var(--space-lg); }
   .page-head h1 { font-size: var(--text-display); }
   .letter {
-    background: var(--color-card); border: 2px solid var(--color-ink);
-    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
-    padding: var(--space-xl) clamp(var(--space-lg), 5vw, var(--space-2xl));
+    border-left: 4px solid var(--color-marker); padding: var(--space-2xs) 0 var(--space-2xs) var(--space-lg);
     margin-bottom: var(--space-2xl);
   }
+  .about-links { display: flex; flex-wrap: wrap; gap: var(--space-xs) var(--space-xl); margin-top: var(--space-lg); font-weight: 700; }
   .letter p + p { margin-top: var(--space-md); }
-  .sign { font-family: var(--font-hand); text-align: right; }
+  .sign { text-align: right; font-weight: 700; }
 
   .faq-title { font-size: var(--text-2xl); margin-bottom: var(--space-lg); }
   details { border-bottom: 2px dashed var(--color-rule); padding-block: var(--space-sm); }
   details:first-of-type { border-top: 2px dashed var(--color-rule); }
-  summary { font-family: var(--font-hand); font-weight: 600; cursor: pointer; list-style: none; padding-right: 2em; position: relative; }
+  summary { font-weight: 700; cursor: pointer; list-style: none; padding-right: 2em; position: relative; }
   summary::-webkit-details-marker { display: none; }
   summary::after { content: '+'; position: absolute; right: 0.25em; top: 0; font-size: var(--text-xl); line-height: 1.4; }
   details[open] summary::after { content: '−'; }

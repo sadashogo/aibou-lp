@@ -1,34 +1,90 @@
 ---
 import Base from '../layouts/Base.astro';
 import ContactButtons from '../components/ContactButtons.astro';
-import WorkCard from '../components/WorkCard.astro';
 import VoiceCard from '../components/VoiceCard.astro';
-import { site, services, works, voices } from '../data/site';
+import MadeCard from '../components/MadeCard.astro';
+import MadeFigure from '../components/MadeFigure.astro';
+import { site, services, voices, consultSteps, pains, faqs } from '../data/site';
+import { madeTop } from '../data/made';
+import { getNoteArticles } from '../data/note';
 
 const pack = services.find((s) => s.id === 'booking-pack')!;
+const price = (id: string) => services.find((s) => s.id === id)!.price;
+const notes = await getNoteArticles(site.noteRss);
+
+// 最初の画面の右側に重ねる「つくったもの」
+const heroMade = madeTop.slice(0, 3);
+
+const ways = [
+  {
+    title: 'まずは無料で相談する',
+    body: '仕事の話を聞いて、AIで楽にできる作業と、そのやり方をその場でお見せします。相談だけで終わっても大丈夫です。',
+    price: '0円・30分・オンライン',
+    href: '/services/#consult',
+  },
+  {
+    title: '予約・申込の事務を、まとめて自動に',
+    body: '講座・サロン・教室などの予約受付、リマインド、入金管理、顧客台帳までを、決まった中身と料金でまとめて整えます。',
+    price: '初期 165,000円（税込）',
+    href: '/#pack',
+  },
+  {
+    title: '必要なものを、必要なだけ作る',
+    body: 'Excelの自動化、LINE公式アカウント、Webサイト、月1回の相談役まで。今あるやり方を活かして作ります。',
+    price: `自動化・LINE ${price('automation')}／LP ${price('web').replace('1ページのLP ', '')}／顧問 ${price('advisor')}`,
+    href: '/services/',
+  },
+];
 ---
 <Base>
-  <section class="hero wrap">
-    <div class="hero-text">
-      <p class="hero-for">小さな会社と個人事業主のための、AI・デジタル支援</p>
-      <h1 class="hero-title">経営者の隣に、<br /><span class="mk">AIの相棒</span>を。</h1>
-      <p class="hero-sub">
-        AIの使い方の相談から、業務の自動化、LINE公式アカウントやWebサイトづくりまで。大がかりなDXではなく、あなたの仕事の隣で一緒に手を動かします。
-      </p>
-      <ContactButtons position="hero" />
-    </div>
-    <aside class="hero-note" aria-label="相談の例">
-      <p class="note-title">たとえば、こんなご相談</p>
-      <ul>
-        <li>見積書や日報づくりに、毎日時間を取られている</li>
-        <li>問い合わせの返信を、もっと早く・楽にしたい</li>
-        <li>AIが気になるけど、何から始めればいいか分からない</li>
-        <li>お店のサイトやLINEを、ちゃんと整えたい</li>
-      </ul>
-    </aside>
+  <div class="hero-band">
+    <section class="hero wrap">
+      <div class="hero-text">
+        <p class="hero-for">小さな会社と個人事業主のための、AI・デジタル支援</p>
+        <h1 class="hero-title">経営者の隣に、<br /><span class="mk">AIの相棒</span>を。</h1>
+        <p class="hero-sub">
+          毎日の手作業や「AIをどう使えばいいか」の迷いを、30分の無料相談で整理します。必要なら、LINE・Excel・Webの仕組みづくりまで一緒に。
+        </p>
+        <ul class="hero-badges" aria-label="無料相談について">
+          <li>無料</li><li>30分</li><li>オンライン</li><li>売り込みなし</li>
+        </ul>
+        <ContactButtons position="hero" />
+      </div>
+      <a class="hero-made" href="/made/" aria-label="つくったものを見る">
+        {heroMade.map((m, i) => (
+          <span class={`hm hm--${i}`}>
+            <span class="hm-name">{m.name}</span>
+            <span class="hm-fig"><MadeFigure kind={m.figure} /></span>
+          </span>
+        ))}
+        <span class="hm-caption">これまでにつくったもの →</span>
+      </a>
+    </section>
+  </div>
+
+  <section class="section wrap">
+    <h2 class="sec-title">こんなこと、ありませんか</h2>
+    <ul class="pains">
+      {pains.map((p) => <li>{p}</li>)}
+    </ul>
+    <p class="pains-after">ひとつでも当てはまれば、まずは30分、話してみてください。<br class="br-pc" />むずかしい用語は使いません。いまの仕事の流れを聞くところから始めます。</p>
   </section>
 
-  <section class="wrap pack" aria-labelledby="pack-title">
+  <section class="section wrap">
+    <h2 class="sec-title">AIBOUへの頼み方</h2>
+    <ol class="ways">
+      {ways.map((w) => (
+        <li>
+          <h3>{w.title}</h3>
+          <p>{w.body}</p>
+          <p class="way-price">{w.price}</p>
+          <a href={w.href}>詳しく見る</a>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <section class="wrap pack" id="pack" aria-labelledby="pack-title">
     <div class="pack-inner">
       <p class="pack-for">講座・セミナー、サロン・整体・教室、説明会や体験会を開く方へ</p>
       <h2 id="pack-title" class="pack-title">{pack.name}</h2>
@@ -50,67 +106,136 @@ const pack = services.find((s) => s.id === 'booking-pack')!;
   </section>
 
   <section class="section wrap">
-    <h2 class="sec-title">できること</h2>
-    <dl class="svc">
-      {services.map((s) => (
-        <div class="svc-row">
-          <dt><a href={`/services/#${s.id}`}>{s.name}</a></dt>
-          <dd class="svc-sum">{s.summary}</dd>
-          <dd class="svc-price">{s.price}</dd>
-        </div>
-      ))}
-    </dl>
-    <p class="more"><a href="/services/">サービスの詳しい内容を見る</a></p>
-  </section>
-
-  <section class="section wrap">
-    <h2 class="sec-title">Webサイトの制作サンプル</h2>
-    <p class="lead sec-lead">どちらも架空の会社・ブランドで作ったサンプルです。スクロールに合わせて映像が進む作りなので、別のタブで開いてご覧ください。</p>
-    <div class="works">
-      {works.map((w) => <WorkCard work={w} />)}
+    <h2 class="sec-title">つくったもの</h2>
+    <p class="lead sec-lead">これまでに作った仕組みの一部です。勤務先の運送会社で作ったものも含みます。制作サンプルの2つは架空の会社・ブランドです。</p>
+    <div class="grid3">
+      {madeTop.map((m) => <MadeCard item={m} compact />)}
     </div>
+    <p class="more"><a href="/made/">つくったものをすべて見る</a></p>
   </section>
 
   <section class="section wrap">
     <h2 class="sec-title">いただいた声</h2>
-    <div class="voices">
+    <div class="grid2">
       {voices.map((v) => <VoiceCard voice={v} />)}
     </div>
     <p class="more"><a href="/works/#voices">全文を見る</a></p>
   </section>
 
-  <section class="section narrow letter">
-    <h2 class="sec-title">AIBOUのこと</h2>
-    <p>
-      「AIBOU（アイボウ）」という名前には、いつでも隣で気軽に頼れる“相棒”でありたい、という思いを込めています。むずかしい用語は使いません。いまの仕事の流れを聞くところから始めます。
-    </p>
-    <p class="sign">— {site.name} {site.owner}</p>
-    <p class="more"><a href="/about/">AIBOUについて</a></p>
+  <section class="section wrap help">
+    <div>
+      <h2 class="sec-title">相談の流れ</h2>
+      <ol class="flow">
+        {consultSteps.map((s) => (
+          <li><b>{s.title}</b><span>{s.body}</span></li>
+        ))}
+      </ol>
+      <p class="muted">受付は{site.consultHours}・先着順です。</p>
+    </div>
+    <div>
+      <h2 class="sec-title">よくある質問</h2>
+      {faqs.map((f) => (
+        <details>
+          <summary>{f.q}</summary>
+          <p>{f.a}</p>
+        </details>
+      ))}
+    </div>
+  </section>
+
+  <section class="section wrap notes">
+    <h2 class="sec-title">noteで書いていること</h2>
+    <p class="lead sec-lead">作った仕組みの裏側や、AIを仕事に使うコツをnoteに書いています。</p>
+    {notes.length > 0 && (
+      <ul class="note-list">
+        {notes.map((n) => (
+          <li>
+            <a href={n.url} target="_blank" rel="noopener">
+              {n.date && <span class="note-date">{n.date}</span>}
+              <span class="note-title">{n.title}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    )}
+    <p class="more"><a href={site.noteUrl} target="_blank" rel="noopener">noteを読む <span aria-hidden="true">↗</span></a></p>
   </section>
 </Base>
 
 <style>
+  /* 方眼は最初の画面だけ */
+  .hero-band {
+    background-image:
+      linear-gradient(var(--color-grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--color-grid) 1px, transparent 1px);
+    background-size: 26px 26px;
+    border-bottom: 1px solid var(--color-rule);
+  }
   .hero {
-    display: grid; gap: var(--space-xl); align-items: center;
-    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    display: grid; gap: var(--space-2xl); align-items: center;
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
     padding-block: var(--space-2xl) var(--space-3xl);
   }
   .hero-for { font-size: var(--text-sm); color: var(--color-ink-soft); margin-bottom: var(--space-sm); }
   .hero-title { font-size: var(--text-display); line-height: 1.45; margin-bottom: var(--space-lg); }
-  .hero-sub { color: var(--color-ink-soft); max-width: 34rem; margin-bottom: var(--space-xl); }
-  .hero-note {
-    background: var(--color-card); border: 2px solid var(--color-ink);
-    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
-    padding: var(--space-xl) var(--space-lg); transform: rotate(-1deg);
-  }
-  .note-title { font-family: var(--font-hand); font-weight: 600; font-size: var(--text-lg); margin-bottom: var(--space-sm); }
-  .hero-note ul { margin: 0; padding-left: 1.2em; font-size: var(--text-sm); display: grid; gap: var(--space-xs); }
-  @media (max-width: 860px) {
-    .hero { grid-template-columns: minmax(0, 1fr); padding-block: var(--space-xl) var(--space-2xl); }
-    .hero-note { transform: none; }
+  .hero-sub { color: var(--color-ink-soft); max-width: 34rem; margin-bottom: var(--space-md); }
+  .hero-badges { display: flex; flex-wrap: wrap; gap: var(--space-xs); margin: 0 0 var(--space-lg); padding: 0; list-style: none; }
+  .hero-badges li {
+    font-size: var(--text-sm); font-weight: 700; padding: 2px 12px; white-space: nowrap;
+    border: 1.5px solid var(--color-ink); border-radius: 999px; background: var(--color-card);
   }
 
-  .pack { padding-bottom: var(--space-2xl); }
+  .hero-made { position: relative; display: block; min-height: 400px; text-decoration: none; }
+  .hm {
+    position: absolute; width: 68%; display: grid; gap: var(--space-2xs);
+    background: var(--color-card); border: 2px solid var(--color-ink); border-radius: var(--radius-md);
+    padding: var(--space-sm) var(--space-sm) var(--space-xs); box-shadow: 4px 4px 0 var(--color-rule);
+    transition: transform var(--dur-fast) var(--ease-out);
+  }
+  .hm--0 { top: 0; left: 0; transform: rotate(-2.5deg); }
+  .hm--1 { top: 104px; right: 0; transform: rotate(2deg); }
+  .hm--2 { top: 208px; left: 8%; transform: rotate(-1deg); }
+  .hero-made:hover .hm--0 { transform: rotate(-4deg) translateY(-3px); }
+  .hero-made:hover .hm--1 { transform: rotate(3.5deg) translateY(-3px); }
+  .hero-made:hover .hm--2 { transform: rotate(-2deg) translateY(-3px); }
+  .hm-fig { display: block; background: var(--color-paper-2); border-radius: var(--radius-sm); padding: var(--space-xs) var(--space-md); }
+  .hm-fig :global(svg) { max-height: 84px; margin-inline: auto; }
+  .hm-name { font-size: var(--text-sm); font-weight: 700; padding-inline: var(--space-2xs); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .hm-caption { position: absolute; right: 0; bottom: 0; font-size: var(--text-sm); font-weight: 700; text-decoration: underline; text-underline-offset: 0.2em; }
+  @media (max-width: 860px) {
+    .hero { grid-template-columns: minmax(0, 1fr); padding-block: var(--space-xl) var(--space-2xl); gap: var(--space-xl); }
+    .hero-made { min-height: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-xs); }
+    .hm { position: static; width: auto; transform: none !important; box-shadow: none; padding: var(--space-2xs); }
+    .hm-fig { padding: var(--space-2xs); }
+    .hm-fig :global(svg) { max-height: 52px; }
+    .hm-name { font-size: 0.6875rem; white-space: normal; line-height: 1.4; }
+    .hm-caption { position: static; grid-column: 1 / -1; text-align: right; }
+  }
+  @media (prefers-reduced-motion: reduce) { .hm { transition: none; } }
+
+  .sec-title { font-size: var(--text-2xl); margin-bottom: var(--space-lg); }
+  .sec-lead { max-width: var(--measure); margin: calc(-1 * var(--space-sm)) 0 var(--space-xl); }
+  .more { margin-top: var(--space-lg); font-weight: 700; }
+
+  .pains { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-sm) var(--space-xl); margin: 0; padding: 0; list-style: none; }
+  .pains li { position: relative; padding: var(--space-sm) 0 var(--space-sm) 2.2em; border-bottom: 1px dashed var(--color-rule); }
+  .pains li::before {
+    content: ''; position: absolute; left: 0.2em; top: 1.05em; width: 1.1em; height: 0.6em;
+    border-left: 3px solid var(--color-marker-strong); border-bottom: 3px solid var(--color-marker-strong); transform: rotate(-45deg);
+  }
+  .pains-after { margin-top: var(--space-lg); font-weight: 700; }
+  @media (max-width: 760px) { .pains { grid-template-columns: minmax(0, 1fr); } .br-pc { display: none; } }
+
+  .ways { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-xl); margin: 0; padding: 0; list-style: none; counter-reset: way; }
+  .ways li { counter-increment: way; border-top: 2px solid var(--color-ink); padding-top: var(--space-md); display: grid; gap: var(--space-xs); align-content: start; }
+  .ways li::before { content: counter(way, decimal-leading-zero); font-family: var(--font-hand); font-weight: 600; font-size: var(--text-xl); color: var(--color-marker-strong); }
+  .ways h3 { font-size: var(--text-lg); }
+  .ways p { font-size: var(--text-sm); color: var(--color-ink-soft); }
+  .ways .way-price { color: var(--color-ink); font-weight: 700; }
+  .ways a { font-weight: 700; justify-self: start; }
+  @media (max-width: 860px) { .ways { grid-template-columns: minmax(0, 1fr); } }
+
+  .pack { padding-bottom: var(--space-2xl); scroll-margin-top: 96px; }
   .pack-inner {
     background: var(--color-card); border: 2px solid var(--color-ink); border-radius: var(--radius-md);
     box-shadow: 6px 6px 0 var(--color-marker); padding: clamp(var(--space-lg), 4vw, var(--space-2xl));
@@ -122,41 +247,41 @@ const pack = services.find((s) => s.id === 'booking-pack')!;
     display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-xs) var(--space-xl);
     margin: 0 0 var(--space-lg); padding-left: 1.4em; font-size: var(--text-sm); color: var(--color-ink-soft);
   }
-  .pack-price { font-family: var(--font-hand); font-weight: 600; font-size: var(--text-xl); margin-bottom: var(--space-2xs); }
+  .pack-price { font-weight: 700; font-size: var(--text-xl); margin-bottom: var(--space-2xs); }
   .pack-price .pg { -webkit-box-decoration-break: clone; box-decoration-break: clone; }
   .pack-price .pw { display: inline-block; } /* 料金は単語の途中で折り返さない */
   .pack-cta { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-sm) var(--space-lg); margin-top: var(--space-lg); }
-  .pack-more { font-family: var(--font-hand); font-weight: 600; white-space: nowrap; }
+  .pack-more { font-weight: 700; white-space: nowrap; }
   @media (max-width: 760px) { .pack-list { grid-template-columns: minmax(0, 1fr); } }
-  @media (max-width: 480px) { .pack-price { font-size: var(--text-base); } }
-  @media (max-width: 480px) { .pack-cta .btn { width: 100%; } }
+  @media (max-width: 480px) { .pack-price { font-size: var(--text-base); } .pack-cta .btn { width: 100%; } }
 
-  .sec-title { font-size: var(--text-2xl); margin-bottom: var(--space-lg); }
-  .sec-lead { max-width: var(--measure); margin: calc(-1 * var(--space-sm)) 0 var(--space-xl); }
-  .more { margin-top: var(--space-lg); font-family: var(--font-hand); font-weight: 600; }
+  .grid3 { display: grid; gap: var(--space-xl); grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .grid2 { display: grid; gap: var(--space-xl); grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  @media (max-width: 1000px) { .grid3 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 640px) { .grid3, .grid2 { grid-template-columns: minmax(0, 1fr); } }
 
-  .svc { margin: 0; border-top: 2px solid var(--color-ink); }
-  .svc-row {
-    display: grid; gap: var(--space-2xs) var(--space-xl); align-items: baseline;
-    grid-template-columns: minmax(0, 17rem) minmax(0, 1fr) auto;
-    padding-block: var(--space-lg); border-bottom: 1px solid var(--color-rule);
+  .help { display: grid; gap: var(--space-2xl); grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  @media (max-width: 860px) { .help { grid-template-columns: minmax(0, 1fr); } }
+  .flow { list-style: none; margin: 0 0 var(--space-md); padding: 0; display: grid; gap: var(--space-md); counter-reset: step; }
+  .flow li { counter-increment: step; display: grid; grid-template-columns: 2.25rem minmax(0, 1fr); column-gap: var(--space-sm); }
+  .flow li::before {
+    content: counter(step); grid-row: span 2; display: grid; place-items: center; width: 2.25rem; height: 2.25rem;
+    font-family: var(--font-hand); font-weight: 600; border: 2px solid var(--color-ink); border-radius: 50% 45% 55% 48%; background: var(--color-card);
   }
-  .svc dt { font-family: var(--font-hand); font-weight: 600; font-size: var(--text-lg); line-height: 1.6; }
-  .svc dt a { text-decoration-thickness: 1px; }
-  .svc dd { margin: 0; }
-  .svc-sum { color: var(--color-ink-soft); font-size: var(--text-sm); }
-  .svc-price { font-size: var(--text-sm); white-space: nowrap; }
-  @media (max-width: 760px) {
-    .svc-row { grid-template-columns: minmax(0, 1fr); }
-    .svc-price { white-space: normal; }
-  }
+  .flow b { font-weight: 700; }
+  .flow span { font-size: var(--text-sm); color: var(--color-ink-soft); }
+  details { border-bottom: 1px dashed var(--color-rule); padding-block: var(--space-sm); }
+  details:first-of-type { border-top: 1px dashed var(--color-rule); }
+  summary { font-weight: 700; cursor: pointer; list-style: none; padding-right: 2em; position: relative; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: '+'; position: absolute; right: 0.25em; top: 0; font-size: var(--text-xl); line-height: 1.3; }
+  details[open] summary::after { content: '−'; }
+  details p { margin-top: var(--space-xs); color: var(--color-ink-soft); font-size: var(--text-sm); }
 
-  .works { display: grid; gap: var(--space-xl); grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  @media (max-width: 760px) { .works { grid-template-columns: minmax(0, 1fr); } }
-
-  .voices { display: grid; gap: var(--space-xl); grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  @media (max-width: 760px) { .voices { grid-template-columns: minmax(0, 1fr); } }
-
-  .letter p + p { margin-top: var(--space-md); }
-  .sign { font-family: var(--font-hand); text-align: right; }
+  .note-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--color-rule); }
+  .note-list li { border-bottom: 1px solid var(--color-rule); }
+  .note-list a { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--space-lg); padding-block: var(--space-sm); text-decoration: none; }
+  .note-list a:hover .note-title { text-decoration: underline; }
+  .note-date { font-size: var(--text-sm); color: var(--color-ink-faint); font-variant-numeric: tabular-nums; }
+  @media (max-width: 480px) { .note-list a { grid-template-columns: minmax(0, 1fr); gap: 0; } }
 </style>
