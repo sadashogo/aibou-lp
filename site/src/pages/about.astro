@@ -1,0 +1,54 @@
+---
+import Base from '../layouts/Base.astro';
+import { site, faqs } from '../data/site';
+---
+<Base title="AIBOUについて" description="AIBOU（アイボウ）は、小さな会社と個人事業主の隣で一緒に手を動かす、AI・デジタル活用の支援です。">
+  <section class="narrow page-head">
+    <h1>AIBOUについて</h1>
+  </section>
+
+  <section class="narrow letter">
+    <p>
+      大手コンサルのような大がかりなDXではなく、<span class="mk">小さな事業の隣で一緒に手を動かすスタイル</span>のAI・デジタル活用の支援です。
+    </p>
+    <p>
+      運送会社でのDX担当として、配車作業の自動化や補助金の申請、各種認定の取得に取り組んできました。現場の仕事の流れに入り込んで、実際に使われるところまで作るのが得意です。
+    </p>
+    <p>
+      「AIBOU（アイボウ）」という名前には、いつでも隣で気軽に頼れる“相棒”でありたい、という思いを込めています。
+    </p>
+    <p class="sign">— {site.name} {site.owner}</p>
+  </section>
+
+  <section class="section narrow">
+    <h2 class="faq-title">よくある質問</h2>
+    {faqs.map((f) => (
+      <details>
+        <summary>{f.q}</summary>
+        <p>{f.a}</p>
+      </details>
+    ))}
+  </section>
+</Base>
+
+<style>
+  .page-head { padding-block: var(--space-2xl) var(--space-lg); }
+  .page-head h1 { font-size: var(--text-display); }
+  .letter {
+    background: var(--color-card); border: 2px solid var(--color-ink);
+    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+    padding: var(--space-xl) clamp(var(--space-lg), 5vw, var(--space-2xl));
+    margin-bottom: var(--space-2xl);
+  }
+  .letter p + p { margin-top: var(--space-md); }
+  .sign { font-family: var(--font-hand); text-align: right; }
+
+  .faq-title { font-size: var(--text-2xl); margin-bottom: var(--space-lg); }
+  details { border-bottom: 2px dashed var(--color-rule); padding-block: var(--space-sm); }
+  details:first-of-type { border-top: 2px dashed var(--color-rule); }
+  summary { font-family: var(--font-hand); font-weight: 600; cursor: pointer; list-style: none; padding-right: 2em; position: relative; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: '+'; position: absolute; right: 0.25em; top: 0; font-size: var(--text-xl); line-height: 1.4; }
+  details[open] summary::after { content: '−'; }
+  details p { margin-top: var(--space-xs); color: var(--color-ink-soft); font-size: var(--text-sm); }
+</style>

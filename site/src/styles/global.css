@@ -1,0 +1,113 @@
+/* Hallmark · macrostructure: Letter (document-led, single column with wide asides) · tone: soft · anchor hue: marker-amber 70
+ * 方眼ノートの紙・黒ペン・オレンジマーカー。手描き風（Klee One）は見出しだけに使う。
+ */
+
+:root {
+  /* 色 */
+  --color-paper: oklch(98.6% 0.008 85);
+  --color-paper-2: oklch(96.2% 0.012 85);
+  --color-card: oklch(100% 0 0);
+  --color-ink: oklch(27% 0.008 60);
+  --color-ink-soft: oklch(45% 0.008 60);
+  --color-ink-faint: oklch(62% 0.006 60);
+  --color-rule: oklch(27% 0.008 60 / 0.14);
+  --color-grid: oklch(48% 0.05 260 / 0.06);
+  --color-marker: oklch(85% 0.12 72);
+  --color-marker-strong: oklch(76% 0.15 66);
+  --color-line: oklch(68% 0.19 150);
+  --color-focus: oklch(55% 0.17 255);
+
+  /* 書体 */
+  --font-hand: 'Klee One', 'Hiragino Maru Gothic ProN', 'BIZ UDPGothic', sans-serif;
+  --font-body: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'BIZ UDPGothic', 'Noto Sans JP', Meiryo, sans-serif;
+
+  /* 文字サイズ */
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.375rem;
+  --text-2xl: clamp(1.5rem, 1.2rem + 1.2vw, 2rem);
+  --text-display: clamp(2rem, 1.3rem + 3.2vw, 3.5rem);
+
+  /* 余白（4pt） */
+  --space-2xs: 0.25rem;
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2.5rem;
+  --space-2xl: 4rem;
+  --space-3xl: 6rem;
+  --gutter: clamp(1rem, 4vw, 2.5rem);
+  --measure: 40rem;
+  --wide: 68rem;
+
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast: 140ms;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body { overflow-x: clip; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: 1.95;
+  color: var(--color-ink);
+  background-color: var(--color-paper);
+  background-image:
+    linear-gradient(var(--color-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-grid) 1px, transparent 1px);
+  background-size: 26px 26px;
+  font-feature-settings: 'palt' 1;
+}
+img, video { display: block; max-width: 100%; height: auto; }
+a { color: inherit; text-underline-offset: 0.2em; }
+h1, h2, h3 {
+  font-family: var(--font-hand);
+  font-weight: 600;
+  font-style: normal;
+  line-height: 1.55;
+  margin: 0;
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+p { margin: 0; }
+:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; }
+
+/* マーカー線 */
+.mk { background: linear-gradient(transparent 62%, var(--color-marker) 62%); padding: 0 2px; }
+
+.wrap { width: min(100% - 2 * var(--gutter), var(--wide)); margin-inline: auto; }
+.narrow { width: min(100% - 2 * var(--gutter), var(--measure)); margin-inline: auto; }
+.section { padding-block: var(--space-2xl); }
+.section + .section { border-top: 1px dashed var(--color-rule); }
+.lead { color: var(--color-ink-soft); }
+.muted { color: var(--color-ink-faint); font-size: var(--text-sm); }
+
+/* ボタン */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--space-xs);
+  min-height: 52px; padding: var(--space-sm) var(--space-lg);
+  font-family: var(--font-hand); font-weight: 600; font-size: var(--text-lg);
+  text-decoration: none; white-space: nowrap;
+  color: var(--color-ink); background: var(--color-marker-strong);
+  border: 2px solid var(--color-ink); border-radius: var(--radius-md);
+  box-shadow: 3px 3px 0 var(--color-ink);
+  transition: transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out);
+}
+.btn:hover { transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--color-ink); }
+.btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--color-ink); }
+.btn--line { background: var(--color-card); }
+.btn--line::before {
+  content: ''; width: 10px; height: 10px; border-radius: 50%; background: var(--color-line); flex: none;
+}
+.btn--sm { min-height: 40px; padding: var(--space-2xs) var(--space-md); font-size: var(--text-base); box-shadow: 2px 2px 0 var(--color-ink); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .btn, .btn:hover, .btn:active { transition: none; transform: none; }
+}

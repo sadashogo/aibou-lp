@@ -1,0 +1,120 @@
+---
+import Base from '../layouts/Base.astro';
+import ContactButtons from '../components/ContactButtons.astro';
+import WorkCard from '../components/WorkCard.astro';
+import { site, services, works, results } from '../data/site';
+---
+<Base>
+  <section class="hero wrap">
+    <div class="hero-text">
+      <p class="hero-for">小さな会社と個人事業主のための、AI・デジタル支援</p>
+      <h1 class="hero-title">経営者の隣に、<br /><span class="mk">AIの相棒</span>を。</h1>
+      <p class="hero-sub">
+        AIの使い方の相談から、業務の自動化、LINE公式アカウントやWebサイトづくりまで。大がかりなDXではなく、あなたの仕事の隣で一緒に手を動かします。
+      </p>
+      <ContactButtons />
+    </div>
+    <aside class="hero-note" aria-label="相談の例">
+      <p class="note-title">たとえば、こんなご相談</p>
+      <ul>
+        <li>見積書や日報づくりに、毎日時間を取られている</li>
+        <li>問い合わせの返信を、もっと早く・楽にしたい</li>
+        <li>AIが気になるけど、何から始めればいいか分からない</li>
+        <li>お店のサイトやLINEを、ちゃんと整えたい</li>
+      </ul>
+    </aside>
+  </section>
+
+  <section class="section wrap">
+    <h2 class="sec-title">できること</h2>
+    <dl class="svc">
+      {services.map((s) => (
+        <div class="svc-row">
+          <dt><a href={`/services/#${s.id}`}>{s.name}</a></dt>
+          <dd class="svc-sum">{s.summary}</dd>
+          <dd class="svc-price">{s.price}</dd>
+        </div>
+      ))}
+    </dl>
+    <p class="more"><a href="/services/">サービスの詳しい内容を見る</a></p>
+  </section>
+
+  <section class="section wrap">
+    <h2 class="sec-title">Webサイトの制作サンプル</h2>
+    <p class="lead sec-lead">どちらも架空の会社・ブランドで作ったサンプルです。スクロールに合わせて映像が進む作りなので、別のタブで開いてご覧ください。</p>
+    <div class="works">
+      {works.map((w) => <WorkCard work={w} />)}
+    </div>
+  </section>
+
+  <section class="section wrap result">
+    <div>
+      <h2 class="sec-title">業務改善の実績</h2>
+      <p class="result-metric"><span class="mk">{results.metric.value}</span></p>
+      <p>{results.metric.label}</p>
+      <p class="lead">{results.ongoing}</p>
+    </div>
+    <p class="more"><a href="/works/">実績をもっと見る</a></p>
+  </section>
+
+  <section class="section narrow letter">
+    <h2 class="sec-title">AIBOUのこと</h2>
+    <p>
+      「AIBOU（アイボウ）」という名前には、いつでも隣で気軽に頼れる“相棒”でありたい、という思いを込めています。むずかしい用語は使いません。いまの仕事の流れを聞くところから始めます。
+    </p>
+    <p class="sign">— {site.name} {site.owner}</p>
+    <p class="more"><a href="/about/">AIBOUについて</a></p>
+  </section>
+</Base>
+
+<style>
+  .hero {
+    display: grid; gap: var(--space-xl); align-items: center;
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    padding-block: var(--space-2xl) var(--space-3xl);
+  }
+  .hero-for { font-size: var(--text-sm); color: var(--color-ink-soft); margin-bottom: var(--space-sm); }
+  .hero-title { font-size: var(--text-display); line-height: 1.45; margin-bottom: var(--space-lg); }
+  .hero-sub { color: var(--color-ink-soft); max-width: 34rem; margin-bottom: var(--space-xl); }
+  .hero-note {
+    background: var(--color-card); border: 2px solid var(--color-ink);
+    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+    padding: var(--space-xl) var(--space-lg); transform: rotate(-1deg);
+  }
+  .note-title { font-family: var(--font-hand); font-weight: 600; font-size: var(--text-lg); margin-bottom: var(--space-sm); }
+  .hero-note ul { margin: 0; padding-left: 1.2em; font-size: var(--text-sm); display: grid; gap: var(--space-xs); }
+  @media (max-width: 860px) {
+    .hero { grid-template-columns: minmax(0, 1fr); padding-block: var(--space-xl) var(--space-2xl); }
+    .hero-note { transform: none; }
+  }
+
+  .sec-title { font-size: var(--text-2xl); margin-bottom: var(--space-lg); }
+  .sec-lead { max-width: var(--measure); margin: calc(-1 * var(--space-sm)) 0 var(--space-xl); }
+  .more { margin-top: var(--space-lg); font-family: var(--font-hand); font-weight: 600; }
+
+  .svc { margin: 0; border-top: 2px solid var(--color-ink); }
+  .svc-row {
+    display: grid; gap: var(--space-2xs) var(--space-xl); align-items: baseline;
+    grid-template-columns: minmax(0, 17rem) minmax(0, 1fr) auto;
+    padding-block: var(--space-lg); border-bottom: 1px solid var(--color-rule);
+  }
+  .svc dt { font-family: var(--font-hand); font-weight: 600; font-size: var(--text-lg); line-height: 1.6; }
+  .svc dt a { text-decoration-thickness: 1px; }
+  .svc dd { margin: 0; }
+  .svc-sum { color: var(--color-ink-soft); font-size: var(--text-sm); }
+  .svc-price { font-size: var(--text-sm); white-space: nowrap; }
+  @media (max-width: 760px) {
+    .svc-row { grid-template-columns: minmax(0, 1fr); }
+    .svc-price { white-space: normal; }
+  }
+
+  .works { display: grid; gap: var(--space-xl); grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  @media (max-width: 760px) { .works { grid-template-columns: minmax(0, 1fr); } }
+
+  .result { display: grid; gap: var(--space-md); grid-template-columns: minmax(0, 1fr) auto; align-items: end; }
+  .result-metric { font-family: var(--font-hand); font-weight: 600; font-size: var(--text-display); line-height: 1.4; }
+  @media (max-width: 760px) { .result { grid-template-columns: minmax(0, 1fr); } }
+
+  .letter p + p { margin-top: var(--space-md); }
+  .sign { font-family: var(--font-hand); text-align: right; }
+</style>

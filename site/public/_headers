@@ -1,0 +1,5 @@
+# Cloudflare Pages のレスポンスヘッダー設定
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+/demo.mp4
+  Cache-Control: public, max-age=604800
