@@ -7,7 +7,7 @@ export const site = {
   title: 'AIBOU（アイボウ）｜小さな会社と個人事業主のAI・デジタル支援',
   description:
     'AIの使い方の相談から、業務の自動化、LINE公式アカウントやWebサイトづくりまで。小さな会社と個人事業主の仕事を、隣で一緒に軽くします。無料30分相談受付中。',
-  url: 'https://aibou.pages.dev',
+  url: 'https://aibou-ai.pages.dev',
   owner: '定方 翔吾',
   bookingUrl: 'https://calendar.app.google/BoqLTYmykRKZVpJb9',
   lineUrl: 'https://lin.ee/R67gFib',
