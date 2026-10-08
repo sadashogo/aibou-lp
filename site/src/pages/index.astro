@@ -3,6 +3,8 @@ import Base from '../layouts/Base.astro';
 import ContactButtons from '../components/ContactButtons.astro';
 import WorkCard from '../components/WorkCard.astro';
 import { site, services, works, results } from '../data/site';
+
+const pack = services.find((s) => s.id === 'booking-pack')!;
 ---
 <Base>
   <section class="hero wrap">
@@ -12,7 +14,7 @@ import { site, services, works, results } from '../data/site';
       <p class="hero-sub">
         AIの使い方の相談から、業務の自動化、LINE公式アカウントやWebサイトづくりまで。大がかりなDXではなく、あなたの仕事の隣で一緒に手を動かします。
       </p>
-      <ContactButtons />
+      <ContactButtons position="hero" />
     </div>
     <aside class="hero-note" aria-label="相談の例">
       <p class="note-title">たとえば、こんなご相談</p>
@@ -23,6 +25,27 @@ import { site, services, works, results } from '../data/site';
         <li>お店のサイトやLINEを、ちゃんと整えたい</li>
       </ul>
     </aside>
+  </section>
+
+  <section class="wrap pack" aria-labelledby="pack-title">
+    <div class="pack-inner">
+      <p class="pack-for">講座・セミナー、サロン・整体・教室、説明会や体験会を開く方へ</p>
+      <h2 id="pack-title" class="pack-title">{pack.name}</h2>
+      <p class="pack-sum">LINE公式・フォーム・スプレッドシートで、予約・申込まわりの事務をまとめて自動にします。中身は次の6つで固定です。</p>
+      <ol class="pack-list">
+        {pack.details.map((d) => <li>{d}</li>)}
+      </ol>
+      <p class="pack-price">
+        {pack.price.split(' ＋ ').map((g, i) => (
+          <>{i > 0 && <br />}<span class="mk pg">{(i > 0 ? `＋ ${g}` : g).split(' ').map((w, j) => <>{j > 0 && ' '}<span class="pw">{w}</span></>)}</span></>
+        ))}
+      </p>
+      {pack.priceNote && <p class="muted">{pack.priceNote}</p>}
+      <div class="pack-cta">
+        <a class="btn" href={site.bookingUrl} target="_blank" rel="noopener" data-track="booking_click" data-position="pack">このパックについて相談する</a>
+        <a class="pack-more" href={`/services/#${pack.id}`}>詳しく見る</a>
+      </div>
+    </div>
   </section>
 
   <section class="section wrap">
@@ -87,6 +110,27 @@ import { site, services, works, results } from '../data/site';
     .hero { grid-template-columns: minmax(0, 1fr); padding-block: var(--space-xl) var(--space-2xl); }
     .hero-note { transform: none; }
   }
+
+  .pack { padding-bottom: var(--space-2xl); }
+  .pack-inner {
+    background: var(--color-card); border: 2px solid var(--color-ink); border-radius: var(--radius-md);
+    box-shadow: 6px 6px 0 var(--color-marker); padding: clamp(var(--space-lg), 4vw, var(--space-2xl));
+  }
+  .pack-for { font-size: var(--text-sm); color: var(--color-ink-soft); margin-bottom: var(--space-xs); }
+  .pack-title { font-size: var(--text-2xl); margin-bottom: var(--space-sm); }
+  .pack-sum { margin-bottom: var(--space-md); max-width: var(--measure); }
+  .pack-list {
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-xs) var(--space-xl);
+    margin: 0 0 var(--space-lg); padding-left: 1.4em; font-size: var(--text-sm); color: var(--color-ink-soft);
+  }
+  .pack-price { font-family: var(--font-hand); font-weight: 600; font-size: var(--text-xl); margin-bottom: var(--space-2xs); }
+  .pack-price .pg { -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+  .pack-price .pw { display: inline-block; } /* 料金は単語の途中で折り返さない */
+  .pack-cta { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-sm) var(--space-lg); margin-top: var(--space-lg); }
+  .pack-more { font-family: var(--font-hand); font-weight: 600; white-space: nowrap; }
+  @media (max-width: 760px) { .pack-list { grid-template-columns: minmax(0, 1fr); } }
+  @media (max-width: 480px) { .pack-price { font-size: var(--text-base); } }
+  @media (max-width: 480px) { .pack-cta .btn { width: 100%; } }
 
   .sec-title { font-size: var(--text-2xl); margin-bottom: var(--space-lg); }
   .sec-lead { max-width: var(--measure); margin: calc(-1 * var(--space-sm)) 0 var(--space-xl); }

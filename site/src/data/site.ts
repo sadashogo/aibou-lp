@@ -21,6 +21,9 @@ export const nav = [
   { href: '/about/', label: 'AIBOUについて' },
 ];
 
+// 自動化パックのモニター枠。決まるたびに remaining を減らす。0 にするとモニター価格の文言が消える。
+export const packMonitor = { remaining: 3, price: '55,000円（税込）' };
+
 export interface Service {
   id: string;
   name: string;
@@ -49,7 +52,7 @@ export const services: Service[] = [
     summary:
       '講座・セミナー、サロン・整体・教室、説明会や体験会を開く小さな会社向け。LINE公式・フォーム・スプレッドシートで、予約・申込まわりの事務をまとめて自動にします。',
     price: '初期 165,000円（税込） ＋ 保守 月11,000円（税込・任意）',
-    priceNote: '先着3社はモニター価格 55,000円（税込）。月額のツール代はかからず、データはすべてお客さまのアカウントに置きます。',
+    priceNote: `${packMonitor.remaining > 0 ? `先着3社はモニター価格 ${packMonitor.price}。` : ''}月額のツール代はかからず、データはすべてお客さまのアカウントに置きます。`,
     details: [
       '申込・予約の受付（フォームからスプレッドシートに自動で記録）',
       'LINEで受付完了・ご案内を自動送信',

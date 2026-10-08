@@ -44,6 +44,11 @@ const path = Astro.url.pathname;
       function gtag() { dataLayer.push(arguments); }
       gtag('js', new Date());
       gtag('config', gaId);
+      // data-track の付いたボタン（予約・LINE）が押されたら、置き場所と一緒に GA4 へ送る
+      document.addEventListener('click', function (e) {
+        var a = e.target.closest && e.target.closest('[data-track]');
+        if (a) gtag('event', a.dataset.track, { position: a.dataset.position || '' });
+      });
     </script>
   </head>
   <body>
@@ -70,13 +75,14 @@ const path = Astro.url.pathname;
         <div class="foot-cta">
           <h2>まずは30分、話してみませんか</h2>
           <p class="lead">相談は無料・オンライン。受付は{site.consultHours}です。</p>
-          <ContactButtons />
+          <ContactButtons position="footer" />
         </div>
         <div class="foot-meta">
           <p class="foot-brand">{site.name}<span>{site.tagline}</span></p>
           <nav class="foot-nav" aria-label="フッターメニュー">
             <a href="/">トップ</a>
             {nav.map((n) => <a href={n.href}>{n.label}</a>)}
+            <a href="/privacy/">プライバシーポリシー</a>
           </nav>
           <p class="muted">© 2026 {site.name}</p>
           <p class="muted">本サイトはアクセス状況の把握のためGoogleアナリティクスを利用しています。</p>
