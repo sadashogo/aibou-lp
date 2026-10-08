@@ -1,0 +1,121 @@
+---
+import '../styles/global.css';
+import { site, nav } from '../data/site';
+import ContactButtons from '../components/ContactButtons.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title, description = site.description } = Astro.props;
+const fullTitle = title ? `${title}｜${site.name}（${site.nameKana}）` : site.title;
+const canonical = new URL(Astro.url.pathname, site.url).href;
+const ogImage = new URL('/og.jpg', site.url).href;
+const path = Astro.url.pathname;
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:locale" content="ja_JP" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="theme-color" content="#fbf9f4" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Klee+One:wght@600&display=swap" />
+    <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${site.gaId}`}></script>
+    <script is:inline define:vars={{ gaId: site.gaId }}>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', gaId);
+    </script>
+  </head>
+  <body>
+    <header class="site-head">
+      <div class="wrap head-row">
+        <a class="brand" href="/" aria-label={`${site.name} トップへ`}>
+          {site.name}<span>{site.nameKana}</span>
+        </a>
+        <nav class="head-nav" aria-label="メインメニュー">
+          {nav.map((n) => (
+            <a href={n.href} aria-current={path.startsWith(n.href) ? 'page' : undefined}>{n.label}</a>
+          ))}
+        </nav>
+        <a class="btn btn--sm head-cta" href={site.bookingUrl} target="_blank" rel="noopener">無料相談</a>
+      </div>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="site-foot">
+      <div class="wrap foot-grid">
+        <div class="foot-cta">
+          <h2>まずは30分、話してみませんか</h2>
+          <p class="lead">相談は無料・オンライン。受付は{site.consultHours}です。</p>
+          <ContactButtons />
+        </div>
+        <div class="foot-meta">
+          <p class="foot-brand">{site.name}<span>{site.tagline}</span></p>
+          <nav class="foot-nav" aria-label="フッターメニュー">
+            <a href="/">トップ</a>
+            {nav.map((n) => <a href={n.href}>{n.label}</a>)}
+          </nav>
+          <p class="muted">© 2026 {site.name}</p>
+          <p class="muted">本サイトはアクセス状況の把握のためGoogleアナリティクスを利用しています。</p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<style>
+  .site-head {
+    position: sticky; top: 0; z-index: 10;
+    background: color-mix(in oklch, var(--color-paper) 92%, transparent);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--color-rule);
+  }
+  .head-row { display: flex; align-items: center; gap: var(--space-lg); min-height: 64px; }
+  .brand {
+    font-family: var(--font-hand); font-weight: 600; font-size: var(--text-xl);
+    text-decoration: none; white-space: nowrap; margin-right: auto;
+  }
+  .brand span { font-size: var(--text-sm); color: var(--color-ink-soft); margin-left: var(--space-xs); }
+  .head-nav { display: flex; gap: var(--space-lg); font-size: var(--text-sm); }
+  .head-nav a { text-decoration: none; white-space: nowrap; padding-block: var(--space-2xs); }
+  .head-nav a:hover, .head-nav a[aria-current='page'] {
+    background: linear-gradient(transparent 62%, var(--color-marker) 62%);
+  }
+  @media (max-width: 640px) {
+    .head-row { flex-wrap: wrap; row-gap: 0; padding-block: var(--space-xs); }
+    .head-nav { order: 3; width: 100%; justify-content: space-between; gap: var(--space-sm); }
+  }
+
+  .site-foot { border-top: 2px solid var(--color-ink); background: var(--color-paper-2); padding-block: var(--space-2xl) var(--space-xl); }
+  .foot-grid { display: grid; gap: var(--space-xl); grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); }
+  .foot-cta h2 { font-size: var(--text-2xl); margin-bottom: var(--space-xs); }
+  .foot-cta .lead { margin-bottom: var(--space-lg); }
+  .foot-brand { font-family: var(--font-hand); font-weight: 600; font-size: var(--text-xl); margin-bottom: var(--space-sm); }
+  .foot-brand span { display: block; font-size: var(--text-sm); color: var(--color-ink-soft); }
+  .foot-nav { display: flex; flex-wrap: wrap; gap: var(--space-2xs) var(--space-lg); font-size: var(--text-sm); margin-bottom: var(--space-md); }
+  .foot-nav a { white-space: nowrap; }
+  @media (max-width: 760px) { .foot-grid { grid-template-columns: minmax(0, 1fr); } }
+</style>

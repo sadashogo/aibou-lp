@@ -1,0 +1,103 @@
+---
+import Base from '../layouts/Base.astro';
+import ContactButtons from '../components/ContactButtons.astro';
+import { services, site } from '../data/site';
+
+const steps = [
+  { title: '日時を選んで予約', body: '空いている枠をタップするだけ。約1分で予約完了です。' },
+  { title: '当日、オンラインで30分', body: '予約と同時にGoogle MeetのURLが自動で届きます。顔出しは任意、スマホ参加もOKです。' },
+  { title: '道筋を持ち帰る', body: '「まず何から始めるか」を整理してお渡しします。売り込みはしません。' },
+];
+---
+<Base title="サービス" description="無料30分AI相談、予約・申込の事務 自動化パック、業務の自動化・LINE公式アカウントの構築、Webサイト・LP制作、月額サポート（AI顧問）。AIBOUのサービス内容と料金です。">
+  <section class="wrap page-head">
+    <h1>サービス</h1>
+    <p class="lead">まずは無料の30分相談で、お仕事の話を聞かせてください。そのうえで、必要なものだけをご提案します。</p>
+  </section>
+
+  {services.map((s, i) => (
+    <section class="section wrap svc" id={s.id}>
+      <div class="svc-head">
+        <h2>{s.name}</h2>
+        <p class="svc-price"><span>料金</span>{s.price}</p>
+        {s.priceNote && <p class="svc-price-note muted">{s.priceNote}</p>}
+      </div>
+      <div class="svc-body">
+        <p class="svc-sum">{s.summary}</p>
+        <ul class="svc-list">
+          {s.details.map((d) => <li>{d}</li>)}
+        </ul>
+        {s.extra && <p class="muted svc-extra">{s.extra}</p>}
+
+        {s.id === 'consult' && (
+          <>
+            <ol class="steps">
+              {steps.map((st) => (
+                <li><b>{st.title}</b><span>{st.body}</span></li>
+              ))}
+            </ol>
+            <p class="muted">受付は{site.consultHours}・先着順です。相談だけで終わっても大丈夫です。</p>
+            <div class="svc-cta"><ContactButtons /></div>
+          </>
+        )}
+
+        {s.id === 'automation' && (
+          <figure class="demo">
+            <video controls preload="none" playsinline poster="/demo-poster.jpg" width="1280" height="720">
+              <source src="/demo.mp4" type="video/mp4" />
+            </video>
+            <figcaption class="muted">こんな仕組みが作れます（45秒・BGMとナレーションあり。字幕だけでも分かる構成です）。画面は構築できる仕組みの一例を再現したイメージです。</figcaption>
+          </figure>
+        )}
+
+        {s.id === 'web' && (
+          <p class="svc-link"><a href="/works/">制作サンプルを見る</a></p>
+        )}
+      </div>
+    </section>
+  ))}
+
+  <section class="section narrow">
+    <h2 class="fee-title">料金について</h2>
+    <p>「予約・申込の事務 自動化パック」は上記の定額です。それ以外のご依頼は、作業の内容と量を伺ってからお見積りします。</p>
+  </section>
+</Base>
+
+<style>
+  .page-head { padding-block: var(--space-2xl) var(--space-lg); }
+  .page-head h1 { font-size: var(--text-display); margin-bottom: var(--space-sm); }
+  .page-head .lead { max-width: var(--measure); }
+
+  .svc { display: grid; gap: var(--space-lg) var(--space-2xl); grid-template-columns: minmax(0, 20rem) minmax(0, 1fr); scroll-margin-top: 96px; }
+  .svc-head h2 { font-size: var(--text-2xl); margin-bottom: var(--space-sm); }
+  .svc-price { display: inline-flex; gap: var(--space-xs); align-items: baseline; font-family: var(--font-hand); font-weight: 600; font-size: var(--text-lg); }
+  .svc-price span {
+    font-family: var(--font-body); font-weight: 400; font-size: 0.75rem; line-height: 1.6; white-space: nowrap; flex: none;
+    padding: 1px 8px; border: 1.5px solid var(--color-ink); border-radius: 999px;
+  }
+  .svc-sum { font-size: var(--text-lg); margin-bottom: var(--space-md); }
+  .svc-price-note { margin-top: var(--space-xs); }
+  .svc-extra { margin-top: calc(-1 * var(--space-sm)); margin-bottom: var(--space-lg); }
+  .svc-list { margin: 0 0 var(--space-lg); padding-left: 1.2em; display: grid; gap: var(--space-xs); color: var(--color-ink-soft); }
+  .svc-link { font-family: var(--font-hand); font-weight: 600; }
+  .svc-cta { margin-top: var(--space-lg); }
+  @media (max-width: 760px) { .svc { grid-template-columns: minmax(0, 1fr); } }
+
+  .steps { list-style: none; margin: 0 0 var(--space-md); padding: 0; display: grid; gap: var(--space-sm); counter-reset: step; }
+  .steps li {
+    counter-increment: step; display: grid; grid-template-columns: 2.25rem minmax(0, 1fr); column-gap: var(--space-sm);
+    background: var(--color-card); border: 1.5px solid var(--color-rule); border-radius: var(--radius-sm); padding: var(--space-sm) var(--space-md);
+  }
+  .steps li::before {
+    content: counter(step); grid-row: span 2; display: grid; place-items: center; width: 2.25rem; height: 2.25rem;
+    font-family: var(--font-hand); font-weight: 600; border: 2px solid var(--color-ink); border-radius: 50% 45% 55% 48%;
+  }
+  .steps b { font-family: var(--font-hand); font-weight: 600; }
+  .steps span { font-size: var(--text-sm); color: var(--color-ink-soft); }
+
+  .demo { margin: 0; max-width: 36rem; }
+  .demo video { width: 100%; border: 2px solid var(--color-ink); border-radius: var(--radius-md); background: var(--color-ink); }
+  .demo figcaption { margin-top: var(--space-xs); }
+
+  .fee-title { font-size: var(--text-xl); margin-bottom: var(--space-sm); }
+</style>

@@ -1,0 +1,62 @@
+---
+import Base from '../layouts/Base.astro';
+import WorkCard from '../components/WorkCard.astro';
+import { works, results } from '../data/site';
+---
+<Base title="実績" description="AIBOUの実績。Webサイトの制作サンプル（赤城急送・MAISON KUROGANE）と、業務の自動化・改善の実績です。">
+  <section class="wrap page-head">
+    <h1>実績</h1>
+    <p class="lead">Webサイトの制作サンプルと、業務の自動化・改善の実績です。</p>
+  </section>
+
+  <section class="section wrap">
+    <h2 class="sec-title">Webサイトの制作サンプル</h2>
+    <p class="lead sec-lead">
+      どちらも<strong>架空の会社・ブランド</strong>で作ったサンプルで、実在のお店や会社のサイトではありません。スクロールに合わせて映像が進む作りなので、このページには埋め込まず、別のタブで開くようにしています。
+    </p>
+    <div class="works">
+      {works.map((w) => <WorkCard work={w} headingLevel="h3" />)}
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <h2 class="sec-title">業務の自動化・改善の実績</h2>
+    <div class="res">
+      <div class="res-main">
+        <p class="res-metric"><span class="mk">{results.metric.value}</span></p>
+        <p>{results.metric.label}</p>
+        <ul class="res-facts">
+          {results.facts.map((f) => <li>{f}</li>)}
+        </ul>
+        <p class="res-ongoing">{results.ongoing}</p>
+      </div>
+      <div class="res-built">
+        <h3>これまでに作った仕組み</h3>
+        <ul>
+          {results.built.map((b) => <li>{b}</li>)}
+        </ul>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .page-head { padding-block: var(--space-2xl) var(--space-lg); }
+  .page-head h1 { font-size: var(--text-display); margin-bottom: var(--space-sm); }
+  .sec-title { font-size: var(--text-2xl); margin-bottom: var(--space-lg); }
+  .sec-lead { max-width: var(--measure); margin: calc(-1 * var(--space-sm)) 0 var(--space-xl); }
+  .sec-lead strong { font-weight: 700; color: var(--color-ink); }
+  .works { display: grid; gap: var(--space-xl); grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  @media (max-width: 760px) { .works { grid-template-columns: minmax(0, 1fr); } }
+
+  .res { display: grid; gap: var(--space-xl) var(--space-2xl); grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); }
+  .res-metric { font-family: var(--font-hand); font-weight: 600; font-size: var(--text-display); line-height: 1.4; }
+  .res-facts { margin: var(--space-lg) 0; padding-left: 1.2em; color: var(--color-ink-soft); display: grid; gap: var(--space-xs); }
+  .res-ongoing { font-family: var(--font-hand); font-weight: 600; font-size: var(--text-lg); }
+  .res-built {
+    background: var(--color-card); border: 2px solid var(--color-ink); border-radius: var(--radius-md); padding: var(--space-lg);
+  }
+  .res-built h3 { font-size: var(--text-lg); margin-bottom: var(--space-sm); }
+  .res-built ul { margin: 0; padding-left: 1.2em; display: grid; gap: var(--space-xs); font-size: var(--text-sm); }
+  @media (max-width: 760px) { .res { grid-template-columns: minmax(0, 1fr); } }
+</style>
