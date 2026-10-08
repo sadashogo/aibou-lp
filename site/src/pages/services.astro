@@ -9,7 +9,7 @@ const steps = [
   { title: '道筋を持ち帰る', body: '「まず何から始めるか」を整理してお渡しします。売り込みはしません。' },
 ];
 ---
-<Base title="サービス" description="無料30分AI相談、業務の自動化・LINE公式アカウントの構築、Webサイト・LP制作、月額サポート（AI顧問）。AIBOUのサービス内容と料金です。">
+<Base title="サービス" description="無料30分AI相談、予約・申込の事務 自動化パック、業務の自動化・LINE公式アカウントの構築、Webサイト・LP制作、月額サポート（AI顧問）。AIBOUのサービス内容と料金です。">
   <section class="wrap page-head">
     <h1>サービス</h1>
     <p class="lead">まずは無料の30分相談で、お仕事の話を聞かせてください。そのうえで、必要なものだけをご提案します。</p>
@@ -20,12 +20,14 @@ const steps = [
       <div class="svc-head">
         <h2>{s.name}</h2>
         <p class="svc-price"><span>料金</span>{s.price}</p>
+        {s.priceNote && <p class="svc-price-note muted">{s.priceNote}</p>}
       </div>
       <div class="svc-body">
         <p class="svc-sum">{s.summary}</p>
         <ul class="svc-list">
           {s.details.map((d) => <li>{d}</li>)}
         </ul>
+        {s.extra && <p class="muted svc-extra">{s.extra}</p>}
 
         {s.id === 'consult' && (
           <>
@@ -57,7 +59,7 @@ const steps = [
 
   <section class="section narrow">
     <h2 class="fee-title">料金について</h2>
-    <p>無料相談のあとに続けてご依頼いただく場合は、作業の内容と量を伺ってからお見積りします。お見積りの段階で費用はかかりません。</p>
+    <p>「予約・申込の事務 自動化パック」は上記の定額です。それ以外のご依頼は、作業の内容と量を伺ってからお見積りします。</p>
   </section>
 </Base>
 
@@ -70,10 +72,12 @@ const steps = [
   .svc-head h2 { font-size: var(--text-2xl); margin-bottom: var(--space-sm); }
   .svc-price { display: inline-flex; gap: var(--space-xs); align-items: baseline; font-family: var(--font-hand); font-weight: 600; font-size: var(--text-lg); }
   .svc-price span {
-    font-family: var(--font-body); font-weight: 400; font-size: 0.75rem; line-height: 1.6;
+    font-family: var(--font-body); font-weight: 400; font-size: 0.75rem; line-height: 1.6; white-space: nowrap; flex: none;
     padding: 1px 8px; border: 1.5px solid var(--color-ink); border-radius: 999px;
   }
   .svc-sum { font-size: var(--text-lg); margin-bottom: var(--space-md); }
+  .svc-price-note { margin-top: var(--space-xs); }
+  .svc-extra { margin-top: calc(-1 * var(--space-sm)); margin-bottom: var(--space-lg); }
   .svc-list { margin: 0 0 var(--space-lg); padding-left: 1.2em; display: grid; gap: var(--space-xs); color: var(--color-ink-soft); }
   .svc-link { font-family: var(--font-hand); font-weight: 600; }
   .svc-cta { margin-top: var(--space-lg); }
