@@ -1,46 +1,76 @@
 ---
 import Base from '../layouts/Base.astro';
 import MadeCard from '../components/MadeCard.astro';
-import { made, madeForLabel, type MadeFor } from '../data/made';
-
-const filters: ('all' | MadeFor)[] = ['all', 'client', 'employer', 'own', 'sample'];
-const count = (f: 'all' | MadeFor) => (f === 'all' ? made.length : made.filter((m) => m.for === f).length);
+import { made, allTags } from '../data/made';
 ---
-<Base title="つくったもの" description="AIBOUの定方がこれまでに作った仕組み。LINE Bot、Excelの自動化、Chrome拡張、在庫アプリ、業務マニュアル作成ツール、Webサイトなど。">
+<Base title="つくったもの" description="AIBOUの定方がこれまでに作った仕組み。運送業・サロン・事務作業・業務効率化など、業種や仕事の内容から探せます。">
   <section class="wrap page-head">
     <h1>つくったもの</h1>
     <p class="lead">
-      これまでに作った仕組みです。「困っていたこと」と「つくったもの」を並べています。勤務先の運送会社で作ったものは、会社名や画面の中の数字を伏せて載せています。
+      これまでに作った仕組みです。業種や仕事の内容のタグ、または検索で探せます。運送業の事例は、定方が社内のDX担当として作ったものです。会社名や画面の中の数字は伏せています。
     </p>
   </section>
 
   <section class="wrap made-wrap">
-    <div class="filters" role="group" aria-label="誰のために作ったかで絞り込む" hidden data-filters>
-      {filters.map((f, i) => (
-        <button type="button" class="filter" data-filter={f} aria-pressed={i === 0 ? 'true' : 'false'}>
-          {f === 'all' ? 'すべて' : madeForLabel[f]}<span>{count(f)}</span>
-        </button>
-      ))}
+    <div class="finder" hidden data-finder>
+      <label class="search">
+        <span class="sr">つくったものを検索</span>
+        <input type="search" placeholder="例：請求、LINE、在庫、サロン" autocomplete="off" data-search-input />
+      </label>
+      <div class="tag-list" role="group" aria-label="タグで絞り込む">
+        {allTags.map(({ tag, count }) => (
+          <button type="button" class="chip" data-tag={tag} aria-pressed="false">#{tag}<span>{count}</span></button>
+        ))}
+      </div>
+      <p class="result" aria-live="polite" data-result></p>
     </div>
-    <div class="made-grid">
+    <div class="made-grid" data-grid>
       {made.map((m) => <MadeCard item={m} headingLevel="h2" />)}
     </div>
+    <p class="empty" hidden data-empty>当てはまるものが見つかりませんでした。似たものを作れるかどうかは、無料相談でお気軽にお聞きください。</p>
   </section>
 </Base>
 
 <script>
-  // JS が動くときだけ絞り込みボタンを出す（動かなくても全件見える）
-  const box = document.querySelector<HTMLElement>('[data-filters]');
-  if (box) {
-    box.hidden = false;
-    const cards = [...document.querySelectorAll<HTMLElement>('.made-grid > [data-for]')];
-    box.addEventListener('click', (e) => {
-      const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-filter]');
-      if (!btn) return;
-      const f = btn.dataset.filter;
-      box.querySelectorAll('[data-filter]').forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
-      cards.forEach((c) => { c.hidden = f !== 'all' && c.dataset.for !== f; });
+  // JS が動くときだけ検索とタグを出す（動かなくても全件見える）
+  const finder = document.querySelector<HTMLElement>('[data-finder]');
+  const grid = document.querySelector<HTMLElement>('[data-grid]');
+  if (finder && grid) {
+    finder.hidden = false;
+    const input = finder.querySelector<HTMLInputElement>('[data-search-input]')!;
+    const result = finder.querySelector<HTMLElement>('[data-result]')!;
+    const empty = document.querySelector<HTMLElement>('[data-empty]')!;
+    const cards = [...grid.querySelectorAll<HTMLElement>('[data-search]')];
+    const chips = [...finder.querySelectorAll<HTMLButtonElement>('.chip')];
+    let tag = '';
+
+    const apply = () => {
+      const words = input.value.trim().toLowerCase().split(/\s+/).filter(Boolean);
+      let n = 0;
+      cards.forEach((c) => {
+        const okTag = !tag || (c.dataset.tags ?? '').split('|').includes(tag);
+        const okWords = words.every((w) => (c.dataset.search ?? '').includes(w));
+        c.hidden = !(okTag && okWords);
+        if (!c.hidden) n++;
+      });
+      chips.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.tag === tag)));
+      result.textContent = tag || words.length ? `${n}件` + (tag ? `（#${tag}）` : '') : '';
+      empty.hidden = n > 0;
+    };
+    const setTag = (t: string) => { tag = tag === t ? '' : t; apply(); };
+
+    input.addEventListener('input', apply);
+    chips.forEach((b) => b.addEventListener('click', () => setTag(b.dataset.tag ?? '')));
+    // カードのタグを押しても絞り込む
+    grid.addEventListener('click', (e) => {
+      const b = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-tag]');
+      if (!b) return;
+      setTag(b.dataset.tag ?? '');
+      finder.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
+    // ?tag=運送業 で開いたときはそのタグで絞り込む
+    const q = new URLSearchParams(location.search).get('tag');
+    if (q && chips.some((b) => b.dataset.tag === q)) setTag(q);
   }
 </script>
 
@@ -49,17 +79,25 @@ const count = (f: 'all' | MadeFor) => (f === 'all' ? made.length : made.filter((
   .page-head h1 { font-size: var(--text-display); margin-bottom: var(--space-sm); }
   .page-head .lead { max-width: var(--measure); }
   .made-wrap { padding-bottom: var(--space-3xl); }
-  .filters { display: flex; flex-wrap: wrap; gap: var(--space-xs); margin-bottom: var(--space-xl); }
-  .filter {
+  .finder { display: grid; gap: var(--space-sm); margin-bottom: var(--space-xl); scroll-margin-top: 110px; }
+  .search input {
+    width: 100%; max-width: 30rem; font: inherit; font-size: var(--text-base);
+    padding: 10px 14px; border: 2px solid var(--color-ink); border-radius: var(--radius-sm); background: var(--color-card); color: var(--color-ink);
+  }
+  .tag-list { display: flex; flex-wrap: wrap; gap: var(--space-xs); }
+  .chip {
     font: inherit; font-size: var(--text-sm); font-weight: 700; cursor: pointer; white-space: nowrap;
-    padding: 6px 14px; border-radius: 999px; border: 1.5px solid var(--color-ink);
+    padding: 4px 12px; border-radius: 999px; border: 1.5px solid var(--color-ink);
     background: var(--color-card); color: var(--color-ink);
   }
-  .filter span { margin-left: 6px; font-weight: 400; color: var(--color-ink-soft); }
-  .filter[aria-pressed='true'] { background: var(--color-ink); color: var(--color-paper); }
-  .filter[aria-pressed='true'] span { color: var(--color-paper); }
+  .chip span { margin-left: 6px; font-weight: 400; color: var(--color-ink-soft); }
+  .chip[aria-pressed='true'] { background: var(--color-ink); color: var(--color-paper); }
+  .chip[aria-pressed='true'] span { color: var(--color-paper); }
+  .result { font-size: var(--text-sm); font-weight: 700; min-height: 1.5em; }
   .made-grid { display: grid; gap: var(--space-xl); grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .made-grid > :global([hidden]) { display: none; }
+  .empty { margin-top: var(--space-lg); }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
   @media (max-width: 1000px) { .made-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   @media (max-width: 640px) { .made-grid { grid-template-columns: minmax(0, 1fr); } }
 </style>
