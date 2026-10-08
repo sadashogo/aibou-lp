@@ -1,0 +1,73 @@
+---
+// 制作サンプル（架空のお店）専用の土台。AIBOU のヘッダーや固定ボタンは出さない。
+// 検索に出さない（noindex）。右下に「Web制作サンプル（架空のお店）」の札を常に出す。
+import { site } from '../data/site';
+
+interface Props {
+  title: string;
+  description: string;
+  ogImage?: string;
+  /** お店の配色・書体（CSS の変数） */
+  theme: Record<string, string>;
+}
+const { title, description, ogImage, theme } = Astro.props;
+const canonical = new URL(Astro.url.pathname, site.url).href;
+const style = Object.entries(theme).map(([k, v]) => `${k}: ${v}`).join('; ');
+---
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <!-- 架空のお店の制作サンプルなので、検索エンジンには載せない -->
+    <meta name="robots" content="noindex, nofollow" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    {ogImage && <meta property="og:image" content={new URL(ogImage, site.url).href} />}
+    {ogImage && <meta property="og:image:width" content="1200" />}
+    {ogImage && <meta property="og:image:height" content="630" />}
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body style={style}>
+    <slot />
+    <footer class="sample-foot">
+      <slot name="footer" />
+      <p class="sample-note">
+        このサイトは Web制作の実績サンプルです。お店の名前・料金・住所・電話番号・スタッフはすべて架空です。写真・映像はAIで生成しています。予約ボタンは本物の予約にはつながりません。<br />
+        制作：<a href={site.url + '/'}>AIBOU</a>（<a href={site.url + '/made/'}>ほかの制作物を見る</a>）
+      </p>
+    </footer>
+    <p class="sample-badge">Web制作サンプル（架空のお店）</p>
+  </body>
+</html>
+
+<style is:global>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; overflow-x: clip; }
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+  body {
+    --s-gutter: clamp(16px, 5vw, 64px);
+    font-family: var(--s-font-body); color: var(--s-ink); background: var(--s-bg);
+    line-height: 1.9; font-feature-settings: 'palt' 1;
+  }
+  img { display: block; max-width: 100%; height: auto; }
+  a { color: inherit; }
+  h1, h2, h3 { font-family: var(--s-font-head); font-weight: 500; line-height: 1.5; margin: 0; overflow-wrap: anywhere; }
+  p { margin: 0; }
+  :focus-visible { outline: 2px solid var(--s-accent); outline-offset: 3px; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+  .sample-foot { padding: 48px var(--s-gutter) 72px; background: var(--s-surface-2); font-size: 13px; color: var(--s-ink-soft); }
+  .sample-note { max-width: 46rem; margin-top: 24px; line-height: 1.9; }
+  .sample-badge {
+    position: fixed; right: 10px; bottom: 10px; z-index: 50; margin: 0; pointer-events: none;
+    padding: 5px 10px; font-size: 11px; font-weight: 700; letter-spacing: 0.04em;
+    color: var(--s-ink); background: color-mix(in srgb, var(--s-bg) 88%, transparent);
+    border: 1px solid color-mix(in srgb, var(--s-ink) 25%, transparent); border-radius: 4px; backdrop-filter: blur(6px);
+  }
+</style>

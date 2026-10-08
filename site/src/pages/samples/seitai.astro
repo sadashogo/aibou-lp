@@ -1,0 +1,12 @@
+---
+import SampleBase from '../../layouts/SampleBase.astro';
+import ShopPage from '../../components/samples/ShopPage.astro';
+import { seitai, seitaiTheme } from '../../data/samples/seitai';
+---
+<SampleBase
+  title="ととのい整体院｜整体院サイト（Web制作サンプル・架空のお店）"
+  description="スクロールに合わせて、問診からセルフケアまでの流れが進む整体院サイトの制作サンプルです（架空のお店）。"
+  theme={seitaiTheme}
+>
+  <ShopPage shop={seitai} />
+</SampleBase>
