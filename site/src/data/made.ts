@@ -60,6 +60,7 @@ export const made: Made[] = [
     after: '配車の連絡がLINEで完結し、1日約30分の電話がなくなった。',
     tags: ['運送業', '配車', 'LINE', '業務効率化'],
     figure: 'chat',
+    note: 'https://note.com/shogo_ai/n/nd45fb22ef99c',
     top: 2,
   },
   {
@@ -84,6 +85,7 @@ export const made: Made[] = [
     after: 'これまでに4つの業務をマニュアルにした。',
     tags: ['運送業', 'マニュアル・引き継ぎ', 'AI活用', '事務作業'],
     figure: 'book',
+    note: 'https://note.com/shogo_ai/n/n023f693a211d',
   },
   {
     id: 'highway',
@@ -94,6 +96,7 @@ export const made: Made[] = [
     what: '何区間でもまとめて検索し、合計金額の集計とCSV出力までできる。IC名は入力の途中で候補が出る。',
     tags: ['運送業', '事務作業', 'Chrome拡張', '業務効率化'],
     figure: 'route',
+    note: 'https://note.com/shogo_ai/n/n0dddae700c5b',
   },
   {
     id: 'daily-csv',
