@@ -1,0 +1,126 @@
+---
+// スクロールに合わせて場面が進む演出（制作サンプル用）。素材の種類は data/samples/types.ts の StoryMedia。
+import type { Scene, StoryMedia } from '../../data/samples/types';
+
+interface Props { scenes: Scene[]; media: StoryMedia }
+const { scenes, media } = Astro.props;
+const n = scenes.length;
+
+const frameSrc = (dir: string, i: number, ext: string) => `${dir}/${String(i).padStart(4, '0')}.${ext}`;
+// JS なし／動きを減らす設定のときに各場面に出す画像
+const posterFor = (i: number): { desktop: string; mobile: string } | null => {
+  if (media.mode === 'stills') return { desktop: media.desktop[i], mobile: media.mobile[i] };
+  if (media.mode === 'frames') {
+    const f = Math.min(media.count, Math.max(1, Math.round(((i + 0.5) / n) * media.count)));
+    return { desktop: frameSrc(media.desktop, f, media.ext), mobile: frameSrc(media.mobile, f, media.ext) };
+  }
+  return null;
+};
+const data =
+  media.mode === 'frames'
+    ? { mode: 'frames', count: media.count, ext: media.ext, desktop: media.desktop, mobile: media.mobile }
+    : media.mode === 'stills'
+      ? { mode: 'stills' }
+      : { mode: 'placeholder' };
+---
+<section class="story" data-story={JSON.stringify(data)} style={`--scenes: ${n}`}>
+  <div class="story-sticky">
+    {media.mode === 'frames' && <canvas class="story-canvas" aria-hidden="true"></canvas>}
+    {media.mode === 'stills' && (
+      <div class="story-stills" aria-hidden="true">
+        {media.desktop.map((src, i) => (
+          <picture class="still" data-still={i}>
+            <source media="(max-aspect-ratio: 1/1)" srcset={media.mobile[i]} />
+            <img src={src} alt="" loading={i === 0 ? 'eager' : 'lazy'} decoding="async" fetchpriority={i === 0 ? 'high' : 'auto'} />
+          </picture>
+        ))}
+      </div>
+    )}
+    {media.mode === 'placeholder' && (
+      <div class="story-stills" aria-hidden="true">
+        {scenes.map((_, i) => <div class="still still--ph" data-still={i}><span>場面 {i + 1}（素材待ち）</span></div>)}
+      </div>
+    )}
+    <div class="story-shade" aria-hidden="true"></div>
+    {scenes.map((s, i) => {
+      const p = posterFor(i);
+      return (
+        <article class="scene" data-scene={i}>
+          {p && (
+            <picture class="scene-poster">
+              <source media="(max-aspect-ratio: 1/1)" srcset={p.mobile} />
+              <img src={p.desktop} alt="" loading={i === 0 ? 'eager' : 'lazy'} />
+            </picture>
+          )}
+          <div class="scene-text">
+            <p class="scene-label"><span>{String(i + 1).padStart(2, '0')}</span>{s.label}</p>
+            {i === 0
+              ? <h1 class="scene-title">{s.title.split('|').map((t) => <span>{t}</span>)}</h1>
+              : <h2 class="scene-title">{s.title.split('|').map((t) => <span>{t}</span>)}</h2>}
+            <p class="scene-body">{s.body}</p>
+          </div>
+        </article>
+      );
+    })}
+    <div class="story-progress" aria-hidden="true">
+      {scenes.map((_, i) => <span data-dot={i}></span>)}
+    </div>
+    <p class="story-hint" aria-hidden="true">スクロール</p>
+  </div>
+</section>
+
+<script>
+  import { initScrollStory } from '../../scripts/scroll-story';
+  document.querySelectorAll<HTMLElement>('[data-story]').forEach(initScrollStory);
+</script>
+
+<style>
+  /* 既定（JS なし／動きを減らす設定）：場面を縦に並べて全部見せる */
+  .story-canvas, .story-stills, .story-shade, .story-progress, .story-hint { display: none; }
+  .scene { position: relative; min-height: 80svh; display: grid; align-items: end; overflow: hidden; background: var(--s-surface); }
+  .scene-poster img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .scene-poster::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, var(--s-shade) 10%, transparent 65%); }
+  .scene-text { position: relative; padding: 0 var(--s-gutter) 10svh; max-width: 34rem; color: var(--s-on-image); }
+  .scene-label { font-size: 12px; letter-spacing: 0.18em; margin: 0 0 1em; opacity: 0.9; }
+  .scene-label span { margin-right: 1em; font-weight: 700; padding-right: 1em; border-right: 1px solid currentColor; }
+  .scene-title { font-family: var(--s-font-head); font-weight: 500; font-size: clamp(30px, 4.6vw, 60px); line-height: 1.35; margin: 0 0 0.5em; }
+  /* 見出しは「|」で区切ったまとまりの中では改行しない（収まらないときだけ中で折り返す） */
+  .scene-title span { display: inline-block; }
+  .scene-body { font-size: 15px; line-height: 2; margin: 0; }
+
+  /* JS が動いたら：画面を固定して、スクロールで場面を重ねて切り替える */
+  .story.is-live { height: calc(var(--scenes) * 120svh); }
+  .story.is-live .story-sticky { position: sticky; top: 0; height: 100svh; overflow: hidden; background: var(--s-surface); }
+  .story.is-live .story-canvas { display: block; position: absolute; inset: 0; width: 100%; height: 100%; }
+  .story.is-live .story-stills { display: block; position: absolute; inset: 0; }
+  .story.is-live .still { position: absolute; inset: 0; opacity: 0; will-change: opacity, transform; }
+  .story.is-live .still img { width: 100%; height: 100%; object-fit: cover; }
+  .story.is-live .still--ph {
+    display: grid; place-items: center; color: var(--s-on-image); font-size: 14px; letter-spacing: 0.1em;
+    background: linear-gradient(135deg, var(--s-ph-a), var(--s-ph-b));
+  }
+  .story.is-live .story-shade {
+    display: block; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(to right, var(--s-shade) 0%, color-mix(in srgb, var(--s-shade) 40%, transparent) 38%, transparent 60%);
+  }
+  .story.is-live .scene { position: absolute; inset: 0; min-height: 0; background: none; opacity: 0; visibility: hidden; will-change: opacity, transform; }
+  .story.is-live .scene-poster { display: none; }
+  .story.is-live .scene-text { padding-bottom: 0; align-self: center; max-width: min(34rem, 46vw); }
+  .story.is-live .story-progress {
+    display: grid; gap: 10px; position: absolute; right: var(--s-gutter); top: 50%; transform: translateY(-50%);
+  }
+  .story.is-live .story-progress span { width: 8px; height: 8px; border-radius: 50%; background: var(--s-on-image); opacity: 0.35; transition: opacity 0.3s, transform 0.3s; }
+  .story.is-live .story-progress span.is-on { opacity: 1; transform: scale(1.4); background: var(--s-accent); }
+  .story.is-live .story-hint {
+    display: block; position: absolute; left: 50%; bottom: 24px; transform: translateX(-50%); margin: 0;
+    font-size: 11px; letter-spacing: 0.3em; color: var(--s-on-image); opacity: 0.8;
+  }
+
+  /* スマホ：文字は下寄せにして、画像の上半分を空ける */
+  @media (max-aspect-ratio: 1/1) {
+    .story.is-live .scene-text { align-self: end; max-width: none; padding-bottom: 12svh; }
+    .story.is-live .story-shade { background: linear-gradient(to top, var(--s-shade) 30%, color-mix(in srgb, var(--s-shade) 55%, transparent) 50%, transparent 70%); }
+    .story.is-live .story-progress { top: auto; bottom: 24px; right: var(--s-gutter); transform: none; grid-auto-flow: column; }
+    .story.is-live .story-hint { left: var(--s-gutter); transform: none; }
+  }
+</style>

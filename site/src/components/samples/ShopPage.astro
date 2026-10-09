@@ -1,0 +1,172 @@
+---
+// 架空のお店のサイト本体（場面の下に続く部分）。美容室・整体院で共通に使う。
+import ScrollStory from './ScrollStory.astro';
+import { site } from '../../data/site';
+import type { ShopData } from '../../data/samples/types';
+
+interface Props { shop: ShopData }
+const { shop } = Astro.props;
+---
+<header class="shop-head">
+  <a class="shop-logo" href="#top">{shop.name}<span>{shop.nameSub}</span></a>
+  <button type="button" class="shop-reserve shop-reserve--sm" data-reserve>LINEで予約</button>
+</header>
+
+<div id="top"><ScrollStory scenes={shop.scenes} media={shop.media} /></div>
+
+<main class="shop-main">
+  <section class="block intro">
+    <h2>{shop.intro.title}</h2>
+    <p>{shop.intro.body}</p>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">{shop.menuTitle}</h2>
+    <dl class="menu">
+      {shop.menu.map((m) => (
+        <div class="menu-row">
+          <dt>{m.name}{m.note && <small>{m.note}</small>}</dt>
+          <dd>{m.price}</dd>
+        </div>
+      ))}
+    </dl>
+    <p class="fine">{shop.menuNote}</p>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">{shop.people.title}</h2>
+    <div class="people">
+      {shop.people.list.map((p) => (
+        <article class="person">
+          <span class="person-mark" aria-hidden="true">{p.name.slice(0, 1)}</span>
+          <div>
+            <p class="person-role">{p.role}</p>
+            <h3>{p.name}</h3>
+            <p>{p.body}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">よくある質問</h2>
+    {shop.faqs.map((f) => (
+      <details>
+        <summary>{f.q}</summary>
+        <p>{f.a}</p>
+      </details>
+    ))}
+  </section>
+
+  <section class="block access">
+    <h2 class="block-title">アクセス</h2>
+    <dl class="info">
+      <div><dt>住所</dt><dd>{shop.access.address}</dd></div>
+      <div><dt>営業時間</dt><dd>{shop.access.hours}</dd></div>
+      <div><dt>定休日</dt><dd>{shop.access.closed}</dd></div>
+      <div><dt>駐車場</dt><dd>{shop.access.parking}</dd></div>
+      <div><dt>電話</dt><dd>{shop.access.tel}</dd></div>
+    </dl>
+  </section>
+
+  <section class="block reserve">
+    <h2>ご予約はLINEから</h2>
+    <p>{shop.reserveLead}</p>
+    <button type="button" class="shop-reserve" data-reserve>LINEで予約する</button>
+  </section>
+</main>
+
+<dialog class="sample-dialog" data-dialog aria-labelledby="sample-dialog-title">
+  <h2 id="sample-dialog-title">これは制作サンプルです</h2>
+  <p>{shop.name}は架空のお店なので、ここから予約はできません。</p>
+  <p class="dialog-pitch">
+    実際にお店のサイトを作るときは、このボタンから<strong>LINEで予約を受け付け、前日にリマインドを送り、来店後にアンケートを届ける</strong>ところまで自動にできます。
+  </p>
+  <div class="dialog-actions">
+    <a class="shop-reserve" href={`${site.url}/services/#booking-pack`}>予約の自動化パックを見る</a>
+    <button type="button" class="dialog-close" data-close>閉じる</button>
+  </div>
+</dialog>
+
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>('[data-dialog]');
+  document.querySelectorAll('[data-reserve]').forEach((b) =>
+    b.addEventListener('click', () => (dialog?.showModal ? dialog.showModal() : alert('これは制作サンプルです。予約はできません。'))),
+  );
+  dialog?.querySelector('[data-close]')?.addEventListener('click', () => dialog.close());
+  dialog?.addEventListener('click', (e) => { if (e.target === dialog) dialog.close(); });
+</script>
+
+<style>
+  .shop-head {
+    position: fixed; inset: 0 0 auto 0; z-index: 40; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 10px var(--s-gutter); pointer-events: none;
+    background: color-mix(in srgb, var(--s-bg) 82%, transparent); backdrop-filter: blur(8px);
+  }
+  .shop-head > * { pointer-events: auto; }
+  .shop-logo { font-family: var(--s-font-head); font-size: 18px; text-decoration: none; color: var(--s-ink); white-space: nowrap; }
+  .shop-logo span { font-size: 11px; margin-left: 8px; letter-spacing: 0.12em; opacity: 0.85; }
+  .shop-reserve {
+    display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 28px;
+    font: inherit; font-weight: 700; font-size: 15px; letter-spacing: 0.06em; white-space: nowrap; cursor: pointer; text-decoration: none;
+    color: var(--s-on-accent); background: var(--s-accent); border: 0; border-radius: 999px;
+    transition: transform 0.15s, filter 0.15s;
+  }
+  .shop-reserve:hover { filter: brightness(1.06); transform: translateY(-1px); }
+  .shop-reserve--sm { min-height: 38px; padding: 0 16px; font-size: 13px; }
+
+  .shop-main { max-width: 60rem; margin-inline: auto; padding: 0 var(--s-gutter); }
+  .block { padding-block: clamp(56px, 9vw, 104px); border-bottom: 1px solid var(--s-rule); }
+  .block:last-child { border-bottom: 0; }
+  .block-title { font-size: clamp(22px, 3vw, 30px); margin-bottom: 28px; }
+  .intro { text-align: center; }
+  .intro h2 { font-size: clamp(24px, 3.6vw, 36px); margin-bottom: 20px; }
+  .intro p { max-width: 36rem; margin-inline: auto; color: var(--s-ink-soft); }
+
+  .menu { margin: 0; border-top: 1px solid var(--s-rule); }
+  .menu-row { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 16px 0; border-bottom: 1px dashed var(--s-rule); }
+  .menu-row dt small { display: block; font-size: 12px; color: var(--s-ink-soft); }
+  .menu-row dd { margin: 0; font-weight: 700; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .fine { margin-top: 14px; font-size: 12px; color: var(--s-ink-soft); }
+
+  .people { display: grid; gap: 28px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); }
+  .person { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 16px; align-items: start; }
+  .person-mark {
+    width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center;
+    font-family: var(--s-font-head); font-size: 26px; color: var(--s-on-accent); background: var(--s-accent);
+  }
+  .person-role { font-size: 12px; color: var(--s-ink-soft); }
+  .person h3 { font-size: 18px; margin-bottom: 6px; }
+  .person p:last-child { font-size: 14px; color: var(--s-ink-soft); }
+
+  details { border-bottom: 1px solid var(--s-rule); padding-block: 14px; }
+  details:first-of-type { border-top: 1px solid var(--s-rule); }
+  summary { font-weight: 700; cursor: pointer; list-style: none; padding-right: 2em; position: relative; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: '+'; position: absolute; right: 0.3em; top: -0.1em; font-size: 22px; }
+  details[open] summary::after { content: '−'; }
+  details p { margin-top: 8px; font-size: 14px; color: var(--s-ink-soft); }
+
+  .info { margin: 0; display: grid; gap: 0; }
+  .info div { display: grid; grid-template-columns: 6rem minmax(0, 1fr); gap: 12px; padding: 12px 0; border-bottom: 1px dashed var(--s-rule); }
+  .info dt { font-size: 13px; color: var(--s-ink-soft); }
+  .info dd { margin: 0; }
+
+  .reserve { text-align: center; }
+  .reserve h2 { font-size: clamp(24px, 3.6vw, 34px); margin-bottom: 12px; }
+  .reserve p { color: var(--s-ink-soft); margin-bottom: 28px; }
+
+  .sample-dialog {
+    max-width: min(30rem, calc(100vw - 32px)); padding: 28px; border: 0; border-radius: 14px;
+    color: var(--s-ink); background: var(--s-bg); box-shadow: 0 20px 60px rgb(0 0 0 / 0.25);
+  }
+  .sample-dialog::backdrop { background: rgb(0 0 0 / 0.45); }
+  .sample-dialog h2 { font-size: 20px; margin-bottom: 12px; }
+  .sample-dialog p { font-size: 14px; margin-bottom: 10px; }
+  .dialog-pitch { padding: 12px 14px; border-radius: 8px; background: var(--s-surface-2); }
+  .dialog-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; align-items: center; }
+  .dialog-actions .shop-reserve { white-space: normal; text-align: center; min-height: 44px; padding: 8px 20px; font-size: 14px; }
+  .dialog-close { font: inherit; font-size: 14px; background: none; border: 0; text-decoration: underline; cursor: pointer; color: var(--s-ink-soft); }
+  @media (prefers-reduced-motion: reduce) { .shop-reserve { transition: none; } }
+</style>

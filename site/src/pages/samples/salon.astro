@@ -1,0 +1,13 @@
+---
+import SampleBase from '../../layouts/SampleBase.astro';
+import ShopPage from '../../components/samples/ShopPage.astro';
+import { salon, salonTheme } from '../../data/samples/salon';
+---
+<SampleBase
+  title="hair salon ソラ｜美容室サイト（Web制作サンプル・架空のお店）"
+  description="スクロールに合わせて、カウンセリングから仕上がりまでの流れが進む美容室サイトの制作サンプルです（架空のお店）。"
+  ogImage="/samples/salon/og.jpg"
+  theme={salonTheme}
+>
+  <ShopPage shop={salon} />
+</SampleBase>
