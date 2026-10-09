@@ -1,113 +1,140 @@
 ---
 import Base from '../layouts/Base.astro';
 import ContactButtons from '../components/ContactButtons.astro';
-import VoiceCard from '../components/VoiceCard.astro';
 import MadeCard from '../components/MadeCard.astro';
-import MadeFigure from '../components/MadeFigure.astro';
-import { site, services, voices, consultSteps, pains, faqs } from '../data/site';
+import WorkCard from '../components/WorkCard.astro';
+import { site, services, voices, consultSteps, pains, faqs, results, works } from '../data/site';
 import { madeTop } from '../data/made';
 import { getNoteArticles } from '../data/note';
 
 const pack = services.find((s) => s.id === 'booking-pack')!;
-const price = (id: string) => services.find((s) => s.id === id)!.price;
+const svc = (id: string) => services.find((s) => s.id === id)!;
 const notes = await getNoteArticles(site.noteRss);
 
-// 最初の画面の右側に重ねる「つくったもの」
-const heroMade = madeTop.slice(0, 3);
-
-const ways = [
-  {
-    title: 'まずは無料で相談する',
-    body: '仕事の話を聞いて、AIで楽にできる作業と、そのやり方をその場でお見せします。相談だけで終わっても大丈夫です。',
-    price: '0円・30分・オンライン',
-    href: '/services/#consult',
-  },
-  {
-    title: '予約・申込の事務を、まとめて自動に',
-    body: '講座・サロン・教室などの予約受付、リマインド、入金管理、顧客台帳までを、決まった中身と料金でまとめて整えます。',
-    price: '初期 165,000円（税込）',
-    href: '/#pack',
-  },
-  {
-    title: '必要なものを、必要なだけ作る',
-    body: 'Excelの自動化、LINE公式アカウント、Webサイト、月1回の相談役まで。今あるやり方を活かして作ります。',
-    price: `自動化・LINE ${price('automation')}／LP ${price('web').replace('1ページのLP ', '')}／顧問 ${price('advisor')}`,
-    href: '/services/',
-  },
+// 証拠に使うお客さまの声（美容サロン）。パックの導入事例ではないので、並べるだけにする
+const salonVoice = voices.find((v) => v.case === 'CASE 02')!;
+// 予約につながるホームページの見本（美容室・整体院）
+const shopSamples = works.filter((w) => w.url.startsWith('/samples/'));
+// 脇役の商品（小さく1段で並べる）
+const others = [
+  { id: 'automation', label: '業務の自動化・LINE公式', price: svc('automation').price },
+  { id: 'web', label: 'ホームページ・LP制作', price: svc('web').price.replace('1ページのLP ', '') },
+  { id: 'advisor', label: '月1回の相談役（AI顧問）', price: svc('advisor').price },
 ];
 ---
-<Base>
+<Base
+  title="サロン・整体院・教室の予約をLINEで自動に"
+  description="サロン・整体院・教室の予約受付、前日のリマインド、来店後のアンケートまでを、LINEとスプレッドシートでまとめて自動にします。群馬から、オンラインで。無料30分相談受付中。"
+>
   <div class="hero-band">
     <section class="hero wrap">
       <div class="hero-text">
-        <p class="hero-for">小さな会社と個人事業主のための、AI・デジタル支援</p>
-        <h1 class="hero-title">経営者の隣に、<br /><span class="mk">AIの相棒</span>を。</h1>
+        <p class="hero-for">{site.tagline}<span>サロン・整体院・教室のための、予約の自動化</span></p>
+        <h1 class="hero-title"><span class="nb">予約と問い合わせの</span><span class="nb">事務を、</span><br /><span class="mk">LINEで自動に。</span></h1>
         <p class="hero-sub">
-          毎日の手作業や「AIをどう使えばいいか」の迷いを、30分の無料相談で整理します。必要なら、LINE・Excel・Webの仕組みづくりまで一緒に。
+          予約の受付、前日のリマインド、来店後のアンケートまでを、いつものLINEとスプレッドシートでまとめて自動にします。群馬から、オンラインで。
         </p>
         <ul class="hero-badges" aria-label="無料相談について">
-          <li>無料</li><li>30分</li><li>オンライン</li><li>売り込みなし</li>
+          <li>相談は無料</li><li>30分</li><li>オンライン</li><li>売り込みなし</li>
         </ul>
         <ContactButtons position="hero" />
       </div>
-      <a class="hero-made" href="/made/" aria-label="つくったものを見る">
-        {heroMade.map((m, i) => (
-          <span class={`hm hm--${i}`}>
-            <span class="hm-name">{m.name}</span>
-            <span class="hm-fig"><MadeFigure kind={m.figure} /></span>
-          </span>
-        ))}
-        <span class="hm-caption">これまでにつくったもの →</span>
-      </a>
+      <figure class="hero-chat" aria-label="LINEで自動に届くメッセージの例">
+        <div class="chat">
+          <p class="chat-head"><span class="chat-icon" aria-hidden="true"></span>あなたのお店（LINE公式）</p>
+          <div class="chat-row">
+            <span class="chat-step">予約したとき</span>
+            <p class="bubble">ご予約ありがとうございます。<br />10月12日（土）14:00 で承りました。</p>
+          </div>
+          <div class="chat-row">
+            <span class="chat-step">前日</span>
+            <p class="bubble">明日 14:00 のご予約のお知らせです。お気をつけてお越しください。</p>
+          </div>
+          <div class="chat-row">
+            <span class="chat-step">来店後</span>
+            <p class="bubble">ご来店ありがとうございました。1分のアンケートにご協力ください。</p>
+          </div>
+        </div>
+        <figcaption>3つとも、自動で届きます</figcaption>
+      </figure>
     </section>
   </div>
+
+  <section class="proof" aria-label="これまでの実績">
+    <div class="wrap">
+    <ul class="proof-list">
+      <li class="proof-item">
+        <p class="proof-num"><span class="mk">サロン2社</span></p>
+        <p class="proof-sub">を、毎月続けて支援しています</p>
+      </li>
+      <li class="proof-item proof-item--voice">
+        <p class="proof-quote">「{salonVoice.headline}」</p>
+        <p class="proof-sub">{salonVoice.context}・{salonVoice.person}　<a href="/works/#voices">声をすべて読む</a></p>
+      </li>
+      <li class="proof-item">
+        <p class="proof-num">{results.metric.value.split(' → ').map((v, i) => <>{i > 0 && ' → '}<span class="nb mk">{v}</span></>)}</p>
+        <p class="proof-sub">運送会社の配車作業（勤務先での取り組み）</p>
+      </li>
+    </ul>
+    </div>
+  </section>
 
   <section class="section wrap">
     <h2 class="sec-title">こんなこと、ありませんか</h2>
     <ul class="pains">
       {pains.map((p) => <li>{p}</li>)}
     </ul>
-    <p class="pains-after">ひとつでも当てはまれば、まずは30分、話してみてください。<br class="br-pc" />むずかしい用語は使いません。いまの仕事の流れを聞くところから始めます。</p>
+    <p class="pains-after">ひとつでも当てはまれば、まずは30分、話してみてください。<br class="br-pc" />むずかしい用語は使いません。いまの予約の受け方を聞くところから始めます。</p>
   </section>
 
-  <section class="section wrap">
-    <h2 class="sec-title">AIBOUへの頼み方</h2>
-    <ol class="ways">
-      {ways.map((w) => (
-        <li>
-          <h3>{w.title}</h3>
-          <p>{w.body}</p>
-          <p class="way-price">{w.price}</p>
-          <a href={w.href}>詳しく見る</a>
-        </li>
-      ))}
-    </ol>
-  </section>
-
-  <section class="wrap pack" id="pack" aria-labelledby="pack-title">
-    <div class="pack-inner">
-      <p class="pack-for">講座・セミナー、サロン・整体・教室、説明会や体験会を開く方へ</p>
-      <h2 id="pack-title" class="pack-title">{pack.name}</h2>
+  <section class="pack" id="pack" aria-labelledby="pack-title">
+    <div class="wrap pack-inner">
+      <p class="pack-for">いちばんのおすすめ｜サロン・整体・教室、講座や体験会を開く方へ</p>
+      <h2 id="pack-title" class="pack-title">{pack.name.split(' ').map((w, i) => <>{i > 0 && ' '}<span class="nb">{w}</span></>)}</h2>
       <p class="pack-sum">LINE公式・フォーム・スプレッドシートで、予約・申込まわりの事務をまとめて自動にします。中身は次の6つで固定です。</p>
       <ol class="pack-list">
         {pack.details.map((d) => <li>{d}</li>)}
       </ol>
-      <p class="pack-price">
-        {pack.price.split(' ＋ ').map((g, i) => (
-          <>{i > 0 && <br />}<span class="mk pg">{(i > 0 ? `＋ ${g}` : g).split(' ').map((w, j) => <>{j > 0 && ' '}<span class="pw">{w}</span></>)}</span></>
-        ))}
-      </p>
-      {pack.priceNote && <p class="muted">{pack.priceNote}</p>}
-      <div class="pack-cta">
-        <a class="btn" href={site.bookingUrl} target="_blank" rel="noopener" data-track="booking_click" data-position="pack">このパックについて相談する</a>
-        <a class="pack-more" href={`/services/#${pack.id}`}>詳しく見る</a>
+      <div class="pack-foot">
+        <div>
+          <p class="pack-price">
+            {pack.price.split(' ＋ ').map((g, i) => (
+              <>{i > 0 && <br />}<span class="pg">{(i > 0 ? `＋ ${g}` : g).split(' ').map((w, j) => <>{j > 0 && ' '}<span class="pw">{w}</span></>)}</span></>
+            ))}
+          </p>
+          {pack.priceNote && <p class="pack-note">{pack.priceNote}</p>}
+        </div>
+        <div class="pack-cta">
+          <a class="btn" href={site.bookingUrl} target="_blank" rel="noopener" data-track="booking_click" data-position="pack">このパックについて相談する</a>
+          <a class="pack-more" href={`/services/#${pack.id}`}>詳しく見る</a>
+        </div>
       </div>
     </div>
   </section>
 
   <section class="section wrap">
+    <h2 class="sec-title">予約につながるホームページも、一緒に</h2>
+    <p class="lead sec-lead">予約ボタンからLINEにつながるホームページも作れます。どちらも架空のお店の制作サンプルです（{svc('web').price}）。</p>
+    <div class="grid2">
+      {shopSamples.map((w) => <WorkCard work={w} />)}
+    </div>
+    <p class="more"><a href="/works/">ほかの制作サンプルを見る</a></p>
+  </section>
+
+  <section class="others-band" aria-labelledby="others-title">
+    <div class="wrap others">
+      <h2 id="others-title" class="others-title">ほかにもできること</h2>
+      <ul class="others-list">
+        {others.map((o) => (
+          <li><a href={`/services/#${o.id}`}><b>{o.label}</b><span>{o.price}</span></a></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section wrap">
     <h2 class="sec-title">つくったもの</h2>
-    <p class="lead sec-lead">これまでに作った仕組みの一部です。運送業の事例は、定方が社内のDX担当として作ったものです。制作サンプルの2つは架空の会社・ブランドです。</p>
+    <p class="lead sec-lead">これまでに作った仕組みの一部です。運送業の事例は、定方が社内のDX担当として作ったものです。</p>
     <div class="grid3">
       {madeTop.map((m) => <MadeCard item={m} compact />)}
     </div>
@@ -138,14 +165,6 @@ const ways = [
     </div>
   </section>
 
-  <section class="section wrap">
-    <h2 class="sec-title">いただいた声</h2>
-    <div class="grid2">
-      {voices.map((v) => <VoiceCard voice={v} />)}
-    </div>
-    <p class="more"><a href="/works/#voices">全文を見る</a></p>
-  </section>
-
   <section class="section wrap help">
     <div>
       <h2 class="sec-title">相談の流れ</h2>
@@ -170,21 +189,24 @@ const ways = [
 </Base>
 
 <style>
-  /* 方眼は最初の画面だけ */
+  /* 強弱は3段階：主役のパック＝濃い墨色の帯／証拠＝白い帯／脇役＝薄い紙の色で小さく */
+
+  /* 最初の画面（方眼） */
   .hero-band {
     background-image:
       linear-gradient(var(--color-grid) 1px, transparent 1px),
       linear-gradient(90deg, var(--color-grid) 1px, transparent 1px);
     background-size: 26px 26px;
-    border-bottom: 1px solid var(--color-rule);
   }
   .hero {
     display: grid; gap: var(--space-2xl); align-items: center;
-    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
     padding-block: var(--space-2xl) var(--space-3xl);
   }
-  .hero-for { font-size: var(--text-sm); color: var(--color-ink-soft); margin-bottom: var(--space-sm); }
+  .hero-for { display: grid; gap: 2px; font-size: var(--text-sm); color: var(--color-ink-soft); margin-bottom: var(--space-sm); }
+  .hero-for span { font-weight: 700; color: var(--color-ink); }
   .hero-title { font-size: var(--text-display); line-height: 1.45; margin-bottom: var(--space-lg); }
+  .nb { display: inline-block; } /* まとまりの途中で改行しない */
   .hero-sub { color: var(--color-ink-soft); max-width: 34rem; margin-bottom: var(--space-md); }
   .hero-badges { display: flex; flex-wrap: wrap; gap: var(--space-xs); margin: 0 0 var(--space-lg); padding: 0; list-style: none; }
   .hero-badges li {
@@ -192,40 +214,51 @@ const ways = [
     border: 1.5px solid var(--color-ink); border-radius: 999px; background: var(--color-card);
   }
 
-  .hero-made { position: relative; display: block; min-height: 400px; text-decoration: none; }
-  .hm {
-    position: absolute; width: 68%; display: grid; gap: var(--space-2xs);
-    background: var(--color-card); border: 2px solid var(--color-ink); border-radius: var(--radius-md);
-    padding: var(--space-sm) var(--space-sm) var(--space-xs); box-shadow: 4px 4px 0 var(--color-rule);
-    transition: transform var(--dur-fast) var(--ease-out);
+  /* LINEのトーク画面の見本 */
+  .hero-chat { margin: 0; justify-self: center; width: min(100%, 25rem); transform: rotate(1.5deg); }
+  .chat {
+    display: grid; gap: var(--space-md); padding: var(--space-md) var(--space-md) var(--space-lg);
+    background: oklch(93% 0.03 240); border: 2px solid var(--color-ink); border-radius: 22px;
+    box-shadow: 6px 6px 0 var(--color-ink);
   }
-  .hm--0 { top: 0; left: 0; transform: rotate(-2.5deg); }
-  .hm--1 { top: 104px; right: 0; transform: rotate(2deg); }
-  .hm--2 { top: 208px; left: 8%; transform: rotate(-1deg); }
-  .hero-made:hover .hm--0 { transform: rotate(-4deg) translateY(-3px); }
-  .hero-made:hover .hm--1 { transform: rotate(3.5deg) translateY(-3px); }
-  .hero-made:hover .hm--2 { transform: rotate(-2deg) translateY(-3px); }
-  .hm-fig { display: block; background: var(--color-paper-2); border-radius: var(--radius-sm); padding: var(--space-xs) var(--space-md); }
-  .hm-fig :global(svg) { max-height: 84px; margin-inline: auto; }
-  .hm-name { font-size: var(--text-sm); font-weight: 700; padding-inline: var(--space-2xs); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .hm-caption { position: absolute; right: 0; bottom: 0; font-size: var(--text-sm); font-weight: 700; text-decoration: underline; text-underline-offset: 0.2em; }
+  .chat-head { display: flex; align-items: center; gap: var(--space-xs); font-size: var(--text-sm); font-weight: 700; padding-bottom: var(--space-xs); border-bottom: 1px solid var(--color-rule); }
+  .chat-icon { width: 26px; height: 26px; border-radius: 50%; background: var(--color-line); border: 2px solid var(--color-ink); flex: none; }
+  .chat-row { display: grid; gap: 4px; justify-items: start; }
+  .chat-step {
+    font-size: 0.75rem; font-weight: 700; padding: 0 8px; border-radius: 999px;
+    background: var(--color-marker); border: 1.5px solid var(--color-ink);
+  }
+  .bubble {
+    margin: 0; padding: var(--space-xs) var(--space-sm); max-width: 92%; font-size: var(--text-sm); line-height: 1.7;
+    background: var(--color-card); border: 1.5px solid var(--color-ink); border-radius: 4px 16px 16px 16px;
+  }
+  .hero-chat figcaption { margin-top: var(--space-md); text-align: center; font-family: var(--font-hand); font-weight: 600; font-size: var(--text-lg); }
   @media (max-width: 860px) {
     .hero { grid-template-columns: minmax(0, 1fr); padding-block: var(--space-xl) var(--space-2xl); gap: var(--space-xl); }
-    .hero-made { min-height: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-xs); }
-    .hm { position: static; width: auto; transform: none !important; box-shadow: none; padding: var(--space-2xs); }
-    .hm-fig { padding: var(--space-2xs); }
-    .hm-fig :global(svg) { max-height: 52px; }
-    .hm-name { font-size: 0.6875rem; white-space: normal; line-height: 1.4; }
-    .hm-caption { position: static; grid-column: 1 / -1; text-align: right; }
+    .hero-chat { transform: none; }
   }
-  @media (prefers-reduced-motion: reduce) { .hm { transition: none; } }
+
+  /* 証拠（白い帯） */
+  .proof { background: var(--color-card); border-block: 2px solid var(--color-ink); }
+  .proof-list { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr) minmax(0, 1fr); margin: 0; padding-block: var(--space-xl); list-style: none; }
+  .proof-item { display: grid; align-content: center; gap: var(--space-2xs); padding: var(--space-sm) var(--space-lg); }
+  .proof-item + .proof-item { border-left: 1px dashed var(--color-rule); }
+  .proof-num { font-family: var(--font-hand); font-weight: 600; font-size: var(--text-2xl); line-height: 1.3; }
+  .proof-quote { font-family: var(--font-hand); font-weight: 600; font-size: var(--text-lg); line-height: 1.6; }
+  .proof-sub { font-size: var(--text-sm); color: var(--color-ink-soft); }
+  .proof-sub a { font-weight: 700; color: var(--color-ink); white-space: nowrap; }
+  @media (max-width: 860px) {
+    .proof-list { grid-template-columns: minmax(0, 1fr); padding-block: var(--space-md); }
+    .proof-item { padding: var(--space-md) 0; }
+    .proof-item + .proof-item { border-left: 0; border-top: 1px dashed var(--color-rule); }
+  }
 
   .sec-title { font-size: var(--text-2xl); margin-bottom: var(--space-lg); }
   .sec-lead { max-width: var(--measure); margin: calc(-1 * var(--space-sm)) 0 var(--space-xl); }
   .more { margin-top: var(--space-lg); font-weight: 700; }
 
   .pains { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-sm) var(--space-xl); margin: 0; padding: 0; list-style: none; }
-  .pains li { position: relative; padding: var(--space-sm) 0 var(--space-sm) 2.2em; border-bottom: 1px dashed var(--color-rule); }
+  .pains li { position: relative; padding: var(--space-sm) 0 var(--space-sm) 2.2em; border-bottom: 1px dashed var(--color-rule); font-size: var(--text-lg); }
   .pains li::before {
     content: ''; position: absolute; left: 0.2em; top: 1.05em; width: 1.1em; height: 0.6em;
     border-left: 3px solid var(--color-marker-strong); border-bottom: 3px solid var(--color-marker-strong); transform: rotate(-45deg);
@@ -233,34 +266,45 @@ const ways = [
   .pains-after { margin-top: var(--space-lg); font-weight: 700; }
   @media (max-width: 760px) { .pains { grid-template-columns: minmax(0, 1fr); } .br-pc { display: none; } }
 
-  .ways { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-xl); margin: 0; padding: 0; list-style: none; counter-reset: way; }
-  .ways li { counter-increment: way; border-top: 2px solid var(--color-ink); padding-top: var(--space-md); display: grid; gap: var(--space-xs); align-content: start; }
-  .ways li::before { content: counter(way, decimal-leading-zero); font-family: var(--font-hand); font-weight: 600; font-size: var(--text-xl); color: var(--color-marker-strong); }
-  .ways h3 { font-size: var(--text-lg); }
-  .ways p { font-size: var(--text-sm); color: var(--color-ink-soft); }
-  .ways .way-price { color: var(--color-ink); font-weight: 700; }
-  .ways a { font-weight: 700; justify-self: start; }
-  @media (max-width: 860px) { .ways { grid-template-columns: minmax(0, 1fr); } }
-
-  .pack { padding-bottom: var(--space-2xl); scroll-margin-top: 96px; }
-  .pack-inner {
-    background: var(--color-card); border: 2px solid var(--color-ink); border-radius: var(--radius-md);
-    box-shadow: 6px 6px 0 var(--color-marker); padding: clamp(var(--space-lg), 4vw, var(--space-2xl));
-  }
-  .pack-for { font-size: var(--text-sm); color: var(--color-ink-soft); margin-bottom: var(--space-xs); }
-  .pack-title { font-size: var(--text-2xl); margin-bottom: var(--space-sm); }
-  .pack-sum { margin-bottom: var(--space-md); max-width: var(--measure); }
+  /* 主役：自動化パック（濃い墨色の帯） */
+  .pack { background: var(--color-ink); color: var(--color-paper); scroll-margin-top: 64px; }
+  .pack-inner { padding-block: var(--space-3xl); }
+  .pack-for { display: inline-block; font-size: var(--text-sm); font-weight: 700; color: var(--color-ink); background: var(--color-marker); padding: 2px 12px; border-radius: 999px; margin-bottom: var(--space-md); }
+  .pack-title { font-size: var(--text-display); line-height: 1.35; margin-bottom: var(--space-md); color: var(--color-paper); }
+  .pack-sum { margin-bottom: var(--space-xl); max-width: var(--measure); color: oklch(92% 0.01 85); font-size: var(--text-lg); }
   .pack-list {
-    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-xs) var(--space-xl);
-    margin: 0 0 var(--space-lg); padding-left: 1.4em; font-size: var(--text-sm); color: var(--color-ink-soft);
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-sm) var(--space-xl);
+    margin: 0 0 var(--space-xl); padding: 0; list-style: none; counter-reset: pk;
   }
-  .pack-price { font-weight: 700; font-size: var(--text-xl); margin-bottom: var(--space-2xs); }
-  .pack-price .pg { -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+  .pack-list li {
+    counter-increment: pk; display: grid; grid-template-columns: 2rem minmax(0, 1fr); gap: var(--space-xs);
+    padding: var(--space-sm) var(--space-md); border: 1.5px solid oklch(98% 0 0 / 0.25); border-radius: var(--radius-md);
+  }
+  .pack-list li::before { content: counter(pk); font-family: var(--font-hand); font-weight: 600; font-size: var(--text-xl); line-height: 1.3; color: var(--color-marker); }
+  .pack-foot { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: var(--space-lg); padding-top: var(--space-lg); border-top: 1px solid oklch(98% 0 0 / 0.25); }
+  .pack-price { font-weight: 700; font-size: var(--text-2xl); line-height: 1.5; }
   .pack-price .pw { display: inline-block; } /* 料金は単語の途中で折り返さない */
-  .pack-cta { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-sm) var(--space-lg); margin-top: var(--space-lg); }
-  .pack-more { font-weight: 700; white-space: nowrap; }
-  @media (max-width: 760px) { .pack-list { grid-template-columns: minmax(0, 1fr); } }
-  @media (max-width: 480px) { .pack-price { font-size: var(--text-base); } .pack-cta .btn { width: 100%; } }
+  .pack-note { margin-top: var(--space-xs); max-width: 36rem; font-size: var(--text-sm); color: var(--color-marker); font-weight: 700; }
+  .pack-cta { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-sm) var(--space-lg); }
+  .pack-cta .btn:hover { box-shadow: 4px 4px 0 var(--color-marker); }
+  .pack-more { font-weight: 700; white-space: nowrap; color: var(--color-paper); }
+  @media (max-width: 760px) { .pack-list { grid-template-columns: minmax(0, 1fr); } .pack-inner { padding-block: var(--space-2xl); } }
+  @media (max-width: 480px) { .pack-price { font-size: var(--text-xl); } .pack-cta .btn { width: 100%; } }
+
+  /* 脇役：ほかにもできること（薄い紙の色・1段） */
+  .others-band { background: var(--color-paper-2); border-block: 1px solid var(--color-rule); }
+  .others { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: var(--space-lg) var(--space-xl); padding-block: var(--space-lg); }
+  .others-title { font-size: var(--text-lg); white-space: nowrap; }
+  .others-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-sm); margin: 0; padding: 0; list-style: none; }
+  .others-list a {
+    display: grid; gap: 2px; height: 100%; padding: var(--space-xs) var(--space-sm); text-decoration: none;
+    background: var(--color-card); border: 1px solid var(--color-rule); border-radius: var(--radius-sm);
+  }
+  .others-list a:hover { border-color: var(--color-ink); }
+  .others-list b { font-size: var(--text-sm); }
+  .others-list span { font-size: 0.8125rem; color: var(--color-ink-soft); }
+  @media (max-width: 960px) { .others { grid-template-columns: minmax(0, 1fr); } }
+  @media (max-width: 640px) { .others-list { grid-template-columns: minmax(0, 1fr); } }
 
   .grid3 { display: grid; gap: var(--space-xl); grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .grid2 { display: grid; gap: var(--space-xl); grid-template-columns: repeat(2, minmax(0, 1fr)); }

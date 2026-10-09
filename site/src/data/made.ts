@@ -84,7 +84,6 @@ export const made: Made[] = [
     after: 'これまでに4つの業務をマニュアルにした。',
     tags: ['運送業', 'マニュアル・引き継ぎ', 'AI活用', '事務作業'],
     figure: 'book',
-    top: 4,
   },
   {
     id: 'highway',
@@ -167,7 +166,6 @@ export const made: Made[] = [
     tags: ['Webサイト', '店舗', 'AI活用'],
     figure: 'site',
     url: 'https://maison-kurogane.pages.dev/',
-    top: 5,
   },
   {
     id: 'sample-akagi',
@@ -178,7 +176,6 @@ export const made: Made[] = [
     tags: ['Webサイト', '運送業'],
     figure: 'site',
     url: 'https://akagi-express.pages.dev/',
-    top: 6,
   },
   {
     id: 'sample-salon',
