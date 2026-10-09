@@ -32,7 +32,7 @@ import { works, results, voices } from '../data/site';
     <div class="res">
       <div class="res-main">
         <p class="res-metric"><span class="mk">{results.metric.value}</span></p>
-        <p>{results.metric.label}</p>
+        <p>{results.metric.label}　<a class="res-note" href={results.metric.note} target="_blank" rel="noopener" data-track="note_click" data-position="works_results">noteで読む <span aria-hidden="true">↗</span></a></p>
         <ul class="res-facts">
           {results.facts.map((f) => <li>{f}</li>)}
         </ul>
@@ -48,6 +48,7 @@ import { works, results, voices } from '../data/site';
 </Base>
 
 <style>
+  .res-note { font-weight: 700; white-space: nowrap; }
   .page-head { padding-block: var(--space-2xl) var(--space-lg); }
   .page-head h1 { font-size: var(--text-display); margin-bottom: var(--space-sm); }
   .sec-title { font-size: var(--text-2xl); margin-bottom: var(--space-lg); }

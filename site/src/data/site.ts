@@ -169,7 +169,12 @@ export const works: Work[] = [
 
 // 業務改善の実績（会社名は出さない）
 export const results = {
-  metric: { value: '約80分 → 10〜15分', label: '運送会社の配車作業を、Excelの自動化で短縮' },
+  metric: {
+    value: '約80分 → 10〜15分',
+    label: '運送会社の配車作業を、Excelの自動化で短縮',
+    /** この取り組みを書いた note 記事 */
+    note: 'https://note.com/shogo_ai/n/n3726eb04e7ce',
+  },
   facts: [
     'デジタコ（運行記録計）のデータ分析による燃費改善',
     'テールゲートリフター補助金の申請、ホワイト物流・健康経営の認定取得',

@@ -73,7 +73,7 @@ const others = [
       </li>
       <li class="proof-item">
         <p class="proof-num">{results.metric.value.split(' → ').map((v, i) => <>{i > 0 && ' → '}<span class="nb mk">{v}</span></>)}</p>
-        <p class="proof-sub">運送会社の配車作業（勤務先での取り組み）</p>
+        <p class="proof-sub">運送会社の配車作業（勤務先での取り組み）　<a href={results.metric.note} target="_blank" rel="noopener" data-track="note_click" data-position="top_proof">noteで読む <span aria-hidden="true">↗</span></a></p>
       </li>
     </ul>
     </div>
