@@ -178,6 +178,26 @@ export const made: Made[] = [
     url: 'https://akagi-express.pages.dev/',
     top: 6,
   },
+  {
+    id: 'sample-salon',
+    name: '美容室のWebサイト',
+    for: 'sample',
+    context: '架空のお店「hair salon ソラ」',
+    what: 'スクロールに合わせて、カウンセリングから仕上がりまでの流れが映像で進むサイト。予約ボタンからLINE予約・前日のリマインドにつなげる想定。写真・映像はAI（Google Flow）で生成。',
+    tags: ['サロン・美容', 'Webサイト', '予約・顧客管理', 'スクロール演出'],
+    figure: 'site',
+    url: '/samples/salon/',
+  },
+  {
+    id: 'sample-seitai',
+    name: '整体院のWebサイト',
+    for: 'sample',
+    context: '架空のお店「ととのい整体院」',
+    what: 'スクロールに合わせて、問診から施術・セルフケアまでの流れが映像で進むサイト。予約ボタンからLINE予約・前日のリマインドにつなげる想定。写真・映像はAI（Google Flow）で生成。',
+    tags: ['整体・治療院', 'Webサイト', '予約・顧客管理', 'スクロール演出'],
+    figure: 'site',
+    url: '/samples/seitai/',
+  },
 ];
 
 export const madeTop = made.filter((m) => m.top).sort((a, b) => (a.top ?? 0) - (b.top ?? 0));

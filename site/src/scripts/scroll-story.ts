@@ -73,8 +73,8 @@ export function initScrollStory(root: HTMLElement) {
       if (document.readyState === 'complete') fine();
       else window.addEventListener('load', fine, { once: true });
     });
-    window.addEventListener('resize', resize);
-    resize();
+    // 画面固定（is-live）に切り替わったあとの大きさで描き直すため、サイズの変化を見張る
+    new ResizeObserver(resize).observe(canvas);
     drawFrame = (p) => {
       const next = Math.min(data.count - 1, Math.round(p * (data.count - 1)));
       if (next !== current) (current = next), paint(current);

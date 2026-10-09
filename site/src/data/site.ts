@@ -130,7 +130,7 @@ export interface Work {
   image?: string;
 }
 
-// 制作サンプル。どちらも架空の会社・ブランド。埋め込まず、別タブで開く（スクロール演出がぶつかるため）。
+// 制作サンプル。すべて架空の会社・ブランド・お店。埋め込まず、別タブで開く（スクロール演出がぶつかるため）。
 export const works: Work[] = [
   {
     name: '赤城急送',
@@ -148,6 +148,22 @@ export const works: Work[] = [
       'スクロールに合わせて映像がコマ送りで進み、採寸から仕立てまでの流れを見せるオーダースーツ店のサイトです。',
     points: ['架空のブランド', '映像はAI（Google Veo）で生成', 'スマホ・PC対応'],
     image: '/works/maison-kurogane.jpg',
+  },
+  {
+    name: 'hair salon ソラ',
+    kind: '美容室のWebサイト',
+    url: '/samples/salon/',
+    description: 'スクロールに合わせて、カウンセリングからシャンプー・カット・カラー・仕上がりまでの流れが映像で進む美容室のサイトです。予約はLINEで受け付ける想定です。',
+    points: ['架空のお店', '写真・映像はAI（Google Flow）で生成', 'LINE予約の導線'],
+    image: '/works/salon-sora.jpg',
+  },
+  {
+    name: 'ととのい整体院',
+    kind: '整体院のWebサイト',
+    url: '/samples/seitai/',
+    description: 'スクロールに合わせて、問診から施術、おうちでのセルフケアまでの流れが映像で進む整体院のサイトです。予約はLINEで受け付ける想定です。',
+    points: ['架空のお店', '写真・映像はAI（Google Flow）で生成', 'LINE予約の導線'],
+    image: '/works/seitai-totonoi.jpg',
   },
 ];
 

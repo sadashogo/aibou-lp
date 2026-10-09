@@ -1,5 +1,6 @@
 // 制作サンプル（架空のお店）の型
 
+/** title の「|」は改行してよい位置（見出しはそこ以外で改行しない） */
 export interface Scene { label: string; title: string; body: string }
 
 // 素材の種類：

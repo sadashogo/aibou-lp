@@ -23,13 +23,13 @@ export const salon: ShopData = {
   nameSub: 'SORA',
   kind: '美容室',
   scenes: [
-    { label: 'カウンセリング', title: 'まず、話すことから。', body: 'なりたい雰囲気と、毎朝のお手入れにかけられる時間を伺います。' },
+    { label: 'カウンセリング', title: 'まず、|話すことから。', body: 'なりたい雰囲気と、毎朝のお手入れにかけられる時間を伺います。' },
     { label: 'シャンプー', title: 'ほどける時間。', body: '頭皮と髪の状態に合わせて、洗い方とお湯の温度を選びます。' },
-    { label: 'カット', title: '骨格に合わせて。', body: '乾かすだけでまとまるように、髪の生え方とクセを見て切ります。' },
-    { label: 'カラー', title: '肌になじむ色を。', body: '光の当たり方で印象が変わる、やわらかな色を一緒に選びます。' },
-    { label: '仕上がり', title: '明日の朝も、同じように。', body: 'ご自宅での乾かし方まで、鏡の前でお伝えします。' },
+    { label: 'カット', title: '骨格に|合わせて。', body: '乾かすだけでまとまるように、髪の生え方とクセを見て切ります。' },
+    { label: 'カラー', title: '肌になじむ|色を。', body: '光の当たり方で印象が変わる、やわらかな色を一緒に選びます。' },
+    { label: '仕上がり', title: '明日の朝も、|同じように。', body: 'ご自宅での乾かし方まで、鏡の前でお伝えします。' },
   ],
-  media: { mode: 'placeholder' },
+  media: { mode: 'frames', count: 150, ext: 'avif', desktop: '/samples/salon/seq/desktop', mobile: '/samples/salon/seq/mobile' },
   intro: {
     title: '毎朝が、少し楽になる髪を。',
     body: '席は3つだけの、小さな美容室です。お一人おひとりにかける時間を長くとり、乾かすだけでまとまる髪型をご提案します。',
