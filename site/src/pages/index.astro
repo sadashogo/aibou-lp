@@ -115,6 +115,30 @@ const ways = [
   </section>
 
   <section class="section wrap">
+    <div class="note-box">
+      <div class="note-head">
+        <div>
+          <h2 class="sec-title">noteで書いていること</h2>
+          <p class="lead">作った仕組みの裏側や、AIを仕事に使うコツを書いています。どんな人が、どう作っているのかを知りたい方はこちらへ。</p>
+        </div>
+        <a class="btn note-btn" href={site.noteUrl} target="_blank" rel="noopener" data-track="note_click" data-position="top_notes">noteを読む <span aria-hidden="true">↗</span></a>
+      </div>
+      {notes.length > 0 && (
+        <ul class="note-cards">
+          {notes.map((n) => (
+            <li>
+              <a href={n.url} target="_blank" rel="noopener" data-track="note_click" data-position="top_notes_article">
+                {n.date && <span class="note-date">{n.date}</span>}
+                <span class="note-title">{n.title}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  </section>
+
+  <section class="section wrap">
     <h2 class="sec-title">いただいた声</h2>
     <div class="grid2">
       {voices.map((v) => <VoiceCard voice={v} />)}
@@ -143,23 +167,6 @@ const ways = [
     </div>
   </section>
 
-  <section class="section wrap notes">
-    <h2 class="sec-title">noteで書いていること</h2>
-    <p class="lead sec-lead">作った仕組みの裏側や、AIを仕事に使うコツをnoteに書いています。</p>
-    {notes.length > 0 && (
-      <ul class="note-list">
-        {notes.map((n) => (
-          <li>
-            <a href={n.url} target="_blank" rel="noopener">
-              {n.date && <span class="note-date">{n.date}</span>}
-              <span class="note-title">{n.title}</span>
-            </a>
-          </li>
-        ))}
-      </ul>
-    )}
-    <p class="more"><a href={site.noteUrl} target="_blank" rel="noopener">noteを読む <span aria-hidden="true">↗</span></a></p>
-  </section>
 </Base>
 
 <style>
@@ -278,10 +285,22 @@ const ways = [
   details[open] summary::after { content: '−'; }
   details p { margin-top: var(--space-xs); color: var(--color-ink-soft); font-size: var(--text-sm); }
 
-  .note-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--color-rule); }
-  .note-list li { border-bottom: 1px solid var(--color-rule); }
-  .note-list a { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--space-lg); padding-block: var(--space-sm); text-decoration: none; }
-  .note-list a:hover .note-title { text-decoration: underline; }
+  .note-box {
+    padding: var(--space-xl); background: var(--color-card);
+    border: 2px solid var(--color-ink); border-radius: var(--radius-md); box-shadow: 4px 4px 0 var(--color-rule);
+  }
+  .note-head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: var(--space-lg); }
+  .note-head > div { flex: 1 1 22rem; }
+  .note-head .lead { margin-top: var(--space-xs); }
+  .note-btn { background: var(--color-card); }
+  .note-cards { display: grid; gap: var(--space-md); grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); margin: var(--space-xl) 0 0; padding: 0; list-style: none; }
+  .note-cards a {
+    display: grid; gap: var(--space-2xs); height: 100%; padding: var(--space-md); text-decoration: none;
+    background: var(--color-paper-2); border-radius: var(--radius-md); border: 1px solid var(--color-rule);
+  }
+  .note-cards a:hover { border-color: var(--color-ink); }
+  .note-cards a:hover .note-title { text-decoration: underline; }
   .note-date { font-size: var(--text-sm); color: var(--color-ink-faint); font-variant-numeric: tabular-nums; }
-  @media (max-width: 480px) { .note-list a { grid-template-columns: minmax(0, 1fr); gap: 0; } }
+  .note-title { font-weight: 700; }
+  @media (max-width: 480px) { .note-box { padding: var(--space-lg); } .note-btn { width: 100%; } }
 </style>
