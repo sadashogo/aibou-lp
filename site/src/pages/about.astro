@@ -20,7 +20,7 @@ import { site, faqs } from '../data/site';
     <p class="sign">— {site.name} {site.owner}</p>
     <p class="about-links">
       <a href="/made/">これまでにつくったもの</a>
-      <a href={site.noteUrl} target="_blank" rel="noopener">noteで書いていること <span aria-hidden="true">↗</span></a>
+      <a href={site.noteUrl} target="_blank" rel="noopener" data-track="note_click" data-position="about">noteで書いていること <span aria-hidden="true">↗</span></a>
     </p>
   </section>
 

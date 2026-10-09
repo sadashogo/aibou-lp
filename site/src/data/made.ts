@@ -23,6 +23,8 @@ export interface Made {
   figure: FigureKind;
   /** 外部の公開ページがあるもの（制作サンプル） */
   url?: string;
+  /** この事例を書いた note 記事の URL。あればカードに「noteで詳しく読む」を出す */
+  note?: string;
   /** トップに載せる順番（小さいほど先）。未指定はトップに載せない */
   top?: number;
 }

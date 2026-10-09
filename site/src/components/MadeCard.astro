@@ -27,8 +27,11 @@ const searchText = [item.name, item.context, item.before, item.what, item.after,
         <li>{compact ? <a class="tag" href={`/made/?tag=${encodeURIComponent(t)}`}>#{t}</a> : <button type="button" class="tag" data-tag={t}>#{t}</button>}</li>
       ))}
     </ul>
-    {item.url && (
-      <a class="made-open" href={item.url} target="_blank" rel="noopener">サイトを開く <span aria-hidden="true">↗</span><span class="sr">（別のタブで開きます）</span></a>
+    {(item.url || item.note) && (
+      <p class="made-links">
+        {item.url && <a class="made-open" href={item.url} target="_blank" rel="noopener">サイトを開く <span aria-hidden="true">↗</span><span class="sr">（別のタブで開きます）</span></a>}
+        {item.note && <a class="made-open" href={item.note} target="_blank" rel="noopener" data-track="note_click" data-position="made_card">noteで詳しく読む <span aria-hidden="true">↗</span><span class="sr">（別のタブで開きます）</span></a>}
+      </p>
     )}
   </div>
 </article>
@@ -55,6 +58,7 @@ const searchText = [item.name, item.context, item.before, item.what, item.after,
   a.tag { text-decoration: none; }
   button.tag { cursor: pointer; }
   button.tag:hover, a.tag:hover { background: var(--color-marker); color: var(--color-ink); }
-  .made-open { margin-top: var(--space-xs); font-weight: 700; white-space: nowrap; justify-self: start; }
+  .made-links { display: flex; flex-wrap: wrap; gap: var(--space-2xs) var(--space-lg); margin-top: var(--space-xs); }
+  .made-open { font-weight: 700; white-space: nowrap; }
   .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 </style>
