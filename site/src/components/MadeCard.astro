@@ -11,7 +11,11 @@ const tags = compact ? item.tags.slice(0, 3) : item.tags;
 const searchText = [item.name, item.context, item.before, item.what, item.after, ...item.tags].filter(Boolean).join(' ').toLowerCase();
 ---
 <article class="made" id={compact ? undefined : item.id} data-tags={item.tags.join('|')} data-search={compact ? undefined : searchText}>
-  <div class="made-fig"><MadeFigure kind={item.figure} /></div>
+  {item.image ? (
+    <div class="made-photo"><img src={item.image} alt={item.imageAlt ?? ''} width="960" height="600" loading="lazy" decoding="async" /></div>
+  ) : (
+    <div class="made-fig"><MadeFigure kind={item.figure} /></div>
+  )}
   <div class="made-body">
     <p class="made-meta">{item.for === 'client' && <span class="made-badge">お客さま事例</span>}{item.context}</p>
     <H class="made-name">{item.name}</H>
@@ -42,8 +46,10 @@ const searchText = [item.name, item.context, item.before, item.what, item.after,
     background: var(--color-card); border: 2px solid var(--color-ink); border-radius: var(--radius-md);
     box-shadow: 4px 4px 0 var(--color-rule);
   }
-  .made-fig { background: var(--color-paper-2); border-bottom: 2px solid var(--color-ink); padding: var(--space-md) var(--space-xl); }
+  .made-fig { display: grid; place-items: center; aspect-ratio: 16 / 10; background: var(--color-paper-2); border-bottom: 2px solid var(--color-ink); padding: var(--space-md) var(--space-xl); }
   .made-fig :global(svg) { max-height: 120px; margin-inline: auto; }
+  .made-photo { border-bottom: 2px solid var(--color-ink); background: var(--color-paper-2); }
+  .made-photo img { display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; object-position: top center; }
   .made-body { padding: var(--space-lg); display: grid; gap: var(--space-xs); align-content: start; }
   .made-meta { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2xs) var(--space-xs); font-size: 0.8125rem; color: var(--color-ink-soft); }
   .made-badge { font-weight: 700; padding: 1px 8px; border-radius: 999px; border: 1.5px solid var(--color-ink); color: var(--color-ink); background: var(--color-marker); white-space: nowrap; }

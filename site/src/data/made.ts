@@ -25,6 +25,10 @@ export interface Made {
   url?: string;
   /** この事例を書いた note 記事の URL。あればカードに「noteで詳しく読む」を出す */
   note?: string;
+  /** 実際の画面の写真（public/made/ の16:10の画像）。あれば図の代わりに出す */
+  image?: string;
+  /** 写真の説明（ぼかしている場合はそのことも書く） */
+  imageAlt?: string;
   /** トップに載せる順番（小さいほど先）。未指定はトップに載せない */
   top?: number;
 }
@@ -39,6 +43,8 @@ export const made: Made[] = [
     what: '来店・回数券・物販・写真をブラウザで管理できる仕組み。回数券の残りは記録から自動で計算するので、手で直して食い違うことがない。Excelにも書き出せる。',
     tags: ['サロン・美容', '予約・顧客管理', 'Webアプリ', '業務効率化'],
     figure: 'dashboard',
+    image: '/made/salon-customer.webp',
+    imageAlt: 'サロンの顧客管理のお客さま一覧の画面（デモ用の架空のデータ）',
     top: 1,
   },
   {
@@ -60,6 +66,8 @@ export const made: Made[] = [
     after: '配車の連絡がLINEで完結し、1日約30分の電話がなくなった。',
     tags: ['運送業', '配車', 'LINE', '業務効率化'],
     figure: 'chat',
+    image: '/made/dispatch-line.webp',
+    imageAlt: '配車確認のLINE Botの画面。届いた配車指示のカード（名前や行き先はぼかしています）',
     note: 'https://note.com/shogo_ai/n/nd45fb22ef99c',
     top: 2,
   },
@@ -73,6 +81,8 @@ export const made: Made[] = [
     after: '稼働初日の出荷数が、それまでのExcel運用と全品番で一致した。',
     tags: ['運送業', '在庫・出荷', 'Webアプリ', 'スマホ対応', '自動化'],
     figure: 'pallet',
+    image: '/made/warehouse.webp',
+    imageAlt: '倉庫アプリの画面。品番ごとに在庫とパレット数が出ている（架空のデータ）',
     top: 3,
   },
   {
