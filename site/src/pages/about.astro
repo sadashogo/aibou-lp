@@ -1,10 +1,31 @@
 ---
 import Base from '../layouts/Base.astro';
+import OwnerFigure from '../components/OwnerFigure.astro';
+import FaqList from '../components/FaqList.astro';
 import { site, faqs } from '../data/site';
+
+const person = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: site.owner,
+  jobTitle: 'AIBOU 代表',
+  description: site.ownerBio,
+  worksFor: { '@id': `${site.url}/#org` },
+  sameAs: [site.noteUrl],
+};
 ---
-<Base title="AIBOUについて" description="AIBOU（アイボウ）は、小さな会社と個人事業主の隣で一緒に手を動かす、AI・デジタル活用の支援です。">
+<Base title="AIBOUについて" description="AIBOU（アイボウ）は、小さな会社と個人事業主の隣で一緒に手を動かす、AI・デジタル活用の支援です。代表・定方翔吾の紹介。" faqs={faqs} jsonLd={[person]}>
   <section class="narrow page-head">
     <h1>AIBOUについて</h1>
+  </section>
+
+  <section class="narrow owner">
+    <OwnerFigure size={144} />
+    <div>
+      <p class="muted">代表</p>
+      <p class="owner-name">{site.owner}</p>
+      <p class="owner-bio">{site.ownerBio}</p>
+    </div>
   </section>
 
   <section class="narrow letter">
@@ -26,12 +47,7 @@ import { site, faqs } from '../data/site';
 
   <section class="section narrow">
     <h2 class="faq-title">よくある質問</h2>
-    {faqs.map((f) => (
-      <details>
-        <summary>{f.q}</summary>
-        <p>{f.a}</p>
-      </details>
-    ))}
+    <FaqList faqs={faqs} />
   </section>
 </Base>
 
@@ -47,11 +63,8 @@ import { site, faqs } from '../data/site';
   .sign { text-align: right; font-weight: 700; }
 
   .faq-title { font-size: var(--text-2xl); margin-bottom: var(--space-lg); }
-  details { border-bottom: 2px dashed var(--color-rule); padding-block: var(--space-sm); }
-  details:first-of-type { border-top: 2px dashed var(--color-rule); }
-  summary { font-weight: 700; cursor: pointer; list-style: none; padding-right: 2em; position: relative; }
-  summary::-webkit-details-marker { display: none; }
-  summary::after { content: '+'; position: absolute; right: 0.25em; top: 0; font-size: var(--text-xl); line-height: 1.4; }
-  details[open] summary::after { content: '−'; }
-  details p { margin-top: var(--space-xs); color: var(--color-ink-soft); font-size: var(--text-sm); }
+  .owner { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-lg); margin-bottom: var(--space-2xl); }
+  .owner > div { flex: 999 1 18rem; min-width: 0; }
+  .owner-name { font-family: var(--font-hand); font-weight: 600; font-size: var(--text-xl); }
+  .owner-bio { color: var(--color-ink-soft); }
 </style>

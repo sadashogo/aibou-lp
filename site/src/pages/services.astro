@@ -1,43 +1,68 @@
 ---
 import Base from '../layouts/Base.astro';
 import ContactButtons from '../components/ContactButtons.astro';
-import { services, site, consultSteps } from '../data/site';
-
-const steps = consultSteps;
+import { services, consult, site, consultSteps } from '../data/site';
 ---
-<Base title="サービス" description="無料30分AI相談、予約・申込の事務 自動化パック、業務の自動化・LINE公式アカウントの構築、Webサイト・LP制作、月額サポート（AI顧問）。AIBOUのサービス内容と料金です。">
+<Base title="サービス" description="AIBOUのサービスは3つ。AI導入（初期設定と業務の自動化）、AI顧問（月額の相談と改善）、オーダーメイド制作（業務アプリ・ホームページ・LP）。まずは無料30分相談から。">
   <section class="wrap page-head">
     <h1>サービス</h1>
-    <p class="lead">まずは無料の30分相談で、お仕事の話を聞かせてください。そのうえで、必要なものだけをご提案します。</p>
+    <p class="lead">サービスは3つだけです。<b>AI導入</b>ではじめて、<b>AI顧問</b>でつづける。大きく作るときは<b>オーダーメイド制作</b>。まずは無料の30分相談で、お仕事の話を聞かせてください。</p>
+    <p class="page-links"><a href="/pricing/">料金をまとめて見る</a></p>
   </section>
 
-  {services.map((s, i) => (
+  <section class="section wrap svc" id={consult.id}>
+    <div class="svc-head">
+      <p class="svc-step">まずはここから</p>
+      <h2>{consult.name}</h2>
+      <p class="svc-price"><span>料金</span>{consult.price}</p>
+    </div>
+    <div class="svc-body">
+      <p class="svc-sum">{consult.summary}</p>
+      <ul class="svc-list">
+        {consult.details.map((d) => <li>{d}</li>)}
+      </ul>
+      <ol class="steps">
+        {consultSteps.map((st) => (
+          <li><b>{st.title}</b><span>{st.body}</span></li>
+        ))}
+      </ol>
+      <p class="muted">受付は{site.consultHours}・先着順です。相談だけで終わっても大丈夫です。</p>
+      <div class="svc-cta"><ContactButtons position="services" /></div>
+    </div>
+  </section>
+
+  {services.map((s) => (
     <section class="section wrap svc" id={s.id}>
+      {s.aliases?.map((a) => <span id={a} class="anchor" aria-hidden="true"></span>)}
       <div class="svc-head">
+        <p class="svc-step">{s.stepLabel}</p>
         <h2>{s.name}</h2>
         <p class="svc-price"><span>料金</span>{s.price}</p>
         {s.priceNote && <p class="svc-price-note muted">{s.priceNote}</p>}
       </div>
       <div class="svc-body">
         <p class="svc-sum">{s.summary}</p>
+        <p class="svc-label">{s.id === 'custom' ? '作れるもの' : '含まれるもの'}</p>
         <ul class="svc-list">
           {s.details.map((d) => <li>{d}</li>)}
         </ul>
-        {s.extra && <p class="muted svc-extra">{s.extra}</p>}
-
-        {s.id === 'consult' && (
+        {s.excludes && (
           <>
-            <ol class="steps">
-              {steps.map((st) => (
-                <li><b>{st.title}</b><span>{st.body}</span></li>
-              ))}
-            </ol>
-            <p class="muted">受付は{site.consultHours}・先着順です。相談だけで終わっても大丈夫です。</p>
-            <div class="svc-cta"><ContactButtons position="services" /></div>
+            <p class="svc-label">含まれないもの</p>
+            <ul class="svc-list svc-list--ex">
+              {s.excludes.map((d) => <li>{d}</li>)}
+            </ul>
           </>
         )}
+        {s.priceRows && (
+          <dl class="rows">
+            {s.priceRows.map((r) => (
+              <div><dt>{r.label}</dt><dd>{r.price}</dd></div>
+            ))}
+          </dl>
+        )}
 
-        {s.id === 'automation' && (
+        {s.id === 'intro' && (
           <figure class="demo">
             <video controls preload="none" playsinline poster="/demo-poster.jpg" width="1280" height="720">
               <source src="/demo.mp4" type="video/mp4" />
@@ -46,8 +71,8 @@ const steps = consultSteps;
           </figure>
         )}
 
-        {s.id === 'web' && (
-          <p class="svc-link"><a href="/works/">制作サンプルを見る</a></p>
+        {s.id === 'custom' && (
+          <p class="svc-link"><a href="/works/">制作サンプルを見る</a>　<a href="/made/">つくったものを見る</a></p>
         )}
       </div>
     </section>
@@ -55,7 +80,7 @@ const steps = consultSteps;
 
   <section class="section narrow">
     <h2 class="fee-title">料金について</h2>
-    <p>表示している金額はすべて税込です。「予約・申込の事務 自動化パック」は定額、それ以外は目安で、作業の内容と量を伺ってからお見積りします。</p>
+    <p>表示している金額はすべて税込です。AI顧問は月額の定額、AI導入とオーダーメイド制作は内容を伺ってからお見積りします。<a href="/pricing/">料金ページ</a>に、プランの違いとよくある質問をまとめています。</p>
   </section>
 </Base>
 
@@ -63,8 +88,11 @@ const steps = consultSteps;
   .page-head { padding-block: var(--space-2xl) var(--space-lg); }
   .page-head h1 { font-size: var(--text-display); margin-bottom: var(--space-sm); }
   .page-head .lead { max-width: var(--measure); }
+  .page-links { margin-top: var(--space-sm); font-weight: 700; }
 
-  .svc { display: grid; gap: var(--space-lg) var(--space-2xl); grid-template-columns: minmax(0, 20rem) minmax(0, 1fr); scroll-margin-top: 96px; }
+  .svc { display: grid; gap: var(--space-lg) var(--space-2xl); grid-template-columns: minmax(0, 20rem) minmax(0, 1fr); scroll-margin-top: 96px; position: relative; }
+  .anchor { position: absolute; top: 0; scroll-margin-top: 96px; }
+  .svc-step { font-size: 0.75rem; font-weight: 700; color: var(--color-ink-faint); margin-bottom: var(--space-2xs); }
   .svc-head h2 { font-size: var(--text-2xl); margin-bottom: var(--space-sm); }
   .svc-price { display: inline-flex; gap: var(--space-xs); align-items: baseline; font-weight: 700; font-size: var(--text-lg); }
   .svc-price span {
@@ -73,8 +101,13 @@ const steps = consultSteps;
   }
   .svc-sum { font-size: var(--text-lg); margin-bottom: var(--space-md); }
   .svc-price-note { margin-top: var(--space-xs); }
-  .svc-extra { margin-top: calc(-1 * var(--space-sm)); margin-bottom: var(--space-lg); }
+  .svc-label { font-size: 0.75rem; font-weight: 700; color: var(--color-ink-soft); margin-bottom: var(--space-2xs); }
   .svc-list { margin: 0 0 var(--space-lg); padding-left: 1.2em; display: grid; gap: var(--space-xs); color: var(--color-ink-soft); }
+  .svc-list--ex { list-style: '× '; }
+  .rows { margin: 0 0 var(--space-lg); display: grid; gap: var(--space-2xs); max-width: 32rem; }
+  .rows div { display: flex; justify-content: space-between; gap: var(--space-md); padding-block: var(--space-2xs); border-bottom: 1px dashed var(--color-rule); font-size: var(--text-sm); }
+  .rows dt { color: var(--color-ink-soft); }
+  .rows dd { margin: 0; font-weight: 700; white-space: nowrap; }
   .svc-link { font-weight: 700; }
   .svc-cta { margin-top: var(--space-lg); }
   @media (max-width: 760px) { .svc { grid-template-columns: minmax(0, 1fr); } }

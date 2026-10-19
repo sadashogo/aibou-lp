@@ -2,138 +2,95 @@
 import Base from '../layouts/Base.astro';
 import ContactButtons from '../components/ContactButtons.astro';
 import MadeCard from '../components/MadeCard.astro';
-import WorkCard from '../components/WorkCard.astro';
-import { site, services, voices, consultSteps, pains, faqs, results, works } from '../data/site';
+import ServiceCards from '../components/ServiceCards.astro';
+import IndustryIcon from '../components/IndustryIcon.astro';
+import OwnerFigure from '../components/OwnerFigure.astro';
+import FaqList from '../components/FaqList.astro';
+import { site, voices, consultSteps, faqs, results } from '../data/site';
 import { madeTop } from '../data/made';
+import { industries } from '../data/industries';
 import { getNoteArticles } from '../data/note';
+import { getColumns, formatDate } from '../data/columns';
 
-const pack = services.find((s) => s.id === 'booking-pack')!;
-const svc = (id: string) => services.find((s) => s.id === id)!;
 const notes = await getNoteArticles(site.noteRss);
-
-// 証拠に使うお客さまの声（美容サロン）。パックの導入事例ではないので、並べるだけにする
+const columns = getColumns(3);
 const salonVoice = voices.find((v) => v.case === 'CASE 02')!;
-// 予約につながるホームページの見本（美容室・整体院）
-const shopSamples = works.filter((w) => w.url.startsWith('/samples/'));
-// 脇役の商品（小さく1段で並べる）
-const others = [
-  { id: 'automation', label: '業務の自動化・LINE公式', price: svc('automation').price },
-  { id: 'web', label: 'ホームページ・LP制作', price: svc('web').price.replace('1ページのLP ', '') },
-  { id: 'advisor', label: '月1回の相談役（AI顧問）', price: svc('advisor').price },
-];
 ---
 <Base
-  title="サロン・整体院・教室の予約をLINEで自動に"
-  description="サロン・整体院・教室の予約受付、前日のリマインド、来店後のアンケートまでを、LINEとスプレッドシートでまとめて自動にします。群馬から、オンラインで。無料30分相談受付中。"
+  description="群馬の小さな会社・お店のための、AI導入と業務改善。AIの初期設定と業務の自動化から始めて、月額のAI顧問で改善を続けます。運送業・美容業の事例あり。無料30分相談受付中。"
+  faqs={faqs}
 >
   <div class="hero-band">
     <section class="hero wrap">
       <div class="hero-text">
-        <p class="hero-for">{site.tagline}<span>サロン・整体院・教室のための、予約の自動化</span></p>
-        <h1 class="hero-title"><span class="nb">予約と問い合わせの</span><span class="nb">事務を、</span><br /><span class="mk">LINEで自動に。</span></h1>
+        <p class="hero-for">群馬の小さな会社・お店のための<span>AI導入と業務改善</span></p>
+        <h1 class="hero-title">経営者の隣に、<br /><span class="mk">AIの相棒</span>を。</h1>
         <p class="hero-sub">
-          予約の受付、前日のリマインド、来店後のアンケートまでを、いつものLINEとスプレッドシートでまとめて自動にします。群馬から、オンラインで。
+          むずかしい用語は使いません。運送業やサロンの現場で仕組みを作ってきた人が、AIの導入から毎月の改善まで一緒に進めます。
         </p>
         <ul class="hero-badges" aria-label="無料相談について">
           <li>相談は無料</li><li>30分</li><li>オンライン</li><li>売り込みなし</li>
         </ul>
         <ContactButtons position="hero" />
       </div>
-      <figure class="hero-chat" aria-label="LINEで自動に届くメッセージの例">
-        <div class="chat">
-          <p class="chat-head"><span class="chat-icon" aria-hidden="true"></span>あなたのお店（LINE公式）</p>
-          <div class="chat-row">
-            <span class="chat-step">予約したとき</span>
-            <p class="bubble">ご予約ありがとうございます。<br />10月12日（土）14:00 で承りました。</p>
-          </div>
-          <div class="chat-row">
-            <span class="chat-step">前日</span>
-            <p class="bubble">明日 14:00 のご予約のお知らせです。お気をつけてお越しください。</p>
-          </div>
-          <div class="chat-row">
-            <span class="chat-step">来店後</span>
-            <p class="bubble">ご来店ありがとうございました。1分のアンケートにご協力ください。</p>
-          </div>
-        </div>
-        <figcaption>3つとも、自動で届きます</figcaption>
+      <figure class="hero-steps" aria-labelledby="hero-steps-cap">
+        <figcaption id="hero-steps-cap">AIBOUの進め方</figcaption>
+        <ol>
+          <li><b>無料30分相談</b><span>困っている作業を一緒に洗い出す</span></li>
+          <li><b>AI導入</b><span>初期設定＋業務をひとつ自動化</span></li>
+          <li class="is-mark"><b>AI顧問</b><span>毎月少しずつ、改善を続ける</span></li>
+        </ol>
       </figure>
     </section>
   </div>
 
   <section class="proof" aria-label="これまでの実績">
     <div class="wrap">
-    <ul class="proof-list">
-      <li class="proof-item">
-        <p class="proof-num"><span class="mk">サロン2社</span></p>
-        <p class="proof-sub">を、毎月続けて支援しています</p>
-      </li>
-      <li class="proof-item proof-item--voice">
-        <p class="proof-quote">「{salonVoice.headline}」</p>
-        <p class="proof-sub">{salonVoice.context}・{salonVoice.person}　<a href="/works/#voices">声をすべて読む</a></p>
-      </li>
-      <li class="proof-item">
-        <p class="proof-num">{results.metric.value.split(' → ').map((v, i) => <>{i > 0 && ' → '}<span class="nb mk">{v}</span></>)}</p>
-        <p class="proof-sub">運送会社の配車作業（勤務先での取り組み）　<a href={results.metric.note} target="_blank" rel="noopener" data-track="note_click" data-position="top_proof">noteで読む <span aria-hidden="true">↗</span></a></p>
-      </li>
-    </ul>
-    </div>
-  </section>
-
-  <section class="section wrap">
-    <h2 class="sec-title">こんなこと、ありませんか</h2>
-    <ul class="pains">
-      {pains.map((p) => <li>{p}</li>)}
-    </ul>
-    <p class="pains-after">ひとつでも当てはまれば、まずは30分、話してみてください。<br class="br-pc" />むずかしい用語は使いません。いまの予約の受け方を聞くところから始めます。</p>
-  </section>
-
-  <section class="pack" id="pack" aria-labelledby="pack-title">
-    <div class="wrap pack-inner">
-      <p class="pack-for">いちばんのおすすめ｜サロン・整体・教室、講座や体験会を開く方へ</p>
-      <h2 id="pack-title" class="pack-title">{pack.name.split(' ').map((w, i) => <>{i > 0 && ' '}<span class="nb">{w}</span></>)}</h2>
-      <p class="pack-sum">LINE公式・フォーム・スプレッドシートで、予約・申込まわりの事務をまとめて自動にします。中身は次の6つで固定です。</p>
-      <ol class="pack-list">
-        {pack.details.map((d) => <li>{d}</li>)}
-      </ol>
-      <div class="pack-foot">
-        <div>
-          <p class="pack-price">
-            {pack.price.split(' ＋ ').map((g, i) => (
-              <>{i > 0 && <br />}<span class="pg">{(i > 0 ? `＋ ${g}` : g).split(' ').map((w, j) => <>{j > 0 && ' '}<span class="pw">{w}</span></>)}</span></>
-            ))}
-          </p>
-          {pack.priceNote && <p class="pack-note">{pack.priceNote}</p>}
-        </div>
-        <div class="pack-cta">
-          <a class="btn" href={site.bookingUrl} target="_blank" rel="noopener" data-track="booking_click" data-position="pack">このパックについて相談する</a>
-          <a class="pack-more" href={`/services/#${pack.id}`}>詳しく見る</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section wrap">
-    <h2 class="sec-title">予約につながるホームページも、一緒に</h2>
-    <p class="lead sec-lead">予約ボタンからLINEにつながるホームページも作れます。どちらも架空のお店の制作サンプルです（{svc('web').price}）。</p>
-    <div class="grid2">
-      {shopSamples.map((w) => <WorkCard work={w} />)}
-    </div>
-    <p class="more"><a href="/works/">ほかの制作サンプルを見る</a></p>
-  </section>
-
-  <section class="others-band" aria-labelledby="others-title">
-    <div class="wrap others">
-      <h2 id="others-title" class="others-title">ほかにもできること</h2>
-      <ul class="others-list">
-        {others.map((o) => (
-          <li><a href={`/services/#${o.id}`}><b>{o.label}</b><span>{o.price}</span></a></li>
-        ))}
+      <ul class="proof-list">
+        <li class="proof-item">
+          <p class="proof-num"><span class="mk">サロン2社</span></p>
+          <p class="proof-sub">を、毎月続けて支援しています</p>
+        </li>
+        <li class="proof-item">
+          <p class="proof-quote">「{salonVoice.headline}」</p>
+          <p class="proof-sub">{salonVoice.context}・{salonVoice.person}　<a href="/works/#voices">声をすべて読む</a></p>
+        </li>
+        <li class="proof-item">
+          <p class="proof-num">{results.metric.value.split(' → ').map((v, i) => <>{i > 0 && ' → '}<span class="nb mk">{v}</span></>)}</p>
+          <p class="proof-sub">運送会社の配車作業（勤務先での取り組み）　<a href={results.metric.note} target="_blank" rel="noopener" data-track="note_click" data-position="top_proof">noteで読む <span aria-hidden="true">↗</span></a></p>
+        </li>
       </ul>
     </div>
   </section>
 
+  <section class="section wrap" id="service">
+    <h2 class="sec-title">サービスは<span class="mk">3つだけ</span></h2>
+    <p class="lead sec-lead">まずAI導入で始めて、AI顧問で続ける。大きな開発が必要になったら、オーダーメイドで作ります。</p>
+    <ServiceCards />
+    <p class="more"><a href="/pricing/">料金とプランの違いを見る</a></p>
+  </section>
+
+  <section class="band" id="industry" aria-labelledby="industry-title">
+    <div class="wrap band-inner">
+      <h2 id="industry-title" class="sec-title"><span class="mk">業種別</span>にできること</h2>
+      <p class="lead sec-lead">同じAIでも、業種によって効くところが違います。</p>
+      <ul class="ind-cards">
+        {industries.map((ind) => (
+          <li>
+            <a href={`/industry/${ind.slug}/`}>
+              <IndustryIcon kind={ind.icon} />
+              <span class="ind-text"><b>{ind.name}</b><span>{ind.short}</span></span>
+              <span class="ind-arrow" aria-hidden="true">→</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <p class="muted ind-more">ほかの業種も、まずは無料相談でご相談ください。</p>
+    </div>
+  </section>
+
   <section class="section wrap">
-    <h2 class="sec-title">つくったもの</h2>
+    <h2 class="sec-title"><span class="mk">つくったもの</span></h2>
     <p class="lead sec-lead">これまでに作った仕組みの一部です。運送業の事例は、定方が社内のDX担当として作ったものです。</p>
     <div class="grid3">
       {madeTop.map((m) => <MadeCard item={m} compact />)}
@@ -141,27 +98,44 @@ const others = [
     <p class="more"><a href="/made/">つくったものをすべて見る</a></p>
   </section>
 
-  <section class="section wrap">
-    <div class="note-box">
-      <div class="note-head">
+  <section class="band" aria-labelledby="column-title">
+    <div class="wrap band-inner">
+      <div class="col-head">
         <div>
-          <h2 class="sec-title">noteで書いていること</h2>
-          <p class="lead">作った仕組みの裏側や、AIを仕事に使うコツを書いています。どんな人が、どう作っているのかを知りたい方はこちらへ。</p>
+          <h2 id="column-title" class="sec-title"><span class="mk">発信</span>しています</h2>
+          <p class="lead">現場で試したAIの使い方を、むずかしい言葉なしで書いています。</p>
         </div>
-        <a class="btn note-btn" href={site.noteUrl} target="_blank" rel="noopener" data-track="note_click" data-position="top_notes">noteを読む <span aria-hidden="true">↗</span></a>
+        <a class="col-all" href="/column/">コラム一覧 <span aria-hidden="true">→</span></a>
       </div>
-      {notes.length > 0 && (
-        <ul class="note-cards">
-          {notes.map((n) => (
-            <li>
-              <a href={n.url} target="_blank" rel="noopener" data-track="note_click" data-position="top_notes_article">
-                {n.date && <span class="note-date">{n.date}</span>}
-                <span class="note-title">{n.title}</span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      )}
+      <ul class="col-cards">
+        {columns.map((c) => (
+          <li>
+            <a href={c.url}>
+              <span class="col-meta">コラム{c.tag && `・${c.tag}`}　{formatDate(c.date)}</span>
+              <span class="col-title">{c.title}</span>
+            </a>
+          </li>
+        ))}
+        {notes.slice(0, Math.max(0, 3 - columns.length)).map((n) => (
+          <li>
+            <a href={n.url} target="_blank" rel="noopener" data-track="note_click" data-position="top_notes_article">
+              <span class="col-meta">note　{n.date}</span>
+              <span class="col-title">{n.title} <span aria-hidden="true">↗</span></span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <p class="col-links"><a href={site.noteUrl} target="_blank" rel="noopener" data-track="note_click" data-position="top_notes">noteでも書いています <span aria-hidden="true">↗</span></a></p>
+    </div>
+  </section>
+
+  <section class="section wrap owner" id="owner" aria-labelledby="owner-title">
+    <OwnerFigure />
+    <div>
+      <p class="muted">代表について</p>
+      <h2 id="owner-title" class="owner-name">{site.owner}</h2>
+      <p class="lead">{site.ownerBio}</p>
+      <p class="more"><a href="/about/">AIBOUについて</a></p>
     </div>
   </section>
 
@@ -177,21 +151,12 @@ const others = [
     </div>
     <div>
       <h2 class="sec-title">よくある質問</h2>
-      {faqs.map((f) => (
-        <details>
-          <summary>{f.q}</summary>
-          <p>{f.a}</p>
-        </details>
-      ))}
+      <FaqList faqs={faqs} />
     </div>
   </section>
-
 </Base>
 
 <style>
-  /* 強弱は3段階：主役のパック＝濃い墨色の帯／証拠＝白い帯／脇役＝薄い紙の色で小さく */
-
-  /* 最初の画面（方眼） */
   .hero-band {
     background-image:
       linear-gradient(var(--color-grid) 1px, transparent 1px),
@@ -200,13 +165,13 @@ const others = [
   }
   .hero {
     display: grid; gap: var(--space-2xl); align-items: center;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
     padding-block: var(--space-2xl) var(--space-3xl);
   }
   .hero-for { display: grid; gap: 2px; font-size: var(--text-sm); color: var(--color-ink-soft); margin-bottom: var(--space-sm); }
   .hero-for span { font-weight: 700; color: var(--color-ink); }
   .hero-title { font-size: var(--text-display); line-height: 1.45; margin-bottom: var(--space-lg); }
-  .nb { display: inline-block; } /* まとまりの途中で改行しない */
+  .nb { display: inline-block; }
   .hero-sub { color: var(--color-ink-soft); max-width: 34rem; margin-bottom: var(--space-md); }
   .hero-badges { display: flex; flex-wrap: wrap; gap: var(--space-xs); margin: 0 0 var(--space-lg); padding: 0; list-style: none; }
   .hero-badges li {
@@ -214,31 +179,24 @@ const others = [
     border: 1.5px solid var(--color-ink); border-radius: 999px; background: var(--color-card);
   }
 
-  /* LINEのトーク画面の見本 */
-  .hero-chat { margin: 0; justify-self: center; width: min(100%, 25rem); transform: rotate(1.5deg); }
-  .chat {
-    display: grid; gap: var(--space-md); padding: var(--space-md) var(--space-md) var(--space-lg);
-    background: oklch(93% 0.03 240); border: 2px solid var(--color-ink); border-radius: 22px;
-    box-shadow: 6px 6px 0 var(--color-ink);
+  .hero-steps {
+    margin: 0; padding: var(--space-lg); background: var(--color-card);
+    border: 2px solid var(--color-ink); border-radius: var(--radius-md); box-shadow: 6px 6px 0 var(--color-ink);
   }
-  .chat-head { display: flex; align-items: center; gap: var(--space-xs); font-size: var(--text-sm); font-weight: 700; padding-bottom: var(--space-xs); border-bottom: 1px solid var(--color-rule); }
-  .chat-icon { width: 26px; height: 26px; border-radius: 50%; background: var(--color-line); border: 2px solid var(--color-ink); flex: none; }
-  .chat-row { display: grid; gap: 4px; justify-items: start; }
-  .chat-step {
-    font-size: 0.75rem; font-weight: 700; padding: 0 8px; border-radius: 999px;
-    background: var(--color-marker); border: 1.5px solid var(--color-ink);
+  .hero-steps figcaption { font-size: 0.75rem; font-weight: 700; color: var(--color-ink-faint); margin-bottom: var(--space-sm); }
+  .hero-steps ol { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-md); counter-reset: hs; }
+  .hero-steps li { counter-increment: hs; display: grid; grid-template-columns: 2.5rem minmax(0, 1fr); column-gap: var(--space-sm); align-items: center; }
+  .hero-steps li::before {
+    content: counter(hs); grid-row: span 2; display: grid; place-items: center; width: 2.5rem; height: 2.5rem;
+    font-family: var(--font-hand); font-weight: 600; border: 2px solid var(--color-ink); border-radius: 50% 45% 55% 48%; background: var(--color-card);
   }
-  .bubble {
-    margin: 0; padding: var(--space-xs) var(--space-sm); max-width: 92%; font-size: var(--text-sm); line-height: 1.7;
-    background: var(--color-card); border: 1.5px solid var(--color-ink); border-radius: 4px 16px 16px 16px;
-  }
-  .hero-chat figcaption { margin-top: var(--space-md); text-align: center; font-family: var(--font-hand); font-weight: 600; font-size: var(--text-lg); }
+  .hero-steps li.is-mark::before { background: var(--color-marker-strong); }
+  .hero-steps b { font-family: var(--font-hand); font-weight: 600; font-size: var(--text-lg); line-height: 1.4; }
+  .hero-steps span { font-size: var(--text-sm); color: var(--color-ink-soft); line-height: 1.6; }
   @media (max-width: 860px) {
     .hero { grid-template-columns: minmax(0, 1fr); padding-block: var(--space-xl) var(--space-2xl); gap: var(--space-xl); }
-    .hero-chat { transform: none; }
   }
 
-  /* 証拠（白い帯） */
   .proof { background: var(--color-card); border-block: 2px solid var(--color-ink); }
   .proof-list { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr) minmax(0, 1fr); margin: 0; padding-block: var(--space-xl); list-style: none; }
   .proof-item { display: grid; align-content: center; gap: var(--space-2xs); padding: var(--space-sm) var(--space-lg); }
@@ -257,59 +215,44 @@ const others = [
   .sec-lead { max-width: var(--measure); margin: calc(-1 * var(--space-sm)) 0 var(--space-xl); }
   .more { margin-top: var(--space-lg); font-weight: 700; }
 
-  .pains { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-sm) var(--space-xl); margin: 0; padding: 0; list-style: none; }
-  .pains li { position: relative; padding: var(--space-sm) 0 var(--space-sm) 2.2em; border-bottom: 1px dashed var(--color-rule); font-size: var(--text-lg); }
-  .pains li::before {
-    content: ''; position: absolute; left: 0.2em; top: 1.05em; width: 1.1em; height: 0.6em;
-    border-left: 3px solid var(--color-marker-strong); border-bottom: 3px solid var(--color-marker-strong); transform: rotate(-45deg);
-  }
-  .pains-after { margin-top: var(--space-lg); font-weight: 700; }
-  @media (max-width: 760px) { .pains { grid-template-columns: minmax(0, 1fr); } .br-pc { display: none; } }
+  .band { background: var(--color-paper-2); border-block: 1px dashed var(--color-rule); }
+  .band-inner { padding-block: var(--space-2xl); }
 
-  /* 主役：自動化パック（濃い墨色の帯） */
-  .pack { background: var(--color-ink); color: var(--color-paper); scroll-margin-top: 64px; }
-  .pack-inner { padding-block: var(--space-3xl); }
-  .pack-for { display: inline-block; font-size: var(--text-sm); font-weight: 700; color: var(--color-ink); background: var(--color-marker); padding: 2px 12px; border-radius: 999px; margin-bottom: var(--space-md); }
-  .pack-title { font-size: var(--text-display); line-height: 1.35; margin-bottom: var(--space-md); color: var(--color-paper); }
-  .pack-sum { margin-bottom: var(--space-xl); max-width: var(--measure); color: oklch(92% 0.01 85); font-size: var(--text-lg); }
-  .pack-list {
-    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-sm) var(--space-xl);
-    margin: 0 0 var(--space-xl); padding: 0; list-style: none; counter-reset: pk;
+  .ind-cards { display: grid; gap: var(--space-lg); grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 0; padding: 0; list-style: none; }
+  @media (max-width: 760px) { .ind-cards { grid-template-columns: minmax(0, 1fr); } }
+  .ind-cards a {
+    display: flex; align-items: center; gap: var(--space-lg); height: 100%; padding: var(--space-lg); text-decoration: none;
+    background: var(--color-card); border: 1px solid var(--color-rule); border-radius: var(--radius-md);
   }
-  .pack-list li {
-    counter-increment: pk; display: grid; grid-template-columns: 2rem minmax(0, 1fr); gap: var(--space-xs);
-    padding: var(--space-sm) var(--space-md); border: 1.5px solid oklch(98% 0 0 / 0.25); border-radius: var(--radius-md);
-  }
-  .pack-list li::before { content: counter(pk); font-family: var(--font-hand); font-weight: 600; font-size: var(--text-xl); line-height: 1.3; color: var(--color-marker); }
-  .pack-foot { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: var(--space-lg); padding-top: var(--space-lg); border-top: 1px solid oklch(98% 0 0 / 0.25); }
-  .pack-price { font-weight: 700; font-size: var(--text-2xl); line-height: 1.5; }
-  .pack-price .pw { display: inline-block; } /* 料金は単語の途中で折り返さない */
-  .pack-note { margin-top: var(--space-xs); max-width: 36rem; font-size: var(--text-sm); color: var(--color-marker); font-weight: 700; }
-  .pack-cta { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-sm) var(--space-lg); }
-  .pack-cta .btn:hover { box-shadow: 4px 4px 0 var(--color-marker); }
-  .pack-more { font-weight: 700; white-space: nowrap; color: var(--color-paper); }
-  @media (max-width: 760px) { .pack-list { grid-template-columns: minmax(0, 1fr); } .pack-inner { padding-block: var(--space-2xl); } }
-  @media (max-width: 480px) { .pack-price { font-size: var(--text-xl); } .pack-cta .btn { width: 100%; } }
-
-  /* 脇役：ほかにもできること（薄い紙の色・1段） */
-  .others-band { background: var(--color-paper-2); border-block: 1px solid var(--color-rule); }
-  .others { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: var(--space-lg) var(--space-xl); padding-block: var(--space-lg); }
-  .others-title { font-size: var(--text-lg); white-space: nowrap; }
-  .others-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-sm); margin: 0; padding: 0; list-style: none; }
-  .others-list a {
-    display: grid; gap: 2px; height: 100%; padding: var(--space-xs) var(--space-sm); text-decoration: none;
-    background: var(--color-card); border: 1px solid var(--color-rule); border-radius: var(--radius-sm);
-  }
-  .others-list a:hover { border-color: var(--color-ink); }
-  .others-list b { font-size: var(--text-sm); }
-  .others-list span { font-size: 0.8125rem; color: var(--color-ink-soft); }
-  @media (max-width: 960px) { .others { grid-template-columns: minmax(0, 1fr); } }
-  @media (max-width: 640px) { .others-list { grid-template-columns: minmax(0, 1fr); } }
+  .ind-cards a:hover { border-color: var(--color-ink); }
+  .ind-text { flex: 1; min-width: 0; display: grid; }
+  .ind-text b { font-family: var(--font-hand); font-weight: 600; font-size: var(--text-xl); }
+  .ind-text span { font-size: var(--text-sm); color: var(--color-ink-soft); line-height: 1.8; }
+  .ind-arrow { font-size: var(--text-xl); }
+  .ind-more { margin-top: var(--space-md); }
 
   .grid3 { display: grid; gap: var(--space-xl); grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .grid2 { display: grid; gap: var(--space-xl); grid-template-columns: repeat(2, minmax(0, 1fr)); }
   @media (max-width: 1000px) { .grid3 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-  @media (max-width: 640px) { .grid3, .grid2 { grid-template-columns: minmax(0, 1fr); } }
+  @media (max-width: 640px) { .grid3 { grid-template-columns: minmax(0, 1fr); } }
+
+  .col-head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: var(--space-md); margin-bottom: var(--space-xl); }
+  .col-head .sec-title { margin-bottom: var(--space-xs); }
+  .col-all { font-weight: 700; white-space: nowrap; }
+  .col-cards { display: grid; gap: var(--space-lg); grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); margin: 0; padding: 0; list-style: none; }
+  .col-cards a {
+    display: grid; align-content: start; gap: var(--space-2xs); height: 100%; padding: var(--space-md) var(--space-lg); text-decoration: none;
+    background: var(--color-card); border: 1px solid var(--color-rule); border-radius: var(--radius-md);
+  }
+  .col-cards a:hover { border-color: var(--color-ink); }
+  .col-cards a:hover .col-title { text-decoration: underline; }
+  .col-meta { font-size: 0.75rem; font-weight: 700; color: var(--color-ink-faint); font-variant-numeric: tabular-nums; }
+  .col-title { font-family: var(--font-hand); font-weight: 600; font-size: var(--text-lg); line-height: 1.55; }
+  .col-links { margin-top: var(--space-lg); font-weight: 700; font-size: var(--text-sm); }
+
+  .owner { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-xl); }
+  .owner > div { flex: 999 1 22rem; min-width: 0; }
+  .owner-name { font-size: var(--text-2xl); margin-bottom: var(--space-sm); }
+  @media (max-width: 640px) { .owner { justify-content: center; } }
 
   .help { display: grid; gap: var(--space-2xl); grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
   @media (max-width: 860px) { .help { grid-template-columns: minmax(0, 1fr); } }
@@ -321,30 +264,4 @@ const others = [
   }
   .flow b { font-weight: 700; }
   .flow span { font-size: var(--text-sm); color: var(--color-ink-soft); }
-  details { border-bottom: 1px dashed var(--color-rule); padding-block: var(--space-sm); }
-  details:first-of-type { border-top: 1px dashed var(--color-rule); }
-  summary { font-weight: 700; cursor: pointer; list-style: none; padding-right: 2em; position: relative; }
-  summary::-webkit-details-marker { display: none; }
-  summary::after { content: '+'; position: absolute; right: 0.25em; top: 0; font-size: var(--text-xl); line-height: 1.3; }
-  details[open] summary::after { content: '−'; }
-  details p { margin-top: var(--space-xs); color: var(--color-ink-soft); font-size: var(--text-sm); }
-
-  .note-box {
-    padding: var(--space-xl); background: var(--color-card);
-    border: 2px solid var(--color-ink); border-radius: var(--radius-md); box-shadow: 4px 4px 0 var(--color-rule);
-  }
-  .note-head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: var(--space-lg); }
-  .note-head > div { flex: 1 1 22rem; }
-  .note-head .lead { margin-top: var(--space-xs); }
-  .note-btn { background: var(--color-card); }
-  .note-cards { display: grid; gap: var(--space-md); grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); margin: var(--space-xl) 0 0; padding: 0; list-style: none; }
-  .note-cards a {
-    display: grid; gap: var(--space-2xs); height: 100%; padding: var(--space-md); text-decoration: none;
-    background: var(--color-paper-2); border-radius: var(--radius-md); border: 1px solid var(--color-rule);
-  }
-  .note-cards a:hover { border-color: var(--color-ink); }
-  .note-cards a:hover .note-title { text-decoration: underline; }
-  .note-date { font-size: var(--text-sm); color: var(--color-ink-faint); font-variant-numeric: tabular-nums; }
-  .note-title { font-weight: 700; }
-  @media (max-width: 480px) { .note-box { padding: var(--space-lg); } .note-btn { width: 100%; } }
 </style>

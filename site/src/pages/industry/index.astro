@@ -1,0 +1,42 @@
+---
+import Base from '../../layouts/Base.astro';
+import IndustryIcon from '../../components/IndustryIcon.astro';
+import { industries } from '../../data/industries';
+---
+<Base title="業種別にできること" description="運送業・美容業など、業種ごとにAIBOUでできることをまとめています。配車や請求、予約や顧客管理の手間を、AIと仕組みで減らします。">
+  <section class="wrap page-head">
+    <h1><span class="mk">業種別</span>にできること</h1>
+    <p class="lead">同じAIでも、業種によって効くところが違います。これまで現場で作ってきた事例をもとに、業種ごとにまとめました。</p>
+  </section>
+
+  <section class="wrap list">
+    {industries.map((ind) => (
+      <a class="card" href={`/industry/${ind.slug}/`}>
+        <IndustryIcon kind={ind.icon} size={56} />
+        <span class="text"><b>{ind.name}</b><span>{ind.short}</span></span>
+        <span class="arrow" aria-hidden="true">→</span>
+      </a>
+    ))}
+  </section>
+
+  <section class="section narrow">
+    <p>ここにない業種でも、予約・問い合わせ・集計・請求など、くり返しの事務はたいてい軽くできます。まずは<a href="/services/#consult">無料の30分相談</a>でお話を聞かせてください。</p>
+  </section>
+</Base>
+
+<style>
+  .page-head { padding-block: var(--space-2xl) var(--space-xl); }
+  .page-head h1 { font-size: var(--text-display); margin-bottom: var(--space-sm); }
+  .page-head .lead { max-width: var(--measure); }
+  .list { display: grid; gap: var(--space-lg); grid-template-columns: repeat(2, minmax(0, 1fr)); padding-bottom: var(--space-2xl); }
+  @media (max-width: 760px) { .list { grid-template-columns: minmax(0, 1fr); } }
+  .card {
+    display: flex; align-items: center; gap: var(--space-lg); padding: var(--space-lg); text-decoration: none;
+    background: var(--color-card); border: 2px solid var(--color-ink); border-radius: var(--radius-md); box-shadow: 4px 4px 0 var(--color-rule);
+  }
+  .card:hover b { text-decoration: underline; }
+  .text { flex: 1; min-width: 0; display: grid; }
+  .text b { font-family: var(--font-hand); font-weight: 600; font-size: var(--text-2xl); }
+  .text span { font-size: var(--text-sm); color: var(--color-ink-soft); }
+  .arrow { font-size: var(--text-xl); }
+</style>

@@ -1,0 +1,135 @@
+---
+import Base from '../layouts/Base.astro';
+import FaqList from '../components/FaqList.astro';
+import ContactButtons from '../components/ContactButtons.astro';
+import { services, pricing, orderSteps, pricingFaqs, TBD } from '../data/site';
+
+const intro = services.find((s) => s.id === 'intro')!;
+const advisor = services.find((s) => s.id === 'advisor')!;
+const custom = services.find((s) => s.id === 'custom')!;
+const tbd = (v: string) => v.includes(TBD);
+---
+<Base
+  title="料金"
+  description="AIBOUの料金。AI導入（初期費用・AI顧問とセットで割引）、AI顧問 月33,000円、オーダーメイド制作（業務の自動化 55,000円〜・LP 77,000円〜）。表示はすべて税込です。"
+  faqs={pricingFaqs}
+>
+  <section class="wrap page-head">
+    <p class="muted">料金</p>
+    <h1>はじめて、<span class="mk">つづける</span>ための料金</h1>
+    <p class="lead">AI導入で仕組みを作り、AI顧問で育てていく流れがおすすめです。表示はすべて税込です。</p>
+  </section>
+
+  <section class="wrap plans">
+    <article class="plan">
+      <p class="plan-step">{intro.stepLabel}</p>
+      <h2>{intro.name}</h2>
+      <div class="opt">
+        <p class="opt-label">導入のみ</p>
+        <p class:list={['opt-price', { 'is-tbd': tbd(pricing.introSolo) }]}>{pricing.introSolo}</p>
+      </div>
+      <div class="opt opt--main">
+        <p class="opt-label">AI顧問とセット<span class="opt-badge">おすすめ</span></p>
+        <p class:list={['opt-price', { 'is-tbd': tbd(pricing.introSet) }]}>{pricing.introSet}</p>
+        <p class="opt-note">AI顧問を{pricing.advisorMinTerm}以上ご契約いただく場合（期間内に解約された場合は差額の{pricing.introSetPenalty}をお支払いいただきます）</p>
+      </div>
+      <p class="plan-label">含まれるもの</p>
+      <ul>{intro.details.map((d) => <li>{d}</li>)}</ul>
+    </article>
+
+    <article class="plan plan--main">
+      <p class="plan-step">{advisor.stepLabel}</p>
+      <h2>{advisor.name}</h2>
+      <p class="big"><span>33,000</span>円 / 月</p>
+      <p class="plan-label">含まれるもの</p>
+      <ul>{advisor.details.map((d) => <li>{d}</li>)}</ul>
+      <p class="plan-label">含まれないもの</p>
+      <ul class="ex">{advisor.excludes!.map((d) => <li>{d}</li>)}</ul>
+    </article>
+
+    <article class="plan">
+      <p class="plan-step">{custom.stepLabel}</p>
+      <h2>{custom.name}</h2>
+      <p class="opt-price">お見積り</p>
+      <dl class="rows">
+        {custom.priceRows!.map((r) => (
+          <div><dt>{r.label}</dt><dd>{r.price}</dd></div>
+        ))}
+      </dl>
+      <p class="plan-note">{custom.priceNote}</p>
+    </article>
+  </section>
+
+  <section class="band">
+    <div class="wrap band-inner">
+      <h2 class="sec-title">ご依頼の<span class="mk">流れ</span></h2>
+      <ol class="order">
+        {orderSteps.map((s, i) => (
+          <li class:list={{ 'is-main': i === orderSteps.length - 1 }}><b>{s.title}</b><span>{s.body}</span></li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section narrow">
+    <h2 class="sec-title">よくある<span class="mk">質問</span></h2>
+    <FaqList faqs={pricingFaqs} />
+    <div class="cta"><ContactButtons position="pricing" /></div>
+  </section>
+</Base>
+
+<style>
+  .page-head { padding-block: var(--space-2xl) var(--space-xl); }
+  .page-head h1 { font-size: var(--text-display); margin-bottom: var(--space-sm); }
+  .page-head .lead { max-width: var(--measure); }
+
+  .plans { display: grid; gap: var(--space-lg); grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: stretch; padding-bottom: var(--space-2xl); }
+  @media (max-width: 960px) { .plans { grid-template-columns: minmax(0, 1fr); } }
+  .plan {
+    display: flex; flex-direction: column; gap: var(--space-sm); padding: var(--space-lg);
+    background: var(--color-card); border: 1px solid var(--color-rule); border-radius: var(--radius-md);
+  }
+  .plan--main { border: 2px solid var(--color-ink); box-shadow: 4px 4px 0 var(--color-rule); }
+  .plan h2 { font-size: var(--text-2xl); }
+  .plan-step { font-size: 0.75rem; font-weight: 700; color: var(--color-ink-faint); }
+  .plan-label { font-size: 0.75rem; font-weight: 700; color: var(--color-ink-faint); margin-top: var(--space-xs); }
+  .plan ul { margin: 0; padding-left: 1.2em; font-size: var(--text-sm); line-height: 1.85; display: grid; gap: 2px; }
+  .plan ul.ex { list-style: '× '; color: var(--color-ink-soft); }
+  .plan-note { font-size: var(--text-sm); color: var(--color-ink-soft); }
+
+  .opt { background: var(--color-paper-2); border-radius: var(--radius-md); padding: var(--space-sm) var(--space-md); }
+  .opt--main { background: var(--color-card); border: 2px solid var(--color-ink); }
+  .opt-label { display: flex; justify-content: space-between; gap: var(--space-xs); font-size: 0.75rem; font-weight: 700; }
+  .opt-badge { background: var(--color-marker); border-radius: var(--radius-sm); padding: 0 8px; }
+  .opt-price { font-family: var(--font-hand); font-weight: 600; font-size: var(--text-xl); line-height: 1.5; }
+  .opt-price.is-tbd { color: var(--color-ink-faint); }
+  .opt-note { font-size: 0.75rem; color: var(--color-ink-soft); }
+  .big { font-size: var(--text-base); }
+  .big span { font-family: var(--font-hand); font-weight: 600; font-size: 2.75rem; line-height: 1.2; }
+
+  .rows { margin: 0; display: grid; gap: var(--space-2xs); }
+  .rows div { display: flex; justify-content: space-between; gap: var(--space-md); padding-block: var(--space-2xs); border-bottom: 1px dashed var(--color-rule); font-size: var(--text-sm); }
+  .rows dt { color: var(--color-ink-soft); }
+  .rows dd { margin: 0; font-weight: 700; white-space: nowrap; }
+
+  .band { background: var(--color-paper-2); border-block: 1px dashed var(--color-rule); }
+  .band-inner { padding-block: var(--space-2xl); }
+  .sec-title { font-size: var(--text-2xl); margin-bottom: var(--space-lg); }
+  .order { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-md); grid-template-columns: repeat(4, minmax(0, 1fr)); counter-reset: od; }
+  @media (max-width: 860px) { .order { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 480px) { .order { grid-template-columns: minmax(0, 1fr); } }
+  .order li {
+    counter-increment: od; display: grid; gap: 2px; align-content: start; padding: var(--space-md);
+    background: var(--color-card); border: 1px solid var(--color-rule); border-radius: var(--radius-md);
+  }
+  .order li.is-main { border: 2px solid var(--color-ink); }
+  .order li::before {
+    content: counter(od); display: grid; place-items: center; width: 2.25rem; height: 2.25rem; margin-bottom: var(--space-xs);
+    font-family: var(--font-hand); font-weight: 600; border: 2px solid var(--color-ink); border-radius: 50% 45% 55% 48%; background: var(--color-card);
+  }
+  .order li.is-main::before { background: var(--color-marker-strong); }
+  .order b { font-family: var(--font-hand); font-weight: 600; font-size: var(--text-lg); }
+  .order span { font-size: var(--text-sm); color: var(--color-ink-soft); line-height: 1.8; }
+
+  .cta { margin-top: var(--space-xl); }
+</style>
