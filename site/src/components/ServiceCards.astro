@@ -1,0 +1,60 @@
+---
+// 3つの商品を並べるカード（トップ・業種ページで共通）
+import { services, TBD } from '../data/site';
+
+interface Props { headingLevel?: 'h2' | 'h3' }
+const { headingLevel = 'h3' } = Astro.props;
+const H = headingLevel;
+
+// カードに出す短い料金
+const cardPrice = (id: string) => {
+  const s = services.find((x) => x.id === id)!;
+  if (id === 'intro') return { main: s.price.split('（')[0], sub: '顧問とセットで割引' };
+  if (id === 'advisor') return { main: s.price, sub: '作った仕組みの保守込み' };
+  return { main: 'お見積り', sub: 'LP 77,000円〜' };
+};
+const badge = { start: '初期費用', keep: '月額', build: 'お見積り' } as const;
+---
+<div class="svc-cards">
+  {services.map((s) => {
+    const p = cardPrice(s.id);
+    return (
+      <article class:list={['svc-card', { 'is-main': s.step === 'keep' }]}>
+        <p class="svc-card-top"><span>{s.stepLabel}</span><span class:list={['svc-badge', { 'is-mark': s.step === 'keep' }]}>{badge[s.step!]}</span></p>
+        <H class="svc-card-name">{s.name}</H>
+        <p class="svc-card-sum">{s.summary}</p>
+        {s.forWho && (
+          <ul class="svc-card-for" aria-label="こんな方に">
+            {s.forWho.map((f) => <li>{f}</li>)}
+          </ul>
+        )}
+        <div class="svc-card-price">
+          <p class:list={['svc-card-main', { 'is-tbd': p.main.includes(TBD) }]}>{p.main}</p>
+          <p class="svc-card-sub">{p.sub}</p>
+        </div>
+        <a class="svc-card-more" href={`/services/#${s.id}`}>詳しく見る <span aria-hidden="true">→</span></a>
+      </article>
+    );
+  })}
+</div>
+
+<style>
+  .svc-cards { display: grid; gap: var(--space-lg); grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: stretch; }
+  @media (max-width: 900px) { .svc-cards { grid-template-columns: minmax(0, 1fr); } }
+  .svc-card {
+    display: flex; flex-direction: column; gap: var(--space-sm); padding: var(--space-lg);
+    background: var(--color-card); border: 1px solid var(--color-rule); border-radius: var(--radius-md);
+  }
+  .svc-card.is-main { border: 2px solid var(--color-ink); box-shadow: 4px 4px 0 var(--color-rule); }
+  .svc-card-top { display: flex; justify-content: space-between; align-items: center; gap: var(--space-xs); font-size: 0.75rem; font-weight: 700; color: var(--color-ink-faint); }
+  .svc-badge { color: var(--color-ink); border: 1px solid var(--color-rule); border-radius: var(--radius-sm); padding: 1px 10px; white-space: nowrap; }
+  .svc-badge.is-mark { background: var(--color-marker); border-color: transparent; }
+  .svc-card-name { font-size: var(--text-xl); }
+  .svc-card-sum { font-size: var(--text-sm); line-height: 1.85; color: var(--color-ink-soft); }
+  .svc-card-for { margin: 0; padding-left: 1.2em; font-size: var(--text-sm); line-height: 1.8; }
+  .svc-card-price { margin-top: auto; padding-top: var(--space-sm); border-top: 1px dashed var(--color-rule); }
+  .svc-card-main { font-family: var(--font-hand); font-weight: 600; font-size: var(--text-xl); line-height: 1.4; }
+  .svc-card-main.is-tbd { color: var(--color-ink-faint); }
+  .svc-card-sub { font-size: 0.75rem; color: var(--color-ink-faint); }
+  .svc-card-more { font-size: var(--text-sm); font-weight: 700; }
+</style>

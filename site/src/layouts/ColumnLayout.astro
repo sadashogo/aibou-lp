@@ -1,0 +1,70 @@
+---
+// コラム記事（src/pages/column/*.md）の型。frontmatter に title / description / date / tag / faqs を書く
+import Base from './Base.astro';
+import FaqList from '../components/FaqList.astro';
+import ContactButtons from '../components/ContactButtons.astro';
+import { site } from '../data/site';
+import type { Faq } from '../data/site';
+import { formatDate } from '../data/columns';
+
+interface Props {
+  frontmatter: { title: string; description: string; date: string; tag?: string; faqs?: Faq[]; note?: string };
+}
+const { frontmatter: fm } = Astro.props;
+const url = new URL(Astro.url.pathname, site.url).href;
+const article = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: fm.title,
+  description: fm.description,
+  datePublished: fm.date,
+  author: { '@type': 'Person', name: site.owner, url: `${site.url}/about/` },
+  publisher: { '@id': `${site.url}/#org` },
+  mainEntityOfPage: url,
+  inLanguage: 'ja',
+};
+---
+<Base title={fm.title} description={fm.description} faqs={fm.faqs ?? []} jsonLd={[article]}>
+  <article class="narrow col">
+    <p class="crumb"><a href="/column/">コラム</a>{fm.tag && <> <span aria-hidden="true">／</span> {fm.tag}</>}</p>
+    <h1>{fm.title}</h1>
+    <p class="meta"><time datetime={fm.date}>{formatDate(fm.date)}</time>　文・{site.owner}</p>
+    <div class="body">
+      <slot />
+    </div>
+    {fm.note && (
+      <p class="note-link"><a href={fm.note} target="_blank" rel="noopener" data-track="note_click" data-position="column">noteで、作ったときの詳しい記録を読む <span aria-hidden="true">↗</span></a></p>
+    )}
+    {fm.faqs && fm.faqs.length > 0 && (
+      <section class="faq-sec">
+        <h2>よくある質問</h2>
+        <FaqList faqs={fm.faqs} />
+      </section>
+    )}
+    <div class="cta">
+      <p class="cta-title">同じような作業がある方へ</p>
+      <p class="lead">無料の30分相談で、いまの仕事の流れを聞いて、減らせる作業を一緒に見つけます。</p>
+      <ContactButtons position="column" />
+    </div>
+  </article>
+</Base>
+
+<style>
+  .col { padding-block: var(--space-2xl); }
+  .crumb { font-size: var(--text-sm); color: var(--color-ink-soft); }
+  .col h1 { font-size: var(--text-2xl); line-height: 1.5; margin-block: var(--space-xs) var(--space-sm); }
+  .meta { font-size: var(--text-sm); color: var(--color-ink-faint); margin-bottom: var(--space-xl); font-variant-numeric: tabular-nums; }
+  .body :global(h2) { font-size: var(--text-xl); margin-block: var(--space-xl) var(--space-sm); padding-bottom: var(--space-2xs); border-bottom: 1px dashed var(--color-rule); }
+  .body :global(p) { margin-bottom: var(--space-md); }
+  .body :global(ul), .body :global(ol) { margin: 0 0 var(--space-md); padding-left: 1.4em; }
+  .body :global(strong) { background: linear-gradient(transparent 62%, var(--color-marker) 62%); }
+  .body :global(table) { width: 100%; border-collapse: collapse; margin-bottom: var(--space-md); font-size: var(--text-sm); }
+  .body :global(th), .body :global(td) { border: 1px solid var(--color-rule); padding: var(--space-xs) var(--space-sm); text-align: left; }
+  .body :global(th) { background: var(--color-paper-2); }
+  .note-link { margin-top: var(--space-lg); font-weight: 700; }
+  .faq-sec { margin-top: var(--space-2xl); }
+  .faq-sec h2 { font-size: var(--text-xl); margin-bottom: var(--space-md); }
+  .cta { margin-top: var(--space-2xl); padding: var(--space-lg); background: var(--color-card); border: 2px solid var(--color-ink); border-radius: var(--radius-md); }
+  .cta-title { font-family: var(--font-hand); font-weight: 600; font-size: var(--text-xl); }
+  .cta .lead { margin-bottom: var(--space-md); }
+</style>

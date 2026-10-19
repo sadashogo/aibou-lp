@@ -1,0 +1,69 @@
+---
+import Base from '../../layouts/Base.astro';
+import { site } from '../../data/site';
+import { getColumns, formatDate } from '../../data/columns';
+import { getNoteArticles } from '../../data/note';
+
+const columns = getColumns();
+const notes = await getNoteArticles(site.noteRss, 6);
+---
+<Base title="コラム" description="AIBOUのコラム。運送業・美容業などの現場で作った仕組みと、AIを仕事に使うコツを、むずかしい言葉なしで書いています。">
+  <section class="wrap page-head">
+    <h1><span class="mk">コラム</span></h1>
+    <p class="lead">現場で作った仕組みと、AIを仕事に使うコツを、むずかしい言葉なしで書いています。</p>
+  </section>
+
+  <section class="wrap">
+    <ul class="cards">
+      {columns.map((c) => (
+        <li>
+          <a href={c.url}>
+            <span class="meta">{c.tag ?? 'コラム'}　<time datetime={c.date}>{formatDate(c.date)}</time></span>
+            <span class="title">{c.title}</span>
+            <span class="desc">{c.description}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="section wrap">
+    <h2 class="sec-title">noteでも書いています</h2>
+    <p class="lead sec-lead">作った仕組みの裏側や、開発の記録はnoteにまとめています。</p>
+    {notes.length > 0 && (
+      <ul class="notes">
+        {notes.map((n) => (
+          <li>
+            <a href={n.url} target="_blank" rel="noopener" data-track="note_click" data-position="column_index">
+              <span class="meta">{n.date}</span>
+              <span class="ntitle">{n.title} <span aria-hidden="true">↗</span></span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    )}
+    <p class="more"><a href={site.noteUrl} target="_blank" rel="noopener" data-track="note_click" data-position="column_index">noteをすべて読む <span aria-hidden="true">↗</span></a></p>
+  </section>
+</Base>
+
+<style>
+  .page-head { padding-block: var(--space-2xl) var(--space-xl); }
+  .page-head h1 { font-size: var(--text-display); margin-bottom: var(--space-sm); }
+  .page-head .lead { max-width: var(--measure); }
+  .cards { display: grid; gap: var(--space-lg); grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr)); margin: 0 0 var(--space-2xl); padding: 0; list-style: none; }
+  .cards a {
+    display: grid; align-content: start; gap: var(--space-xs); height: 100%; padding: var(--space-lg); text-decoration: none;
+    background: var(--color-card); border: 2px solid var(--color-ink); border-radius: var(--radius-md); box-shadow: 4px 4px 0 var(--color-rule);
+  }
+  .cards a:hover .title { text-decoration: underline; }
+  .meta { font-size: 0.75rem; font-weight: 700; color: var(--color-ink-faint); font-variant-numeric: tabular-nums; }
+  .title { font-family: var(--font-hand); font-weight: 600; font-size: var(--text-xl); line-height: 1.5; }
+  .desc { font-size: var(--text-sm); color: var(--color-ink-soft); line-height: 1.8; }
+  .sec-title { font-size: var(--text-2xl); margin-bottom: var(--space-lg); }
+  .sec-lead { max-width: var(--measure); margin: calc(-1 * var(--space-sm)) 0 var(--space-xl); }
+  .notes { display: grid; gap: var(--space-sm); grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr)); margin: 0; padding: 0; list-style: none; }
+  .notes a { display: grid; gap: 2px; height: 100%; padding: var(--space-md); text-decoration: none; background: var(--color-paper-2); border: 1px solid var(--color-rule); border-radius: var(--radius-md); }
+  .notes a:hover { border-color: var(--color-ink); }
+  .ntitle { font-weight: 700; }
+  .more { margin-top: var(--space-lg); font-weight: 700; }
+</style>

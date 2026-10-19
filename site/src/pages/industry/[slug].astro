@@ -1,0 +1,193 @@
+---
+// 業種別ページ。中身は src/data/industries.ts から作る（業種を増やすときはデータを1件足すだけ）
+import Base from '../../layouts/Base.astro';
+import ContactButtons from '../../components/ContactButtons.astro';
+import MadeCard from '../../components/MadeCard.astro';
+import VoiceCard from '../../components/VoiceCard.astro';
+import FaqList from '../../components/FaqList.astro';
+import IndustryIcon from '../../components/IndustryIcon.astro';
+import { industries } from '../../data/industries';
+import type { Industry } from '../../data/industries';
+import { made } from '../../data/made';
+import { voices, pricing, site } from '../../data/site';
+
+export function getStaticPaths() {
+  return industries.map((ind) => ({ params: { slug: ind.slug }, props: { ind } }));
+}
+
+interface Props { ind: Industry }
+const { ind } = Astro.props;
+const items = ind.madeIds.map((id) => made.find((m) => m.id === id)).filter((m) => m !== undefined);
+const voice = ind.voiceCase ? voices.find((v) => v.case === ind.voiceCase) : undefined;
+const breadcrumb = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'トップ', item: `${site.url}/` },
+    { '@type': 'ListItem', position: 2, name: '業種別', item: `${site.url}/industry/` },
+    { '@type': 'ListItem', position: 3, name: ind.name, item: `${site.url}/industry/${ind.slug}/` },
+  ],
+};
+---
+<Base title={`${ind.name}のAI・業務改善`} description={ind.description} faqs={ind.faqs} jsonLd={[breadcrumb]}>
+  <div class="hero-band">
+    <section class="wrap hero">
+      <div>
+        <p class="crumb"><a href="/industry/">業種別</a> <span aria-hidden="true">／</span> {ind.name}</p>
+        <h1>{ind.heading.before}<br /><span class="mk">{ind.heading.mark}</span>{ind.heading.after}</h1>
+        <p class="lead">{ind.lead}</p>
+      </div>
+      <div class="hero-icon" aria-hidden="true"><IndustryIcon kind={ind.icon} size={120} /></div>
+    </section>
+  </div>
+
+  <section class="section wrap">
+    <h2 class="sec-title">こんな<span class="mk">困りごと</span>はありませんか</h2>
+    <ul class="pains">
+      {ind.pains.map((p) => <li>{p}</li>)}
+    </ul>
+  </section>
+
+  <section class="band">
+    <div class="wrap band-inner">
+      <h2 class="sec-title">AIBOUで<span class="mk">できること</span></h2>
+      {ind.sourceNote && <p class="muted src-note">{ind.sourceNote}</p>}
+      <ol class="sols">
+        {ind.solutions.map((s, i) => (
+          <li class="sol">
+            <div class="sol-text">
+              <p class="sol-label">{String(i + 1).padStart(2, '0')}・{s.label}</p>
+              <h3>{s.title}</h3>
+              <p>{s.body}</p>
+            </div>
+            {s.before && s.after && (
+              <p class="sol-ba" aria-label={`いま ${s.before}、導入後 ${s.after}`}>
+                <span><small>いま</small>{s.before}</span>
+                <span class="sol-arrow" aria-hidden="true">→</span>
+                <span><small>導入後</small><b>{s.after}</b></span>
+              </p>
+            )}
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  {items.length > 0 && (
+    <section class="section wrap">
+      <h2 class="sec-title"><span class="mk">つくったもの</span></h2>
+      <div class="grid3">
+        {items.map((m) => <MadeCard item={m!} compact />)}
+      </div>
+      <p class="more"><a href="/made/">つくったものをすべて見る</a></p>
+    </section>
+  )}
+
+  {voice && (
+    <section class="section wrap">
+      <h2 class="sec-title">いただいた声</h2>
+      <VoiceCard voice={voice} full />
+    </section>
+  )}
+
+  <section class="section wrap">
+    <h2 class="sec-title">{ind.name}での<span class="mk">進め方と料金</span></h2>
+    <div class="start">
+      <a class="start-card" href="/services/#intro">
+        <span class="start-step">はじめる</span>
+        <b>AI導入</b>
+        <span>{ind.start.intro}</span>
+        <span class="start-price">{pricing.introSolo}</span>
+      </a>
+      <a class="start-card start-card--main" href="/services/#advisor">
+        <span class="start-step">つづける</span>
+        <b>AI顧問</b>
+        <span>{ind.start.advisor}</span>
+        <span class="start-price">{pricing.advisor}</span>
+      </a>
+    </div>
+    <p class="more"><a href="/pricing/">料金の詳細を見る</a></p>
+  </section>
+
+  <section class="section narrow">
+    <h2 class="sec-title">{ind.name}の<span class="mk">よくある質問</span></h2>
+    <FaqList faqs={ind.faqs} />
+  </section>
+
+  <section class="section wrap">
+    <div class="cta-box">
+      <h2>まずは<span class="mk">無料の30分相談</span>から</h2>
+      <p class="lead">いまの仕事の流れを聞いて、減らせる作業を一緒に見つけます。売り込みはしません。</p>
+      <ContactButtons position={`industry_${ind.slug}`} />
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero-band {
+    background-image:
+      linear-gradient(var(--color-grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--color-grid) 1px, transparent 1px);
+    background-size: 26px 26px;
+  }
+  .hero { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-xl); padding-block: var(--space-2xl); }
+  .hero > div:first-child { flex: 999 1 30rem; min-width: 0; }
+  .hero h1 { font-size: var(--text-display); line-height: 1.45; margin-block: var(--space-xs) var(--space-md); }
+  .hero .lead { max-width: var(--measure); }
+  .crumb { font-size: var(--text-sm); color: var(--color-ink-soft); }
+  .hero-icon { flex: 1 1 10rem; display: grid; place-items: center; color: var(--color-ink); }
+  @media (max-width: 640px) { .hero-icon { display: none; } }
+
+  .sec-title { font-size: var(--text-2xl); margin-bottom: var(--space-lg); }
+  .more { margin-top: var(--space-lg); font-weight: 700; }
+  .band { background: var(--color-paper-2); border-block: 1px dashed var(--color-rule); }
+  .band-inner { padding-block: var(--space-2xl); }
+  .src-note { margin: calc(-1 * var(--space-sm)) 0 var(--space-lg); }
+
+  .pains { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-sm) var(--space-xl); margin: 0; padding: 0; list-style: none; }
+  .pains li { position: relative; padding: var(--space-sm) 0 var(--space-sm) 2.2em; border-bottom: 1px dashed var(--color-rule); font-size: var(--text-lg); }
+  .pains li::before {
+    content: ''; position: absolute; left: 0.2em; top: 1.05em; width: 1.1em; height: 0.6em;
+    border-left: 3px solid var(--color-marker-strong); border-bottom: 3px solid var(--color-marker-strong); transform: rotate(-45deg);
+  }
+  @media (max-width: 760px) { .pains { grid-template-columns: minmax(0, 1fr); } }
+
+  .sols { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-md); }
+  .sol {
+    display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-lg); padding: var(--space-lg);
+    background: var(--color-card); border: 1px solid var(--color-rule); border-radius: var(--radius-md);
+  }
+  .sol-text { flex: 999 1 24rem; min-width: 0; }
+  .sol-label { font-size: 0.75rem; font-weight: 700; color: var(--color-ink-faint); }
+  .sol h3 { font-size: var(--text-xl); margin-block: var(--space-2xs); }
+  .sol-text > p:last-child { font-size: var(--text-sm); color: var(--color-ink-soft); line-height: 1.85; }
+  .sol-ba { flex: 1 1 16rem; display: flex; align-items: center; justify-content: center; gap: var(--space-sm); text-align: center; }
+  .sol-ba > span { display: grid; font-family: var(--font-hand); font-weight: 600; font-size: var(--text-lg); line-height: 1.4; }
+  .sol-ba small { font-family: var(--font-body); font-weight: 700; font-size: 0.75rem; color: var(--color-ink-faint); }
+  .sol-ba b { font-weight: 600; background: linear-gradient(transparent 62%, var(--color-marker) 62%); }
+  .sol-arrow { color: var(--color-marker-strong); font-size: var(--text-xl); }
+
+  .grid3 { display: grid; gap: var(--space-xl); grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  @media (max-width: 1000px) { .grid3 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 640px) { .grid3 { grid-template-columns: minmax(0, 1fr); } }
+
+  .start { display: grid; gap: var(--space-lg); grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  @media (max-width: 640px) { .start { grid-template-columns: minmax(0, 1fr); } }
+  .start-card {
+    display: grid; gap: var(--space-2xs); padding: var(--space-lg); text-decoration: none;
+    background: var(--color-card); border: 1px solid var(--color-rule); border-radius: var(--radius-md);
+  }
+  .start-card--main { border: 2px solid var(--color-ink); }
+  .start-card:hover b { text-decoration: underline; }
+  .start-step { font-size: 0.75rem; font-weight: 700; color: var(--color-ink-faint); }
+  .start-card b { font-family: var(--font-hand); font-weight: 600; font-size: var(--text-xl); }
+  .start-card span { font-size: var(--text-sm); color: var(--color-ink-soft); }
+  .start-card .start-price { font-family: var(--font-hand); font-weight: 600; font-size: var(--text-lg); color: var(--color-ink); margin-top: var(--space-xs); }
+
+  .cta-box {
+    display: grid; justify-items: center; gap: var(--space-md); text-align: center; padding: var(--space-xl) var(--space-lg);
+    background: var(--color-card); border: 2px solid var(--color-ink); border-radius: var(--radius-md);
+  }
+  .cta-box h2 { font-size: var(--text-2xl); }
+  .cta-box :global(.contact) { justify-content: center; }
+</style>

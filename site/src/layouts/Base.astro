@@ -1,14 +1,45 @@
 ---
 import '../styles/global.css';
-import { site, nav } from '../data/site';
+import { site, nav, footNav, TBD } from '../data/site';
+import type { Faq } from '../data/site';
 import ContactButtons from '../components/ContactButtons.astro';
 
 interface Props {
   title?: string;
   description?: string;
+  /** ページに表示しているよくある質問。構造化データ（FAQPage）にもそのまま出す */
+  faqs?: Faq[];
+  /** ページ固有の構造化データ（記事など） */
+  jsonLd?: Record<string, unknown>[];
 }
 
-const { title, description = site.description } = Astro.props;
+const { title, description = site.description, faqs = [], jsonLd = [] } = Astro.props;
+
+// 誰が運営しているかをAI・検索エンジンに伝える（全ページ共通）
+const org = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  '@id': `${site.url}/#org`,
+  name: `${site.name}（${site.nameKana}）`,
+  alternateName: site.name,
+  url: site.url,
+  description: site.description,
+  slogan: site.tagline,
+  founder: { '@type': 'Person', name: site.owner, jobTitle: '代表' },
+  areaServed: { '@type': 'AdministrativeArea', name: '群馬県' },
+  address: { '@type': 'PostalAddress', addressRegion: '群馬県', addressCountry: 'JP' },
+  sameAs: [site.noteUrl, site.lineUrl],
+};
+// 未定の値が残った質問は構造化データに出さない
+const faqLd = faqs.filter((f) => !f.a.includes(TBD));
+const ldList: Record<string, unknown>[] = [org, ...jsonLd];
+if (faqLd.length > 0) {
+  ldList.push({
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqLd.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  });
+}
 const fullTitle = title ? `${title}｜${site.name}（${site.nameKana}）` : site.title;
 const canonical = new URL(Astro.url.pathname, site.url).href;
 const ogImage = new URL('/og.jpg', site.url).href;
@@ -35,6 +66,7 @@ const path = Astro.url.pathname;
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="theme-color" content="#fbf9f4" />
+    {ldList.map((ld) => <script type="application/ld+json" set:html={JSON.stringify(ld).replace(/</g, "\\u003c")} />)}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Klee+One:wght@600&display=swap" />
@@ -61,7 +93,6 @@ const path = Astro.url.pathname;
           {nav.map((n) => (
             <a href={n.href} aria-current={path.startsWith(n.href) ? 'page' : undefined}>{n.label}</a>
           ))}
-          <a class="nav-note" href={site.noteUrl} target="_blank" rel="noopener" data-track="note_click" data-position="header">note <span aria-hidden="true">↗</span></a>
         </nav>
         <a class="head-note" href={site.noteUrl} target="_blank" rel="noopener" data-track="note_click" data-position="header">note <span aria-hidden="true">↗</span></a>
         <a class="btn btn--sm head-cta" href={site.bookingUrl} target="_blank" rel="noopener" data-track="booking_click" data-position="header">無料相談</a>
@@ -83,7 +114,7 @@ const path = Astro.url.pathname;
           <p class="foot-brand">{site.name}<span>{site.tagline}</span></p>
           <nav class="foot-nav" aria-label="フッターメニュー">
             <a href="/">トップ</a>
-            {nav.map((n) => <a href={n.href}>{n.label}</a>)}
+            {[...nav, ...footNav].map((n) => <a href={n.href}>{n.label}</a>)}
             <a href={site.noteUrl} target="_blank" rel="noopener" data-track="note_click" data-position="footer">note</a>
             <a href="/privacy/">プライバシーポリシー</a>
           </nav>
@@ -143,10 +174,11 @@ const path = Astro.url.pathname;
 
   .head-note { font-size: var(--text-sm); white-space: nowrap; text-decoration: none; }
   .head-note:hover { text-decoration: underline; }
-  /* 広い画面では右上に単独で、狭い画面ではメニューの並びに note を出す */
-  .nav-note { display: none; }
-  @media (max-width: 900px) { .head-note { display: none; } .nav-note { display: inline; } }
+  /* 狭い画面では note はフッターとコラムページから */
+  @media (max-width: 900px) { .head-note { display: none; } }
   @media (max-width: 400px) { .head-nav { gap: var(--space-xs); font-size: 0.8125rem; } }
+  /* 万一はみ出したときは横にスクロールできるようにする */
+  @media (max-width: 640px) { .head-nav { overflow-x: auto; scrollbar-width: none; } }
 
   .sticky-cta { display: none; }
   @media (max-width: 760px) {
