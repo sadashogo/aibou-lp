@@ -49,16 +49,18 @@ export const consultSteps = [
 // 料金。金額はすべて税込。未定のものは TBD のまま（公開前に埋める）
 export const pricing = {
   /** AI導入を単体で頼むとき */
-  introSolo: TBD,
+  introSolo: '110,000円',
   /** AI導入をAI顧問とセットで頼むとき（顧問の最低契約期間が条件） */
-  introSet: TBD,
+  introSet: '66,000円',
   /** セット価格の条件になる、顧問の最低契約期間（例：6ヶ月） */
-  advisorMinTerm: TBD,
+  advisorMinTerm: '6ヶ月',
   advisor: '月33,000円',
+  /** セット価格で導入し、最低契約期間内に顧問を解約したときにお支払いいただく額（単体との差額） */
+  introSetPenalty: '44,000円',
   /** 顧問で対応する小さな修正・追加の上限（例：月2時間まで） */
-  advisorSmallFixes: TBD,
+  advisorSmallFixes: '月2時間まで',
   /** 顧問の契約中にオーダーメイド制作を頼むときの割引（例：10%引き） */
-  customDiscount: TBD,
+  customDiscount: '10%引き',
 };
 
 // 未定の金額が残っていたら、ビルドのたびに知らせる
@@ -112,7 +114,7 @@ export const services: Service[] = [
     summary: 'AIの初期設定と社内の使い方ルールづくりに加えて、時間を取られている業務をひとつ自動化します。',
     forWho: ['何から始めればいいか分からない', '電話や紙の受付・連絡を減らしたい', 'AIを社内で使える状態にしたい'],
     price: `${pricing.introSolo}（AI顧問とセットなら ${pricing.introSet}）`,
-    priceNote: `セット価格は、AI顧問を${pricing.advisorMinTerm}以上ご契約いただく場合です。`,
+    priceNote: `セット価格は、AI顧問を${pricing.advisorMinTerm}以上ご契約いただく場合です。期間内に顧問を解約された場合は、差額の${pricing.introSetPenalty}をお支払いいただきます。`,
     details: [
       '業務の棚卸し（どこに時間がかかっているかを一緒に洗い出す）',
       'AIの初期設定と、社内での使い方ルールづくり',
@@ -253,7 +255,7 @@ export const faqs: Faq[] = [
 export const pricingFaqs: Faq[] = [
   {
     q: 'AI顧問の料金に、新しい仕組みづくりは含まれますか？',
-    a: `含まれるのは、相談・使い方の指導・作った仕組みの保守と、小さな修正・追加（${pricing.advisorSmallFixes}）までです。新しく作るものは別にお見積りし、顧問の契約中は${pricing.customDiscount}です。`,
+    a: `含まれるのは、相談・使い方の指導・作った仕組みの保守と、小さな修正・追加（${pricing.advisorSmallFixes}）です。新しく作るものは別にお見積りし、顧問の契約中は${pricing.customDiscount}です。`,
   },
   {
     q: 'AI導入だけの依頼もできますか？',

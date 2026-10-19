@@ -31,7 +31,7 @@ const tbd = (v: string) => v.includes(TBD);
       <div class="opt opt--main">
         <p class="opt-label">AI顧問とセット<span class="opt-badge">おすすめ</span></p>
         <p class:list={['opt-price', { 'is-tbd': tbd(pricing.introSet) }]}>{pricing.introSet}</p>
-        <p class="opt-note">AI顧問を{pricing.advisorMinTerm}以上ご契約いただく場合</p>
+        <p class="opt-note">AI顧問を{pricing.advisorMinTerm}以上ご契約いただく場合（期間内に解約された場合は差額の{pricing.introSetPenalty}をお支払いいただきます）</p>
       </div>
       <p class="plan-label">含まれるもの</p>
       <ul>{intro.details.map((d) => <li>{d}</li>)}</ul>
