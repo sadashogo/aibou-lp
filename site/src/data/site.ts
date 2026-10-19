@@ -54,7 +54,7 @@ export const pricing = {
   introSet: TBD,
   /** セット価格の条件になる、顧問の最低契約期間（例：6ヶ月） */
   advisorMinTerm: TBD,
-  advisor: '月30,000円',
+  advisor: '月33,000円',
   /** 顧問で対応する小さな修正・追加の上限（例：月2時間まで） */
   advisorSmallFixes: TBD,
   /** 顧問の契約中にオーダーメイド制作を頼むときの割引（例：10%引き） */
