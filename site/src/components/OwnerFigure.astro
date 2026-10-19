@@ -1,14 +1,18 @@
 ---
 // 代表の似顔絵。site.ownerIllustration に画像のパス（public/ 以下）を入れると、それを出す。
-// 画像がまだないあいだは、名前の頭文字を手描き風の丸に入れて出す（顔写真は使わない方針）。
+// 画像は全身の手描きイラスト（背景は透明）。丸く切り抜かず、そのまま立たせて置く。
+// 画像がないときは、名前の頭文字を手描き風の丸に入れて出す（顔写真は使わない方針）。
 import { site } from '../data/site';
 
 interface Props { size?: number }
 const { size = 176 } = Astro.props;
 const img = site.ownerIllustration;
+// 全身イラストの縦横比（424 × 810）
+const h = Math.round(size * 1.35);
+const w = Math.round((h * 424) / 810);
 ---
 {img ? (
-  <img class="owner-fig" src={img} alt={`${site.owner}の似顔絵`} width={size} height={size} loading="lazy" decoding="async" style={`width:${size}px;height:${size}px`} />
+  <img class="owner-fig" src={img} alt={`${site.owner}の似顔絵（手描きのイラスト）`} width={w} height={h} loading="lazy" decoding="async" style={`width:${w}px;height:${h}px`} />
 ) : (
   <div class="owner-fig owner-fig--mono" style={`width:${size}px;height:${size}px`} role="img" aria-label={`${site.owner}（似顔絵は準備中）`}>
     <span aria-hidden="true">{site.owner.slice(0, 1)}</span>
@@ -16,9 +20,9 @@ const img = site.ownerIllustration;
 )}
 
 <style>
-  .owner-fig { flex: none; border-radius: 50%; border: 2px solid var(--color-ink); background: var(--color-paper-2); object-fit: cover; }
+  .owner-fig { flex: none; object-fit: contain; }
   .owner-fig--mono {
-    display: grid; place-items: center; border-radius: 50% 46% 54% 48%;
+    display: grid; place-items: center; border: 2px solid var(--color-ink); border-radius: 50% 46% 54% 48%;
     font-family: var(--font-hand); font-weight: 600; font-size: 3.5rem; line-height: 1;
     background: linear-gradient(transparent 58%, var(--color-marker) 58%), var(--color-card);
   }

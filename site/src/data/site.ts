@@ -10,7 +10,7 @@ export const site = {
   url: 'https://aibou-ai.pages.dev',
   owner: '定方 翔吾',
   /** 代表の似顔絵（public/ 以下のパス。例：'/owner.webp'）。空のあいだは頭文字の丸を出す */
-  ownerIllustration: '',
+  ownerIllustration: '/owner.webp',
   /** 代表紹介（トップ・AIBOUとは で使う） */
   ownerBio:
     '製造・人事総務・営業・運送の現場を6社で経験。運送会社では配車・請求・DXを担当し、配車の連絡や在庫管理の仕組みを自分で作って現場で動かしてきました。ITの専門家というより「現場の困りごとを一緒に片づける人」として、隣で手を動かします。',
