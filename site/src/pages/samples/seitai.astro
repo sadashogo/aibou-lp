@@ -1,13 +1,22 @@
 ---
 import SampleBase from '../../layouts/SampleBase.astro';
+import SeitaiFilmStory from '../../components/samples/SeitaiFilmStory.astro';
 import ShopPage from '../../components/samples/ShopPage.astro';
 import { seitai, seitaiTheme } from '../../data/samples/seitai';
 ---
 <SampleBase
   title="ととのい整体院｜整体院サイト（Web制作サンプル・架空のお店）"
-  description="スクロールに合わせて、問診からセルフケアまでの流れが進む整体院サイトの制作サンプルです（架空のお店）。"
+  description="スクロールに合わせて、相談・姿勢の確認・ケア・自宅でのセルフケアへと進む整体院サイトの制作サンプルです（架空のお店）。"
   ogImage="/samples/seitai/og.jpg"
   theme={seitaiTheme}
+  mediaNote="写真の人物は日本人という設定でAI生成した架空のモデルです。手元・足元・セルフケアの動きと風景には、別撮影の実写ストック映像を組み合わせています。同じ人物の実録や、実在のスタッフ・利用者、施術効果を示すものではありません。"
 >
-  <ShopPage shop={seitai} />
+  <Fragment slot="head">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;500&display=swap" rel="stylesheet" />
+  </Fragment>
+  <ShopPage shop={seitai} cinematic>
+    <SeitaiFilmStory slot="story" scenes={seitai.scenes} />
+  </ShopPage>
 </SampleBase>

@@ -1,21 +1,22 @@
 // 整体院の制作サンプル（架空のお店）。名前・料金・住所・スタッフはすべて架空。
 // 医療行為ではないので「治る」「治療」などの言葉は使わない。
 import type { ShopData } from './types';
+import { seitaiFilm } from './seitai-film';
 
 export const seitaiTheme = {
-  '--s-bg': '#f8f7f3',
-  '--s-surface': '#dde5ea',
-  '--s-surface-2': '#eef2f3',
+  '--s-bg': '#f5f2ea',
+  '--s-surface': '#dfe5d9',
+  '--s-surface-2': '#e9ede3',
   '--s-ink': '#24313a',
   '--s-ink-soft': '#5c6a73',
   '--s-rule': 'rgb(36 49 58 / 0.14)',
-  '--s-accent': '#4f7c95',
+  '--s-accent': '#4c6959',
   '--s-on-accent': '#ffffff',
   '--s-on-image': '#ffffff',
   '--s-shade': 'rgb(20 32 40 / 0.7)',
   '--s-ph-a': '#a9bcc6',
   '--s-ph-b': '#4f7c95',
-  '--s-font-head': "'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', Meiryo, sans-serif",
+  '--s-font-head': "'Noto Serif JP', 'Yu Mincho', 'Hiragino Mincho ProN', serif",
   '--s-font-body': "'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', Meiryo, sans-serif",
 };
 
@@ -24,13 +25,14 @@ export const seitai: ShopData = {
   nameSub: 'TOTONOI',
   kind: '整体院',
   scenes: [
-    { label: '問診', title: 'まず、|お話を。', body: 'いつから、どんなときにつらいのか。お仕事や暮らしのクセまで丁寧に伺います。' },
-    { label: '姿勢のチェック', title: 'からだの|クセを知る。', body: '立ち姿と歩き方から、負担がかかっているところを一緒に確かめます。' },
-    { label: '施術', title: 'ゆっくり、|やさしく。', body: 'ボキボキと鳴らさない、やさしい力の施術です。' },
-    { label: 'セルフケア', title: 'おうちでも|続けられるように。', body: '1日3分でできるストレッチを、その場で一緒に練習します。' },
-    { label: 'お帰りのとき', title: '明日の朝を、|軽く。', body: '次に来ていただくまでの過ごし方をお伝えして、お見送りします。' },
+    { label: 'はじめに', title: 'からだに、|余白を。', body: '忙しい毎日の中に、自分をいたわる時間を。あなたのペースを大切にする整体院です。' },
+    { label: 'お話を伺う', title: 'まずは、|あなたのお話を。', body: '気になっていること、いつもの過ごし方。言葉にしづらいことも、ゆっくり伺います。' },
+    { label: '姿勢の確認', title: 'いつもの姿勢に、|目を向ける。', body: '普段どおりの立ち姿から、その日の様子を確認。気になることを、無理のない範囲で伺います。' },
+    { label: 'からだのケア', title: '急がず、|無理をせず。', body: '力加減や動かしやすさを伺いながら。呼吸とペースを大切に、身体に合わせて進めます。' },
+    { label: 'セルフケア', title: 'いたわる時間を、|日常にも。', body: 'おうちでも、ほっとひと息。院で一緒に確認したセルフケアを、ご自分のペースで。' },
+    { label: 'いつもの日常へ', title: 'いつもの道を、|自分のペースで。', body: '次にお会いするまでの毎日にも、自分をいたわるひと呼吸を。' },
   ],
-  media: { mode: 'frames', count: 150, ext: 'avif', desktop: '/samples/seitai/seq/desktop', mobile: '/samples/seitai/seq/mobile' },
+  media: { mode: 'stills', desktop: seitaiFilm.posters, mobile: seitaiFilm.posters },
   intro: {
     title: '「もう少し早く来ればよかった」をなくしたい。',
     body: '肩や腰のつらさを我慢しがちな方のための、予約制の整体院です。施術だけで終わらず、ご自宅でのケアまで一緒に考えます。',

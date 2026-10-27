@@ -4,18 +4,18 @@ import ScrollStory from './ScrollStory.astro';
 import { site } from '../../data/site';
 import type { ShopData } from '../../data/samples/types';
 
-interface Props { shop: ShopData }
-const { shop } = Astro.props;
+interface Props { shop: ShopData; cinematic?: boolean }
+const { shop, cinematic = false } = Astro.props;
 ---
-<header class="shop-head">
+<header class:list={["shop-head", {"shop-head--cinematic":cinematic}]}>
   <a class="shop-logo" href="#top">{shop.name}<span>{shop.nameSub}</span></a>
   <button type="button" class="shop-reserve shop-reserve--sm" data-reserve>LINEで予約</button>
 </header>
 
-<div id="top"><ScrollStory scenes={shop.scenes} media={shop.media} /></div>
+<div id="top"><slot name="story"><ScrollStory scenes={shop.scenes} media={shop.media} /></slot></div>
 
 <main class="shop-main">
-  <section class="block intro">
+  <section class="block intro" id={cinematic ? "care-intro" : undefined}>
     <h2>{shop.intro.title}</h2>
     <p>{shop.intro.body}</p>
   </section>
@@ -104,6 +104,11 @@ const { shop } = Astro.props;
     padding: 10px var(--s-gutter); pointer-events: none;
     background: color-mix(in srgb, var(--s-bg) 82%, transparent); backdrop-filter: blur(8px);
   }
+  .shop-head--cinematic { padding-block:20px; background:linear-gradient(rgba(15,29,21,.88),rgba(15,29,21,.24));backdrop-filter:blur(5px); }
+  .shop-head--cinematic .shop-logo { color:#f5f2e9;font-size:17px;letter-spacing:.08em; }
+  .shop-head--cinematic .shop-logo span {font:9px ui-monospace,monospace;letter-spacing:.2em;margin-left:14px;}
+  .shop-head--cinematic .shop-reserve {border:1px solid #bcc9ad;background:transparent;border-radius:2px;color:#f5f2e9;font-size:11px;font-weight:400;}
+  @media(max-width:480px) {.shop-head--cinematic .shop-logo {font-size:14px;} .shop-head--cinematic .shop-logo span {display:none;} .shop-head--cinematic {padding-block:16px;} }
   .shop-head > * { pointer-events: auto; }
   .shop-logo { font-family: var(--s-font-head); font-size: 18px; text-decoration: none; color: var(--s-ink); white-space: nowrap; }
   .shop-logo span { font-size: 11px; margin-left: 8px; letter-spacing: 0.12em; opacity: 0.85; }

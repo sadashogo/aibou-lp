@@ -14,3 +14,8 @@ npm install
 npm run dev      # 開発サーバー
 npm run build    # dist/ に書き出し
 ```
+
+
+## 整体サンプル：スクロール演出版
+
+`/samples/seitai/` を、相談・姿勢の確認・ケア・自宅でのセルフケアへ進む構成です。人物は日本人設定のAI写真を残し、メモ・足元・施術・腕のストレッチを別撮影の無料実写動画へつないでいます。有料の動画生成APIは使いません。[構成と検証](docs/seitai-cinematic.md)、[素材の出典](docs/seitai-media-credits.md)を参照してください。
