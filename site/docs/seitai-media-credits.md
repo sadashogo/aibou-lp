@@ -6,7 +6,7 @@
 |---|---|---|---|
 | 00 / welcome | Coverr — [Pexels](https://www.pexels.com/video/woman-walking-through-a-park-853771/) | 0–4秒 | 全体 |
 | 01 / listen | Cedric Fauntleroy — [Pexels](https://www.pexels.com/video/woman-getting-medical-consultation-4486777/) | 1–5秒 | 相談する女性を中心にトリミング |
-| 02 / observe | Miriam Alonso — [Pexels](https://www.pexels.com/video/woman-doing-stretching-7590434/) | 1–5秒 | 縦長の構図を維持 |
+| 02 / observe | Anna Pou — [Pexels](https://www.pexels.com/video/a-woman-sitting-on-a-bed-8298066/) | 0.15–2.15秒を4秒へスロー化 | 座って自然に身体を伸ばす場面。縦長の構図を維持 |
 | 03 / care | Kampus Production — [Pexels](https://www.pexels.com/video/man-having-a-physical-therapy-6111091/) | 1–5秒 | 顔を映さず、腕を支える手元をトリミング |
 | 04 / selfcare | Anna Pou — [Pexels](https://www.pexels.com/video/a-woman-sitting-on-a-bed-8298066/) | 1–5秒 | 縦長の構図を維持 |
 | 05 / everyday | Coverr — [Pexels](https://www.pexels.com/video/woman-walking-through-a-park-853771/) | 6–10秒 | 全体 |
