@@ -1,5 +1,5 @@
 export const seitaiFilm = {
-  src: '/samples/seitai/film-ai/journey.mp4',
+  src: '/samples/seitai/film-hybrid/journey.mp4',
   secondsPerScene: 4,
   posters: [
     '/samples/seitai/film/welcome.webp',

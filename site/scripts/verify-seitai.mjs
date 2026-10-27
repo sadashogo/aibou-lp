@@ -7,6 +7,8 @@ const people=assets.filter(a=>a.origin==='ai-generated-still');
 assert.equal(people.length,4);
 assert.equal(new Set(people.map(a=>a.sourceAssetId)).size,4,'Each people scene has an independent source');
 assert.notEqual(assets[2].purpose,assets[4].purpose,'Posture assessment and home care are different scenes');
+assert.equal(new Set(people.map(a=>a.motionStock.sourceAssetId)).size,4,'All four live-action inserts use different source videos');
+assert.notEqual(assets[2].motionStock.sourceAssetId,assets[4].motionStock.sourceAssetId,'Posture and home care must not reuse one video');
 for(const asset of people){
   const bytes=await readFile(new URL('../public'+asset.poster,import.meta.url));
   assert.equal(createHash('sha256').update(bytes).digest('hex'),asset.sha256,'Reviewed asset matches its manifest');
@@ -36,7 +38,8 @@ try {
   await go(.24);assert.ok(await time()<8,'Reverse scroll returns to the conversation');
   await page.locator('[data-care-stop="2"]').click();await page.waitForTimeout(1600);
   assert.equal(await page.locator('[aria-current="step"]').getAttribute('aria-label'),'姿勢の確認');
-  assert.match(await page.locator('body').innerText(),/人物は日本人という設定でAI生成した架空のモデル/);
+  assert.match(await page.locator('body').innerText(),/写真の人物は日本人という設定でAI生成した架空のモデル/);
+  assert.match(await page.locator('body').innerText(),/別撮影の実写ストック映像/);
   const posters=await page.locator('[data-care-scene]').evaluateAll(els=>els.map(el=>el.dataset.poster));
   assert.deepEqual(posters,assets.map(a=>a.poster));
   await page.locator('.shop-head [data-reserve]').click();
@@ -59,7 +62,7 @@ try {
   reducedPage.on('request',r=>{if(r.url().endsWith('journey.mp4'))filmRequests++});
   await reducedPage.goto(base+'/samples/seitai/');assert.equal(filmRequests,0);
   const failedPage=await browser.newPage();
-  await failedPage.route('**/samples/seitai/film-ai/journey.mp4',r=>r.abort());
+  await failedPage.route('**/samples/seitai/film-hybrid/journey.mp4',r=>r.abort());
   await failedPage.goto(base+'/samples/seitai/');await failedPage.waitForSelector('.care-story.is-live');
   assert.equal(await failedPage.locator('.has-film').count(),0);
   assert.equal(await failedPage.locator('[data-care-poster]').evaluate(img=>img.complete&&img.naturalWidth>0),true);
