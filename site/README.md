@@ -14,3 +14,8 @@ npm install
 npm run dev      # 開発サーバー
 npm run build    # dist/ に書き出し
 ```
+
+
+## 整体サンプル：実写スクロール版
+
+`/samples/seitai/` を、相談・動きの確認・ケア・セルフケア・日常の実写ストック映像へ更新しています。[構成と検証](docs/seitai-cinematic.md)、[素材の出典](docs/seitai-media-credits.md)を参照してください。

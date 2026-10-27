@@ -1,0 +1,101 @@
+---
+import type { Scene } from '../../data/samples/types';
+import { seitaiFilm as film } from '../../data/samples/seitai-film';
+interface Props { scenes: Scene[] }
+const { scenes } = Astro.props;
+---
+<section class="care-story" data-care-story data-film={film.src} data-seconds={film.secondsPerScene} style={`--care-scenes:${scenes.length}`}>
+  <div class="care-sticky">
+    <div class="care-media" aria-hidden="true">
+      <img data-care-poster src={film.posters[0]} alt="" fetchpriority="high" />
+      <video data-care-video muted playsinline preload="none" poster={film.posters[0]}></video>
+      <div class="care-media-shade"></div>
+    </div>
+    <div class="care-wash" aria-hidden="true"></div>
+    <p class="care-edition" aria-hidden="true">TOTONOI / BODYWORK & DAILY CARE</p>
+    {scenes.map((scene, index) => <article id={`care-scene-${index}`} class:list={['care-chapter', {'care-chapter--right':index===2 || index===4,'care-chapter--hero':index===0}]} data-care-scene data-poster={film.posters[index]}>
+      <img class="care-static-poster" src={film.posters[index]} alt="" loading={index===0?'eager':'lazy'} />
+      <div class="care-copy">
+        <p class="care-label"><span>{String(index).padStart(2,'0')}</span>{index===0 ? '自分のための、ひと呼吸。' : scene.label}</p>
+        {index===0 ? <h1 class="care-title">{scene.title.split('|').map(line=><span>{line}</span>)}</h1> : <h2 class="care-title">{scene.title.split('|').map(line=><span>{line}</span>)}</h2>}
+        <p class="care-description">{scene.body}</p>
+        <p class="care-english">{film.english[index]}</p>
+        {index===scenes.length-1 && <a class="care-next" href="#care-intro">私たちが大切にしていること <span aria-hidden="true">↓</span></a>}
+      </div>
+    </article>)}
+    <nav class="care-index" aria-label="整体の流れ">
+      {scenes.map((scene,index)=><a href={`#care-scene-${index}`} data-care-stop={index} aria-label={index===0?'はじめに':scene.label}><span>{String(index).padStart(2,'0')}</span><i aria-hidden="true"></i></a>)}
+    </nav>
+    <div class="care-bottom" aria-hidden="true"><span>A LITTLE ROOM TO BREATHE</span><span data-care-count>00 / 05</span></div>
+    <p class="care-hint" aria-hidden="true"><i></i>SCROLL SLOWLY</p>
+    <div class="care-track" aria-hidden="true"><i data-care-track></i></div>
+  </div>
+</section>
+<script>
+  import { initSeitaiFilm } from '../../scripts/seitai-film';
+  document.querySelectorAll<HTMLElement>('[data-care-story]').forEach(initSeitaiFilm);
+</script>
+<style>
+  .care-story { background:#14231e;color:#f5f2e9; --care-muted:#b6c1b2; }
+  .care-media,.care-wash,.care-index,.care-bottom,.care-hint,.care-track,.care-edition {display:none;}
+  .care-chapter { position:relative;min-height:85svh;display:grid;align-items:end;overflow:hidden;background:#14231e; }
+  .care-static-poster {position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+  .care-chapter::before {content:'';position:absolute;inset:0;z-index:1;background:linear-gradient(0deg,rgba(10,23,17,.92),rgba(10,23,17,.18) 85%);}
+  .care-copy {position:relative;z-index:2;padding:0 var(--s-gutter) 12svh;max-width:44rem;}
+  .care-label {display:flex;align-items:center;gap:20px;font-size:11px;letter-spacing:.2em;color:#d5dfcb;margin:0 0 28px;}
+  .care-label span {font:10px ui-monospace,monospace;color:#b7c5ad;}
+  .care-title {font-family:'Noto Serif JP','Yu Mincho','Hiragino Mincho ProN',serif;font-size:clamp(36px,4.9vw,74px);font-weight:400;letter-spacing:.05em;line-height:1.65;margin:0 0 26px;}
+  .care-title span {display:block;white-space:nowrap;}
+  .care-description {max-width:26em;font-size:14px;line-height:2.2;color:#dfE5dc;}
+  .care-english {margin:30px 0 0;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--care-muted);}
+  .care-next {display:inline-flex;align-items:center;gap:32px;margin-top:26px;padding:12px 0;border-bottom:1px solid #adbd9e;font-size:12px;letter-spacing:.08em;text-decoration:none;}
+  .care-story.is-live {height:calc(var(--care-scenes)*110svh);}
+  .is-live .care-sticky {position:sticky;top:0;height:100svh;overflow:hidden;}
+  .is-live .care-media {display:block;position:absolute;inset:0;width:100%;height:100%;transition:left .55s,top .55s,width .55s,height .55s;overflow:hidden;}
+  .care-media img,.care-media video {position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scale(1.04);}
+  .care-media video {opacity:0;}
+  .care-story.has-film .care-media video {opacity:1;}
+  .care-media-shade {position:absolute;inset:0;background:linear-gradient(0deg,rgba(8,20,13,.35),transparent 65%);}
+  .is-live[data-layout='split'] .care-media {left:44%;top:15%;width:48%;height:69%;}
+  .is-live[data-layout='split'][data-side='right'] .care-media {left:3%;}
+  .is-live[data-layout='split'] .care-media img,.is-live[data-layout='split'] .care-media video {object-fit:contain;}
+  .is-live .care-wash {display:block;position:absolute;inset:0;background:linear-gradient(90deg,rgba(14,27,20,.83),rgba(14,27,20,.32) 42%,rgba(14,27,20,.04) 75%),linear-gradient(0deg,rgba(14,27,20,.45),transparent 30%);pointer-events:none;}
+  .is-live[data-layout='split'] .care-wash {background:linear-gradient(90deg,#14231e 1%,rgba(20,35,30,.25) 40%,transparent 58%);}
+  .is-live[data-side='right'] .care-wash {transform:scaleX(-1);}
+  .is-live .care-chapter {position:absolute;inset:0;min-height:0;opacity:0;visibility:hidden;background:none;align-items:center;}
+  .is-live .care-chapter::before,.is-live .care-static-poster {display:none;}
+  .is-live .care-copy {padding-bottom:0;width:44vw;max-width:42rem;}
+  .is-live .care-chapter--right .care-copy {justify-self:end;padding-right:calc(var(--s-gutter) + 48px);}
+  .is-live .care-chapter--hero .care-title {font-size:clamp(52px,6.4vw,96px);line-height:1.5;}
+  .is-live .care-edition {display:block;position:absolute;top:115px;left:var(--s-gutter);font-size:9px;letter-spacing:.2em;color:var(--care-muted);}
+  .is-live .care-index {display:grid;position:absolute;right:var(--s-gutter);top:50%;transform:translateY(-50%);gap:15px;z-index:5;}
+  .care-index a {display:flex;align-items:center;gap:9px;text-decoration:none;font:9px ui-monospace,monospace;color:#b7c5ad;padding:4px 0;}
+  .care-index i {display:block;width:12px;height:1px;background:#617062;transition:width .3s,background .3s;}
+  .care-index a[aria-current='step'] {color:white;}
+  .care-index a[aria-current='step'] i {width:24px;background:#d4dfc5;}
+  .is-live .care-bottom {display:flex;position:absolute;inset:auto var(--s-gutter) 38px;justify-content:space-between;font-size:9px;letter-spacing:.16em;color:var(--care-muted);}
+  .is-live .care-hint {display:block;position:absolute;bottom:32px;left:50%;transform:translateX(-50%);font-size:9px;letter-spacing:.18em;color:#d0d9c8;}
+  .care-hint i {display:block;width:1px;height:32px;margin:0 auto 14px;background:linear-gradient(transparent,#d0d9c8);}
+  .is-live .care-track {display:block;position:absolute;bottom:0;left:0;right:0;height:2px;background:#334237;}
+  .care-track i {display:block;width:100%;height:100%;background:#bccaa7;transform:scaleX(0);transform-origin:left;}
+  @media(max-aspect-ratio:1/1) {
+    .care-title {font-size:clamp(30px,8vw,48px);line-height:1.6;margin-bottom:18px;}
+    .is-live .care-chapter--hero .care-title {font-size:clamp(42px,11vw,62px);}
+    .is-live .care-copy,.is-live .care-chapter--right .care-copy {align-self:end;justify-self:start;width:100%;max-width:none;padding:0 var(--s-gutter) 18svh;}
+    .is-live .care-chapter--hero .care-copy {padding-bottom:24svh;}
+    .care-description {font-size:13px;line-height:2;max-width:29em;}
+    .care-label {font-size:10px;gap:12px;margin-bottom:18px;}
+    .care-english {margin-top:20px;font-size:8px;}
+    .is-live[data-layout='split'] .care-media,.is-live[data-layout='split'][data-side='right'] .care-media {left:16px;top:100px;width:calc(100% - 32px);height:34svh;}
+    .is-live .care-wash,.is-live[data-layout='split'] .care-wash {background:linear-gradient(0deg,rgba(20,35,30,.96) 24%,rgba(20,35,30,.20) 68%,rgba(20,35,30,.2));transform:none;}
+    .is-live .care-edition {top:80px;font-size:7px;}
+    .is-live .care-index {display:flex;left:var(--s-gutter);right:auto;top:auto;bottom:86px;transform:none;gap:17px;}
+    .care-index a {gap:5px;}
+    .care-index i {width:6px;}
+    .care-index a[aria-current='step'] i {width:11px;}
+    .is-live .care-hint {bottom:112px;font-size:8px;}
+    .care-next {margin-top:14px;font-size:11px;}
+    .is-live .care-bottom {font-size:7px;bottom:42px;}
+  }
+  @media(prefers-reduced-motion:reduce) {.care-media,.care-index i {transition:none;}}
+</style>
