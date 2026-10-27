@@ -54,9 +54,7 @@ export function initSeitaiFilm(root: HTMLElement) {
         stops.forEach((stop,i) => i === index ? stop.setAttribute('aria-current','step') : stop.removeAttribute('aria-current'));
         if (counter) counter.textContent = `${String(index).padStart(2,'0')} / ${String(chapters.length-1).padStart(2,'0')}`;
       }
-      const frame = root.querySelector<HTMLElement>('.care-media');
-      const portraitScale = (index===2 || index===4) && frame ? Math.max(1, frame.clientHeight / (frame.clientWidth * 9/16)) : 1;
-      const transform = `translate3d(${(local-.5)*-1.4}%,${(local-.5)*-.6}%,0) scale(${(1.04+local*.025)*portraitScale})`;
+      const transform = `translate3d(${(local-.5)*-1.4}%,${(local-.5)*-.6}%,0) scale(${1.04+local*.025})`;
       poster!.style.transform = transform;
       video!.style.transform = transform;
       for (const [i,el] of chapters.entries()) {

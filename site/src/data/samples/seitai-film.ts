@@ -1,6 +1,10 @@
 export const seitaiFilm = {
-  src: '/samples/seitai/film/journey.mp4',
+  src: '/samples/seitai/film-ai/journey.mp4',
   secondsPerScene: 4,
-  posters: ['welcome','listen','observe','care','selfcare','everyday'].map(name => `/samples/seitai/film/${name}.webp`),
-  english: ['A moment for yourself','Listen to your story','Understand your movement','Care at your own pace','A little care, every day','Back to your everyday'],
+  posters: [
+    '/samples/seitai/film/welcome.webp',
+    ...['listen','observe','care','selfcare'].map(name => `/samples/seitai/film-ai/${name}.webp`),
+    '/samples/seitai/film/everyday.webp',
+  ],
+  english: ['A moment for yourself','Listen to your story','Observe your posture','Care at your own pace','A little care at home','Back to your everyday'],
 };

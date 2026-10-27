@@ -1,6 +1,7 @@
 // 整体院の制作サンプル（架空のお店）。名前・料金・住所・スタッフはすべて架空。
 // 医療行為ではないので「治る」「治療」などの言葉は使わない。
 import type { ShopData } from './types';
+import { seitaiFilm } from './seitai-film';
 
 export const seitaiTheme = {
   '--s-bg': '#f5f2ea',
@@ -26,12 +27,12 @@ export const seitai: ShopData = {
   scenes: [
     { label: 'はじめに', title: 'からだに、|余白を。', body: '忙しい毎日の中に、自分をいたわる時間を。あなたのペースを大切にする整体院です。' },
     { label: 'お話を伺う', title: 'まずは、|あなたのお話を。', body: '気になっていること、いつもの過ごし方。言葉にしづらいことも、ゆっくり伺います。' },
-    { label: '動きの確認', title: 'いつもの動きに、|目を向ける。', body: '身体をゆっくり動かしながら、その日の様子を確認。気になることを、無理のない範囲で伺います。' },
+    { label: '姿勢の確認', title: 'いつもの姿勢に、|目を向ける。', body: '普段どおりの立ち姿から、その日の様子を確認。気になることを、無理のない範囲で伺います。' },
     { label: 'からだのケア', title: '急がず、|無理をせず。', body: '力加減や動かしやすさを伺いながら。呼吸とペースを大切に、身体に合わせて進めます。' },
-    { label: 'セルフケア', title: 'いたわる時間を、|日常にも。', body: '暮らしの中で続けやすい動きを一緒に確認。おうちでの過ごし方まで、ご相談ください。' },
+    { label: 'セルフケア', title: 'いたわる時間を、|日常にも。', body: 'おうちでも、ほっとひと息。院で一緒に確認したセルフケアを、ご自分のペースで。' },
     { label: 'いつもの日常へ', title: 'いつもの道を、|自分のペースで。', body: '次にお会いするまでの毎日にも、自分をいたわるひと呼吸を。' },
   ],
-  media: { mode: 'stills', desktop: ['welcome','listen','observe','care','selfcare','everyday'].map(name => `/samples/seitai/film/${name}.webp`), mobile: ['welcome','listen','observe','care','selfcare','everyday'].map(name => `/samples/seitai/film/${name}.webp`) },
+  media: { mode: 'stills', desktop: seitaiFilm.posters, mobile: seitaiFilm.posters },
   intro: {
     title: '「もう少し早く来ればよかった」をなくしたい。',
     body: '肩や腰のつらさを我慢しがちな方のための、予約制の整体院です。施術だけで終わらず、ご自宅でのケアまで一緒に考えます。',

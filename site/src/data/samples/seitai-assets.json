@@ -1,0 +1,74 @@
+[
+  {
+    "scene": 0,
+    "purpose": "nature-opening",
+    "origin": "stock-video",
+    "sourceAssetId": "pexels-853771",
+    "sourceUrl": "https://www.pexels.com/video/woman-walking-through-a-park-853771/",
+    "sourceSeconds": [
+      0,
+      4
+    ],
+    "poster": "/samples/seitai/film/welcome.webp"
+  },
+  {
+    "scene": 1,
+    "purpose": "clinic-consultation",
+    "origin": "ai-generated-still",
+    "sourceAssetId": "imagegen-9e36e1bd-216e-4c5b-be78-39df5fb5b99f",
+    "fictionalCharacterSetting": "日本人という設定の架空の施術者・利用者。同じ人物として生成したイメージ。実在人物の国籍の主張ではない。",
+    "motion": "digital-camera-zoom-only",
+    "poster": "/samples/seitai/film-ai/listen.webp",
+    "sha256": "dbeb18ef9bee2a2c17bca3bd69afc143e44508125aa58b5b7aeab318b5e1b645",
+    "reviewedOn": "2026-10-27",
+    "visualReview": "院内のテーブルで施術者と利用者が相談。自然な横顔と開いた手。"
+  },
+  {
+    "scene": 2,
+    "purpose": "standing-posture-observation",
+    "origin": "ai-generated-still",
+    "sourceAssetId": "imagegen-22e95266-09d7-478e-b4e6-f5bc4e87c14d",
+    "fictionalCharacterSetting": "日本人という設定の架空の施術者・利用者。同じ人物として生成したイメージ。実在人物の国籍の主張ではない。",
+    "motion": "digital-camera-zoom-only",
+    "poster": "/samples/seitai/film-ai/observe.webp",
+    "sha256": "c5fdeb84b81d25f886afdb886e3306964c0efaf95fb7bbb2eaa47d705bc989f0",
+    "reviewedOn": "2026-10-27",
+    "visualReview": "院内で立つ利用者を施術者が横から確認。二人、全身、腕は下ろす。"
+  },
+  {
+    "scene": 3,
+    "purpose": "clothed-back-care",
+    "origin": "ai-generated-still",
+    "sourceAssetId": "imagegen-ec513233-adb6-4dab-9b2c-ce494457f376",
+    "fictionalCharacterSetting": "日本人という設定の架空の施術者・利用者。同じ人物として生成したイメージ。実在人物の国籍の主張ではない。",
+    "motion": "digital-camera-zoom-only",
+    "poster": "/samples/seitai/film-ai/care.webp",
+    "sha256": "ec635689c72a3a3a59568138acc36d9e404a32f1a7723a60f9b912bfa670c449",
+    "reviewedOn": "2026-10-27",
+    "visualReview": "着衣の利用者の背中に施術者が両手を添える。利用者の顔はほぼ見えない。"
+  },
+  {
+    "scene": 4,
+    "purpose": "solo-home-self-care",
+    "origin": "ai-generated-still",
+    "sourceAssetId": "imagegen-9060c232-5f78-4a29-9aca-91e66f629fca",
+    "fictionalCharacterSetting": "日本人という設定の架空の施術者・利用者。同じ人物として生成したイメージ。実在人物の国籍の主張ではない。",
+    "motion": "digital-camera-zoom-only",
+    "poster": "/samples/seitai/film-ai/selfcare.webp",
+    "sha256": "187c0d6c63e21edf69913d725f68f9ac11859d19f695c0d61ba1795245dc31fa",
+    "reviewedOn": "2026-10-27",
+    "visualReview": "自宅の椅子に一人で座り腕を胸の前へ。横顔と穏やかな表情。"
+  },
+  {
+    "scene": 5,
+    "purpose": "nature-closing",
+    "origin": "stock-video",
+    "sourceAssetId": "pexels-853771",
+    "sourceUrl": "https://www.pexels.com/video/woman-walking-through-a-park-853771/",
+    "sourceSeconds": [
+      6,
+      10
+    ],
+    "poster": "/samples/seitai/film/everyday.webp"
+  }
+]

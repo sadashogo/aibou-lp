@@ -16,6 +16,6 @@ npm run build    # dist/ に書き出し
 ```
 
 
-## 整体サンプル：実写スクロール版
+## 整体サンプル：スクロール演出版
 
-`/samples/seitai/` を、相談・動きの確認・ケア・セルフケア・日常の実写ストック映像へ更新しています。[構成と検証](docs/seitai-cinematic.md)、[素材の出典](docs/seitai-media-credits.md)を参照してください。
+`/samples/seitai/` を、相談・姿勢の確認・ケア・自宅でのセルフケアへ進む構成です。人物は日本人設定のAI生成静止画へのカメラ移動、風景は実写ストック映像です。[構成と検証](docs/seitai-cinematic.md)、[素材の出典](docs/seitai-media-credits.md)を参照してください。

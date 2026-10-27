@@ -1,5 +1,16 @@
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
 import { chromium } from 'playwright';
+const assets=JSON.parse(await readFile(new URL('../src/data/samples/seitai-assets.json',import.meta.url),'utf8'));
+const people=assets.filter(a=>a.origin==='ai-generated-still');
+assert.equal(people.length,4);
+assert.equal(new Set(people.map(a=>a.sourceAssetId)).size,4,'Each people scene has an independent source');
+assert.notEqual(assets[2].purpose,assets[4].purpose,'Posture assessment and home care are different scenes');
+for(const asset of people){
+  const bytes=await readFile(new URL('../public'+asset.poster,import.meta.url));
+  assert.equal(createHash('sha256').update(bytes).digest('hex'),asset.sha256,'Reviewed asset matches its manifest');
+}
 const base=process.env.TEST_BASE_URL || 'http://localhost:4321';
 const browser=await chromium.launch({headless:true,...(process.env.TEST_BROWSER_PATH?{executablePath:process.env.TEST_BROWSER_PATH}:{})});
 try {
@@ -17,14 +28,17 @@ try {
     await page.waitForTimeout(850);
   }
   const time=()=>page.locator('video').evaluate(v=>v.currentTime);
-  for(const [p,lo,hi,label] of [[.24,4,8,'お話を伺う'],[.42,8,12,'動きの確認'],[.58,12,16,'からだのケア'],[.76,16,20,'セルフケア'],[.96,20,24,'いつもの日常へ']]){
+  for(const [p,lo,hi,label] of [[.24,4,8,'お話を伺う'],[.42,8,12,'姿勢の確認'],[.58,12,16,'からだのケア'],[.76,16,20,'セルフケア'],[.96,20,24,'いつもの日常へ']]){
     await go(p);assert.equal(await page.locator('[aria-current="step"]').getAttribute('aria-label'),label);
     assert.ok((await time())>=lo && (await time())<hi,`Film matches ${label}`);
   }
   await go(.24);const before=await time();await go(.27);assert.ok(await time()>before,'Motion within the same scene');
   await go(.24);assert.ok(await time()<8,'Reverse scroll returns to the conversation');
   await page.locator('[data-care-stop="2"]').click();await page.waitForTimeout(1600);
-  assert.equal(await page.locator('[aria-current="step"]').getAttribute('aria-label'),'動きの確認');
+  assert.equal(await page.locator('[aria-current="step"]').getAttribute('aria-label'),'姿勢の確認');
+  assert.match(await page.locator('body').innerText(),/人物は日本人という設定でAI生成した架空のモデル/);
+  const posters=await page.locator('[data-care-scene]').evaluateAll(els=>els.map(el=>el.dataset.poster));
+  assert.deepEqual(posters,assets.map(a=>a.poster));
   await page.locator('.shop-head [data-reserve]').click();
   assert.equal(await page.locator('dialog').evaluate(d=>d.open),true);
   assert.match(await page.locator('dialog').innerText(),/架空のお店/);
@@ -45,7 +59,7 @@ try {
   reducedPage.on('request',r=>{if(r.url().endsWith('journey.mp4'))filmRequests++});
   await reducedPage.goto(base+'/samples/seitai/');assert.equal(filmRequests,0);
   const failedPage=await browser.newPage();
-  await failedPage.route('**/samples/seitai/film/journey.mp4',r=>r.abort());
+  await failedPage.route('**/samples/seitai/film-ai/journey.mp4',r=>r.abort());
   await failedPage.goto(base+'/samples/seitai/');await failedPage.waitForSelector('.care-story.is-live');
   assert.equal(await failedPage.locator('.has-film').count(),0);
   assert.equal(await failedPage.locator('[data-care-poster]').evaluate(img=>img.complete&&img.naturalWidth>0),true);
