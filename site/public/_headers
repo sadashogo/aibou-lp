@@ -1,4 +1,13 @@
 # Cloudflare Pages のレスポンスヘッダー設定
+# 全ページ共通のセキュリティヘッダー（2026-10-28 追加）
+# CSP はGoogleアナリティクスとページ内スクリプトを止めないよう、埋め込み・プラグイン・base の制限だけにしている
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  Strict-Transport-Security: max-age=31536000
+  Content-Security-Policy: frame-ancestors 'none'; object-src 'none'; base-uri 'self'
 /_astro/*
   Cache-Control: public, max-age=31536000, immutable
 /demo.mp4
