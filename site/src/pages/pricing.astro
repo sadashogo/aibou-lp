@@ -11,7 +11,7 @@ const tbd = (v: string) => v.includes(TBD);
 ---
 <Base
   title="料金"
-  description="AIBOUの料金。AI導入（初期費用・AI顧問とセットで割引）、AI顧問 月33,000円、オーダーメイド制作（業務の自動化 55,000円〜・LP 77,000円〜）。表示はすべて税込です。"
+  description="AIBOUの料金。AI導入 165,000円〜、AI顧問 月55,000円〜（月2回の打ち合わせ・業務マニュアルづくり・補助金を使う計画づくりの支援つき）、オーダーメイド制作（業務の自動化 55,000円〜・LP 77,000円〜）。表示はすべて税込です。"
   faqs={pricingFaqs}
 >
   <section class="wrap page-head">
@@ -25,13 +25,9 @@ const tbd = (v: string) => v.includes(TBD);
       <p class="plan-step">{intro.stepLabel}</p>
       <h2>{intro.name}</h2>
       <div class="opt">
-        <p class="opt-label">導入のみ</p>
+        <p class="opt-label">初期費用</p>
         <p class:list={['opt-price', { 'is-tbd': tbd(pricing.introSolo) }]}>{pricing.introSolo}</p>
-      </div>
-      <div class="opt opt--main">
-        <p class="opt-label">AI顧問とセット<span class="opt-badge">おすすめ</span></p>
-        <p class:list={['opt-price', { 'is-tbd': tbd(pricing.introSet) }]}>{pricing.introSet}</p>
-        <p class="opt-note">AI顧問を{pricing.advisorMinTerm}以上ご契約いただく場合（期間内に解約された場合は差額の{pricing.introSetPenalty}をお支払いいただきます）</p>
+        <p class="opt-note">{intro.priceNote}</p>
       </div>
       <p class="plan-label">含まれるもの</p>
       <ul>{intro.details.map((d) => <li>{d}</li>)}</ul>
@@ -40,9 +36,10 @@ const tbd = (v: string) => v.includes(TBD);
     <article class="plan plan--main">
       <p class="plan-step">{advisor.stepLabel}</p>
       <h2>{advisor.name}</h2>
-      <p class="big"><span>33,000</span>円 / 月</p>
+      <p class="big"><span>{pricing.advisor.replace(/^月|円.*$/g, '')}</span>円〜 / 月</p>
       <p class="plan-label">含まれるもの</p>
       <ul>{advisor.details.map((d) => <li>{d}</li>)}</ul>
+      <p class="plan-note">{advisor.priceNote}</p>
       <p class="plan-label">含まれないもの</p>
       <ul class="ex">{advisor.excludes!.map((d) => <li>{d}</li>)}</ul>
     </article>

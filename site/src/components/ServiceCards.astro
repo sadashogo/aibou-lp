@@ -9,8 +9,8 @@ const H = headingLevel;
 // カードに出す短い料金
 const cardPrice = (id: string) => {
   const s = services.find((x) => x.id === id)!;
-  if (id === 'intro') return { main: s.price.split('（')[0], sub: '顧問とセットで割引' };
-  if (id === 'advisor') return { main: s.price, sub: '作った仕組みの保守込み' };
+  if (id === 'intro') return { main: s.price, sub: '業務をひとつ自動化まで' };
+  if (id === 'advisor') return { main: s.price, sub: '月2回の打ち合わせ・保守込み' };
   return { main: 'お見積り', sub: 'LP 77,000円〜' };
 };
 const badge = { start: '初期費用', keep: '月額', build: 'お見積り' } as const;
